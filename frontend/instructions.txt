@@ -1,0 +1,2 @@
+Para ejecutar el proyecto, se debe ejecutar el comando `npm run dev` en la carpeta `frontend/react-project.
+Acto seguido, se debe acceder a la aplicación en la dirección `http://localhost:5173/`.
