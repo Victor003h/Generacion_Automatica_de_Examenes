@@ -35,7 +35,7 @@ const Register_Student: React.FC = () => {
     }
     const data = { ...formData };
     axios
-      .post("http://localhost:8000/api/account/register/", data, {
+      .post("http://localhost:8000/api/account/register/student/", data, {
         headers: {
           "Content-Type": "application/json",
         },

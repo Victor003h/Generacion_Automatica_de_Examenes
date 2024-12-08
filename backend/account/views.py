@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializer import UserSerializer
+from .serializer import UserSerializer,TeacherSerializer,StudentSerializer
 from .models import User
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema,OpenApiParameter
 
 
 @extend_schema(
@@ -38,20 +38,36 @@ def login(request):
     
     return Response({'token': token.key, 'user':serializer.data},status=status.HTTP_200_OK)
 
+
+
 @extend_schema(
-    request=UserSerializer, 
-    responses={201: UserSerializer}, 
+    request=TeacherSerializer, 
+    responses={201: TeacherSerializer}, 
 )
 @api_view(['POST'])
-def register(request):
-    serializer=UserSerializer(data=request.data)
-    
+def teacher_register(request):
+    serializer=TeacherSerializer(data=request.data)
+    print(request.data)
     if serializer.is_valid():
-             
-        user=User.objects.create_user(username=serializer.data['username'],email=serializer.data['email'],
-                                      password=serializer.data['password'],first_name=serializer.data['first_name'])
-        
-        token=Token.objects.create(user=user)
-        return Response({'token': token.key,'user': serializer.data},status=status.HTTP_201_CREATED)
+        serializer.save()    
+      
+        return Response({'user': serializer.data},status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema(
+    request=StudentSerializer, 
+    responses={201: StudentSerializer}, 
+)
+@api_view(['POST'])
+def student_register(request):
+    serializer=StudentSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()    
+      
+        return Response({'user': serializer.data},status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+

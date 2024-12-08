@@ -3,19 +3,14 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
+    last_name2=models.CharField(max_length=50)
 
 
-class Admin(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
-
-class Teacher(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+class Teacher(User):
     speciality=models.CharField(max_length=100)
-    
-    
-class Student(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+
+
+class Student(User):
     age=models.PositiveIntegerField()
     course=models.PositiveIntegerField()
     
