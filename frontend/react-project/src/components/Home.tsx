@@ -1,12 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
+import RegisterModal from "./Register_Modal";
+import useRegisterModal from "../hooks/RegisterModalTrigger";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
+
   return (
     <div className="home-container">
       <header className="header">
-        <h1 className="logo">Generación de Exámenes</h1>
+        <h1 className="logo">SmartExam</h1>
       </header>
       <div className="slider">
         <div className="slides">
@@ -18,7 +23,7 @@ const Home: React.FC = () => {
 
           <div className="slide slide2">
             <div className="slide-text">
-              Como profesor, califica tus estudiantes de manera organizada.¡Te
+              Como profesor, califica tus estudiantes de manera organizada. ¡Te
               ayudaremos a planificar tu curso!
             </div>
           </div>
@@ -31,21 +36,24 @@ const Home: React.FC = () => {
         </div>
       </div>
       <main className="main-content">
-        <h2 className="main-title">Bienvenido a Generación de Exámenes</h2>
+        <h2 className="main-title">Bienvenido a SmartExam</h2>
         <p className="main-description">
           Una aplicación web de nuestra institución educativa para la gestión
-          eficiente de exámenes y calificaciones. Nunca profesores y estudiantes
-          han estado tan unidos.
+          eficiente de exámenes y calificaciones. Nuestros profesores y
+          estudiantes nunca han estado tan unidos.
         </p>
         <div className="button-group">
-          <Link to="/login" className="cta-button">
-            Iniciar Sesión
-          </Link>
-          <Link to="/register" className="cta-button">
+          <button className="home-button" onClick={() => navigate("/login")}>
+            <div className="button-text">Iniciar Sesión</div>
+          </button>
+        </div>
+        <div className="button-group">
+          <button className="cta-button" onClick={handleRegisterClick}>
             Registrarse
-          </Link>
+          </button>
         </div>
       </main>
+      <RegisterModal open={open} onClose={handleCloseModal} />
     </div>
   );
 };

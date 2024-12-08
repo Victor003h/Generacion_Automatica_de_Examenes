@@ -1,25 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(
+    90deg,
+    rgb(255, 255, 255) 0%,
+    rgb(148, 233, 193) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  color: #333;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .home-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to right, #e0eafc, #cfdef3);
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .header {
   width: 100%;
-  padding: 20px 0;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 50px;
+  background-color: #fc9d31cc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 2.5rem;
+  color: #5f1f57;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  font-weight: 600;
 }
 
 .nav-link {
@@ -39,6 +80,7 @@
   height: 60vh;
   overflow: hidden;
   position: relative;
+  margin-top: 80px; /* Space for fixed header */
 }
 .slides {
   display: flex;
@@ -46,12 +88,13 @@
 }
 .slide {
   min-width: 100%;
-  height: 60vh; /* Asegurarse de que las diapositivas tengan la misma altura */
-  background-size: 1920px 580px;
+  height: 60vh;
+  background-size: cover;
   background-position: center;
-  position: relative; /* Para que el texto se posicione relativamente al slide */
+  position: relative;
   display: flex;
   align-items: flex-end;
+  justify-content: center;
 }
 
 .slide-text {
@@ -60,12 +103,7 @@
   left: 20px;
   font-size: 1.5rem;
   color: #fff;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.5
-  ); /* Fondo semitransparente para mejorar la visibilidad */
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 10px 20px;
   border-radius: 5px;
 }
@@ -100,17 +138,19 @@
 .main-content {
   text-align: center;
   padding: 50px 20px;
+  margin-top: 20px;
 }
 
 .main-title {
   font-size: 3rem;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .main-description {
   font-size: 1.2rem;
   color: #666;
-  margin: 20px 0;
+  margin-bottom: 30px;
 }
 
 .button-group {
@@ -119,18 +159,81 @@
   gap: 20px;
 }
 
+.home-button,
 .cta-button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
-  text-decoration: none; /* Asegurarse de que los enlaces no tengan subrayado */
+  background-color: #00aeff;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-decoration-color: white;
+  margin-top: 30px;
 }
 
+.home-button:hover,
 .cta-button:hover {
+  background-color: #0056b3;
+}
+
+.button-text {
+  color: white;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+}
+
+.role-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.role-button:hover {
   background-color: #0056b3;
 }
