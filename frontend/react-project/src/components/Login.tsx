@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "../styles/Login.css";
+import { useNavigate } from "react-router-dom";
 import RegisterModal from "./Register_Modal";
 import useRegisterModal from "../hooks/RegisterModalTrigger";
 
@@ -11,6 +12,7 @@ const Login: React.FC = () => {
     role: "",
   });
 
+  const navigate = useNavigate();
   const [role, setRole] = useState("");
   const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
 
@@ -35,7 +37,11 @@ const Login: React.FC = () => {
         },
       })
       .then((response) => {
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
         console.log("Inicio de sesión exitoso:", response.data);
+        navigate("/dashboard"); // Redirigir al dashboard
         // Maneja la respuesta, guarda el token, redirige o muestra un mensaje de éxito
       })
       .catch((error) => {

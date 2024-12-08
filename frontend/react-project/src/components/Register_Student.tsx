@@ -6,15 +6,20 @@ import "../styles/Errors.css";
 
 const Register_Student: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    first_name: "",
     email: "",
     password: "",
-    passwordRepeat: "",
-    lastname1: "",
-    lastname2: "",
+    last_name: "",
+    last_name2: "",
     age: 0,
-    course: "",
+    course: 2024,
   });
+
+  const [passwordRepeat, setPasswordRepeat] = useState("");
+
+  const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPasswordRepeat(e.target.value);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -29,7 +34,7 @@ const Register_Student: React.FC = () => {
     e.preventDefault();
     setError("");
 
-    if (formData.password !== formData.passwordRepeat) {
+    if (formData.password !== passwordRepeat) {
       setError("Las contraseñas no coinciden");
       return;
     }
@@ -59,9 +64,9 @@ const Register_Student: React.FC = () => {
             <label className="form-label">Nombre</label>
             <input
               type="text"
-              name="username"
+              name="first_name"
               className="form-input"
-              value={formData.username}
+              value={formData.first_name}
               onChange={handleChange}
               required
             />
@@ -71,9 +76,9 @@ const Register_Student: React.FC = () => {
               <label className="form-label">Primer Apellido</label>
               <input
                 type="text"
-                name="lastname1"
+                name="last_name"
                 className="form-input"
-                value={formData.lastname1}
+                value={formData.last_name}
                 onChange={handleChange}
                 required
               />
@@ -82,9 +87,9 @@ const Register_Student: React.FC = () => {
               <label className="form-label">Segundo Apellido</label>
               <input
                 type="text"
-                name="lastname2"
+                name="last_name2"
                 className="form-input"
-                value={formData.lastname2}
+                value={formData.last_name2}
                 onChange={handleChange}
                 required
               />
@@ -104,7 +109,7 @@ const Register_Student: React.FC = () => {
           <div className="form-group">
             <label className="form-label">Curso</label>
             <input
-              type="text"
+              type="number"
               name="course"
               className="form-input"
               value={formData.course}
@@ -140,8 +145,8 @@ const Register_Student: React.FC = () => {
               type="password"
               name="passwordRepeat"
               className="form-input"
-              value={formData.passwordRepeat}
-              onChange={handleChange}
+              value={passwordRepeat}
+              onChange={handlePasswordRepeatChange}
               required
             />
           </div>
