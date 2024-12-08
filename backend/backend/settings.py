@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import corsheaders
+from corsheaders.defaults import default_headers, default_methods
 
 load_dotenv()
 
@@ -31,8 +33,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [ "http://localhost:3000", "http://localhost:5173", ]
 
-# Application definition
+CORS_ALLOW_HEADERS = list(default_headers) + [ 'Content-Type', 'Authorization', ]
+
+CORS_ALLOW_METHODS = list(default_methods) + [ 'GET', 'POST', 'PUT', 'DELETE']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     "drf_spectacular",
+    'corsheaders',
     #Internal
     'account',
 ]
@@ -52,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -148,4 +155,3 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': True,
 }
-

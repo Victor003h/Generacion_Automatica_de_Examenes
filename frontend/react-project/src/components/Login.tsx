@@ -1,26 +1,81 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import axios from "axios";
 import "../styles/Login.css";
+import { useNavigate } from "react-router-dom";
+import RegisterModal from "./Register_Modal";
+import useRegisterModal from "../hooks/RegisterModalTrigger";
 
 const Login: React.FC = () => {
-  const [role, setRole] = useState("");
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    role: "",
+  });
 
-  const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setRole(event.target.value);
+  const navigate = useNavigate();
+  const [role, setRole] = useState("");
+  const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setRole(e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const data = { ...formData, role };
+    axios
+      .post("http://localhost:8000/api/account/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        const { token } = response.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        console.log("Inicio de sesión exitoso:", response.data);
+        navigate("/dashboard"); // Redirigir al dashboard
+        // Maneja la respuesta, guarda el token, redirige o muestra un mensaje de éxito
+      })
+      .catch((error) => {
+        console.error("Error en el inicio de sesión:", error.response.data);
+        // Maneja el error, muestra un mensaje de error
+      });
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
         <h2 className="login-title">Iniciar Sesión</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Email</label>
-            <input type="email" className="form-input" required />
+            <label className="form-label">Nombre de usuario</label>
+            <input
+              type="text"
+              name="username"
+              className="form-input"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label className="form-label">Contraseña</label>
-            <input type="password" className="form-input" required />
+            <input
+              type="password"
+              name="password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label className="form-label">¿Eres estudiante o profesor?</label>
@@ -41,12 +96,23 @@ const Login: React.FC = () => {
             Iniciar Sesión
           </button>
         </form>
-        <Link to="/" className="home-button">
-          Volver a Inicio
-        </Link>
         <p className="register-link">
-          ¿No tienes una cuenta? <a href="/register">Regístrate aquí</a>
+          <a href="/">Volver a Inicio</a>
         </p>
+        <p className="register-link">
+          <span onClick={handleRegisterClick} style={{ cursor: "pointer" }}>
+            ¿No tienes una cuenta? Regístrate aquí
+          </span>
+        </p>
+      </div>
+      <RegisterModal open={open} onClose={handleCloseModal} />
+      <div className="side-element left-side">
+        <img src="/images/auth/educ_benefits.jpg" alt="Inspiration" />
+        <p>Inspírate y aprende todos los días</p>
+      </div>
+      <div className="side-element right-side">
+        <img src="/images/auth/digital_educ.jpg" alt="Benefits" />
+        <p>Descubre los beneficios de nuestra plataforma</p>
       </div>
     </div>
   );
