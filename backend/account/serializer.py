@@ -16,9 +16,25 @@ class TeacherSerializer(serializers.ModelSerializer):
         extra_kwargs={'password': {'write_only':True } }
         
 
+    def create(self, validated_data): 
+        if 'username' not in validated_data: 
+            validated_data['username'] = validated_data['first_name'] 
+            user = Teacher(**validated_data) 
+            user.set_password(validated_data['password']) 
+            user.save() 
+            return user
+
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model=Student
         fields=['first_name','email','password','last_name','last_name2','age','course']
         extra_kwargs={'password': {'write_only':True } }
+        
+    def create(self, validated_data): 
+        if 'username' not in validated_data: 
+            validated_data['username'] = validated_data['first_name'] 
+            user = Student(**validated_data) 
+            user.set_password(validated_data['password']) 
+            user.save() 
+            return user
         
