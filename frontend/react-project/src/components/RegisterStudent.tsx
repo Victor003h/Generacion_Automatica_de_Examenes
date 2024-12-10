@@ -4,7 +4,7 @@ import axios from "axios";
 import "../styles/Register.css";
 import "../styles/Errors.css";
 
-const Register_Student: React.FC = () => {
+const RegisterStudent: React.FC = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     email: "",
@@ -174,4 +174,4 @@ const Register_Student: React.FC = () => {
   );
 };
 
-export default Register_Student;
+export default RegisterStudent;

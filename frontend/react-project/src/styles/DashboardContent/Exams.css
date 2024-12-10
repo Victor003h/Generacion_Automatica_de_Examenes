@@ -1,0 +1,47 @@
+/* Exams.css */
+
+.content-container {
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 20px;
+}
+
+.content-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.exam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.exam-card {
+  padding: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  background-color: #e9ecef;
+}
+
+.exam-card h3 {
+  margin-top: 0;
+  color: #007bff;
+}
+
+.exam-card p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.exam-card p strong {
+  color: #333;
+}
