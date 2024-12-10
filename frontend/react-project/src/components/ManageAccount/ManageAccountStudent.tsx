@@ -37,7 +37,6 @@ const ManageAccountStudent: React.FC = () => {
       })
       .then((response) => {
         console.log("Actualización exitosa:", response.data);
-        // Actualizar el valor en localStorage
         localStorage.setItem(field, formData[field as keyof typeof formData]);
       })
       .catch((error) => {

@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import RegisterModal from "./Register_Modal";
+import RegisterModal from "./RegisterModal";
 import useRegisterModal from "../hooks/RegisterModalTrigger";
 
 const Login: React.FC = () => {

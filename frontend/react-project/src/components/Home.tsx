@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
-import RegisterModal from "./Register_Modal";
+import RegisterModal from "./RegisterModal";
 import useRegisterModal from "../hooks/RegisterModalTrigger";
 
 const Home: React.FC = () => {
