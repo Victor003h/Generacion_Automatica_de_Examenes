@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard";
 import "./styles/App.css";
 import Exams from "./components/DashboardContent/Exams";
 import Grades from "./components/DashboardContent/Grades";
+import Subjects from "./components/DashboardContent/Subjects";
 import Statistics from "./components/DashboardContent/Statistics";
 
 const App: React.FC = () => {
@@ -21,7 +22,9 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="exams" element={<Exams />} />
           <Route path="grades" element={<Grades />} />
+          <Route path="subjects" element={<Subjects />} />
           <Route path="statistics" element={<Statistics />} />
+          <Route path="students" element={<Statistics />} />
         </Route>
       </Routes>
     </Router>

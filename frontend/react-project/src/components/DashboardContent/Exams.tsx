@@ -3,10 +3,13 @@ import axios from "axios";
 import "../../styles/DashboardContent/Exams.css";
 
 interface Exam {
-  id: number;
-  subject: string;
-  date: string;
-  type: string;
+  id: 0;
+  type: "string";
+  validation: true;
+  parameters: "string";
+  date: "2024-12-10";
+  teacher: 0;
+  subject: 0;
 }
 
 const Exams: React.FC = () => {
@@ -16,7 +19,7 @@ const Exams: React.FC = () => {
     const fetchExams = async () => {
       try {
         const response = await axios.get<Exam[]>(
-          `http://localhost:8000/api/exams/1`
+          `http://localhost:8000/api/exam/`
         ); // Reemplaza '1' con el ID del profesor
         setExamData(response.data);
       } catch (error) {
@@ -29,17 +32,24 @@ const Exams: React.FC = () => {
 
   return (
     <div className="content-container">
-      <h2>Exámenes Realizados</h2>
+      <h2>Exámenes Generados</h2>
       <div className="exam-list">
         {examData.map((exam) => (
           <div key={exam.id} className="exam-card">
-            <h3>{exam.subject}</h3>
-            <p>
-              <strong>Tipo:</strong> {exam.type}
-            </p>
-            <p>
-              <strong>Fecha:</strong> {new Date(exam.date).toLocaleDateString()}
-            </p>
+            <div key={exam.id} className="exam-details">
+              <p>
+                <strong>Asignatura:</strong> {exam.subject}
+                {/*Aqui pedir un
+                consulta que devuelva el nombre de asignatura por id*/}
+              </p>
+              <p>
+                <strong>Tipo:</strong> {exam.type}
+              </p>
+              <p>
+                <strong>Fecha:</strong>{" "}
+                {new Date(exam.date).toLocaleDateString()}
+              </p>
+            </div>
           </div>
         ))}
       </div>

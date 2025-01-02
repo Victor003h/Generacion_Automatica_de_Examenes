@@ -40,6 +40,7 @@ const Login: React.FC = () => {
         const { token } = response.data;
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("username", formData.username);
         console.log("Inicio de sesión exitoso:", response.data);
         navigate("/dashboard"); // Redirigir al dashboard
         // Maneja la respuesta, guarda el token, redirige o muestra un mensaje de éxito

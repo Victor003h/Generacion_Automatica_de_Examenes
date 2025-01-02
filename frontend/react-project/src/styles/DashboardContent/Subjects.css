@@ -1,4 +1,4 @@
-/* Exams.css */
+/* Subjects.css */
 
 .content-container {
   padding: 20px;
@@ -6,7 +6,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin-left: 20px;
-  height: 530px;
 }
 
 .content-container h2 {
@@ -14,41 +13,41 @@
   color: #333;
 }
 
-.exam-list {
+.subject-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.exam-card {
-  padding: 10px;
+.subject-card {
+  padding: 20px;
   background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   transition: transform 0.3s, background-color 0.3s;
 }
 
-.exam-card:hover {
+.subject-card:hover {
   transform: translateY(-5px);
   background-color: #e9ecef;
 }
 
-.exam-details {
+.subject-details {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
 }
 
-.exam-details h3 {
+.subject-details h3 {
   margin: 0;
   color: #007bff;
 }
 
-.exam-details p {
+.subject-details p {
   margin: 0 10px;
   color: #555;
 }
 
-.exam-details p strong {
+.subject-details p strong {
   color: #333;
 }
