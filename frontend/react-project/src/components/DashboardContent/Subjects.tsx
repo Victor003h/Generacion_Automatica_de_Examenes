@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/Subjects.css";
-
-interface Subject {
-  id: number;
-  name: string;
-  examsCount: number;
-  averageScore: number;
-}
+import { Subject } from "../../components/Interfaces";
 
 const Subjects: React.FC = () => {
   const [subjectData, setSubjectData] = useState<Subject[]>([]);
@@ -26,22 +20,17 @@ const Subjects: React.FC = () => {
 
     fetchSubjects();
   }, []);
-
   return (
     <div className="content-container">
-      <h2>Asignaturas</h2>
-      <div className="subject-list">
+      <div className="header">
+        <h2>Asignaturas</h2>
+      </div>
+      <div className="card-container">
         {subjectData.map((subject) => (
-          <div key={subject.id} className="subject-card">
-            <div className="subject-details">
-              <h3>{subject.name}</h3>
-              <p>
-                <strong>Exámenes:</strong> {subject.examsCount}
-              </p>
-              <p>
-                <strong>Promedio:</strong> {subject.averageScore}%
-              </p>
-            </div>
+          <div key={subject.id} className="card">
+            <h3>{subject.name}</h3> <p>Curso: {subject.course}</p>
+            <p>Programa de Estudio: {subject.study_program}</p>
+            <p>{subject.head_of_subject}</p>
           </div>
         ))}
       </div>
