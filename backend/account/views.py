@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializer import UserSerializer,TeacherSerializer,StudentSerializer
-from .models import User
+from .models import User,Teacher,Student
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from drf_spectacular.utils import extend_schema,OpenApiParameter
@@ -71,3 +71,16 @@ def student_register(request):
     
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+def getallTeacher(request):
+    teachers=Teacher.objects.all()
+    serializer=TeacherSerializer(teachers,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def getallStudent(request):
+    stundets=Student.objects.all()
+    serializer=StudentSerializer(stundets,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+    
