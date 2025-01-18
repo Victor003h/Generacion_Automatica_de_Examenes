@@ -84,3 +84,12 @@ def getallStudent(request):
     serializer=StudentSerializer(stundets,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
     
+@api_view(['GET'])
+def getUser(request,id):
+    try:
+        user=User.objects.get(pk=id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer=UserSerializer(user)
+    return Response(serializer.data,status=status.HTTP_200_OK)
