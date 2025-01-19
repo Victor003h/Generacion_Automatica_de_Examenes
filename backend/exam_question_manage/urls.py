@@ -1,8 +1,8 @@
 from django.urls import path
 from rest_framework import routers
 
-from .views import subject_detail, subject_list, subject_questions,teacher_subjects
-from .views import topic_list,topic_detail,question_list,question_detail,exam_list,exam_detail,topic_subject,question_topic
+from .views import *
+
 
 
 router=routers.DefaultRouter()
@@ -28,5 +28,6 @@ urlpatterns =[
     path('subject/question/<int:subject_id>/',subject_questions),
     path('topic/subject/<int:topic_id>/',topic_subject),
     path('question/topic/<int:question_id>/',question_topic),
+    path('subject/topics/<int:subject_id>/',subject_topics),
      
 ]+router.urls
