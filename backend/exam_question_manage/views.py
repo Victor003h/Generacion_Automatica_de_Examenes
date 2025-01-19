@@ -276,7 +276,7 @@ def exam_detail(request, pk):
 def teacher_subjects(request,teacher_id):
     try:
         teacher = Teacher.objects.get(pk=teacher_id)
-    except Question.DoesNotExist:
+    except Teacher.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     subjects=teacher.subjects.all()
@@ -287,7 +287,7 @@ def teacher_subjects(request,teacher_id):
 def subject_questions(request,subject_id):
     try:
         subject = Subject.objects.get(pk=subject_id)
-    except Question.DoesNotExist:
+    except Subject.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     questions=Question.objects.filter(subject=subject_id)
@@ -323,8 +323,8 @@ def question_topic(request,question_id):
 @api_view(['GET'])
 def subject_topics(request,subject_id):
     try:
-        subject=Question.objects.get(pk=subject_id)
-    except Question.DoesNotExist:
+        subject=Subject.objects.get(pk=subject_id)
+    except Subject.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
         
     topic=Topic.objects.filter(Subject=subject)
