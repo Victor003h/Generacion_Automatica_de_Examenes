@@ -316,5 +316,17 @@ def question_topic(request,question_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
         
     topic=question.topic
-    serializer=SubjectSerializer(topic)
+    serializer=TopicSerializer(topic)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def subject_topics(request,subject_id):
+    try:
+        subject=Question.objects.get(pk=subject_id)
+    except Question.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    topic=Topic.objects.filter(Subject=subject)
+    serializer=TopicSerializer(topic,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
