@@ -5,13 +5,15 @@ import { Subject } from "../../components/Interfaces";
 
 const Subjects: React.FC = () => {
   const [subjectData, setSubjectData] = useState<Subject[]>([]);
+  //Get teacher ID from localStorage
+  const teacherId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
         const response = await axios.get<Subject[]>(
-          `http://localhost:8000/api/subject/`
-        ); // Reemplaza '1' con el ID del profesor
+          `http://localhost:8000/api/teacher/subjects/${teacherId}/`
+        );
         setSubjectData(response.data);
       } catch (error) {
         console.error("Error al obtener las asignaturas:", error);

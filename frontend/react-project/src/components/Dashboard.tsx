@@ -30,10 +30,10 @@ const DashboardStudent: React.FC = () => {
   return (
     <div className="dashboard">
       <nav className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
-        <div className="profile">
-          <span>Bienvenido, {name}</span>
-        </div>
         <ul>
+          <li className="profile">
+            <span>Bienvenido, {name}</span>
+          </li>
           <li>
             <Link to="exams">Gestionar Exámenes</Link>
           </li>
@@ -54,22 +54,17 @@ const DashboardStudent: React.FC = () => {
             <Link to="statistics">Estadísticas</Link>
           </li>
           <li className="dropdown">
-            {" "}
             <button className="dropdown-toggle" onClick={toggleDropdown}>
-              {" "}
-              Mi Cuenta{" "}
-              <span
-                className={`arrow ${isDropdownOpen ? "up" : "down"}`}
-              ></span>{" "}
-            </button>{" "}
+              Mi Cuenta
+              <span className={`arrow ${isDropdownOpen ? "up" : "down"}`} />
+            </button>
             <div className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
-              {" "}
-              <Link to="manage-account-teacher">Gestionar Cuenta</Link>{" "}
+              <Link to="/manage-account">Gestionar Cuenta</Link>
               <button onClick={handleSignOut} className="dropdown-item">
                 Cerrar Sesión
-              </button>{" "}
-              <Link to="personalize">Personalizar</Link>{" "}
-            </div>{" "}
+              </button>
+              <Link to="/personalize">Personalizar</Link>
+            </div>
           </li>
         </ul>
         <button className="sidebar-toggle" onClick={toggleSidebar}>

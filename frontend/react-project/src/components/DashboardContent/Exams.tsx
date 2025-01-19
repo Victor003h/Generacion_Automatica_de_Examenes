@@ -19,7 +19,7 @@ const Exams: React.FC = () => {
         const examsWithSubjectNames = await Promise.all(
           exams.map(async (exam: Exam) => {
             const subjectResponse = await axios.get(
-              `http://localhost:8000/api/subject/${exam.subject}`
+              `http://localhost:8000/api/subjects/${exam.subject}`
             );
             return { ...exam, subjectName: subjectResponse.data.name };
           })

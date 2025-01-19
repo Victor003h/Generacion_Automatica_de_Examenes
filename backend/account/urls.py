@@ -7,5 +7,5 @@ urlpatterns = [
     path('get/students/',getallStudent),
     path('get/teachers/',getallTeacher),
     path('login/',login),
-    path('get/user'/getUser),
+    path('get/user/', getUser),
 ]

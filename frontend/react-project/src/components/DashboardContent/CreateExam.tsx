@@ -1,11 +1,11 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/CreateExam.css";
-import { Subject, Topic, Question } from "../../components/Interfaces";
+import { Question } from "../../components/Interfaces";
+import useFetchSubjects from "../../hooks/useFetchTeacherSubjects"; // Importa el hook
+import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
 
 const CreateExam: React.FC = () => {
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
@@ -13,33 +13,19 @@ const CreateExam: React.FC = () => {
   const [examType, setExamType] = useState<string>("");
   const [parameters, setParameters] = useState<string>("");
 
-  useEffect(() => {
-    // Obtener todas las asignaturas
-    const fetchSubjects = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/subject");
-        setSubjects(response.data);
-      } catch (error) {
-        console.error("Error al obtener las asignaturas:", error);
-      }
-    };
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? storedUserId : null;
 
-    fetchSubjects();
-  }, []);
-
-  useEffect(() => {
-    // Obtener todos los temas (independiente de la asignatura)
-    const fetchTopics = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/topic");
-        setTopics(response.data);
-      } catch (error) {
-        console.error("Error al obtener los temas:", error);
-      }
-    };
-
-    fetchTopics();
-  }, []);
+  const {
+    subjects,
+    loading: subjectsLoading,
+    error: subjectsError,
+  } = useFetchSubjects(userId);
+  const {
+    topics,
+    loading: topicsLoading,
+    error: topicsError,
+  } = useFetchTopics(selectedSubject);
 
   useEffect(() => {
     if (selectedTopic !== null) {
@@ -69,7 +55,6 @@ const CreateExam: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Recuperar el ID del profesor del localStorage
     const storedTeacherId = localStorage.getItem("userId");
     const teacherId = storedTeacherId ? parseInt(storedTeacherId, 10) : null;
 
@@ -104,31 +89,49 @@ const CreateExam: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Asignatura</label>
-          <select
-            onChange={(e) => setSelectedSubject(Number(e.target.value))}
-            required
-          >
-            <option value="">Selecciona una asignatura</option>
-            {subjects.map((subject) => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
+          {subjectsLoading ? (
+            <p>Cargando asignaturas...</p>
+          ) : (
+            <select
+              onChange={(e) => setSelectedSubject(Number(e.target.value))}
+              required
+            >
+              <option value="">Selecciona una asignatura</option>
+              {subjects.length === 0 ? (
+                <option value="">No se encontraron asignaturas</option>
+              ) : (
+                subjects.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.name}
+                  </option>
+                ))
+              )}
+            </select>
+          )}
+          {subjectsError && <p>{subjectsError}</p>}
         </div>
         <div className="form-group">
           <label>Tema</label>
-          <select
-            onChange={(e) => setSelectedTopic(Number(e.target.value))}
-            required
-          >
-            <option value="">Selecciona un tema</option>
-            {topics.map((topic) => (
-              <option key={topic.id} value={topic.id}>
-                {topic.name}
-              </option>
-            ))}
-          </select>
+          {topicsLoading ? (
+            <p>Cargando temas...</p>
+          ) : (
+            <select
+              onChange={(e) => setSelectedTopic(Number(e.target.value))}
+              required
+            >
+              <option value="">Selecciona un tema</option>
+              {topics.length === 0 ? (
+                <option value="">No se encontraron temas</option>
+              ) : (
+                topics.map((topic) => (
+                  <option key={topic.id} value={topic.id}>
+                    {topic.name}
+                  </option>
+                ))
+              )}
+            </select>
+          )}
+          {topicsError && <p>{topicsError}</p>}
         </div>
         <div className="form-group">
           <label>Preguntas</label>

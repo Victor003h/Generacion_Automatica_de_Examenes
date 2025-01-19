@@ -14,7 +14,7 @@ const useFetchQuestions = (subjectIds: number[]) => {
         for (const subjectId of subjectIds) {
           try {
             const response = await axios.get(
-              `http://localhost:8000/api/subject/questions/${subjectId}/`
+              `http://localhost:8000/api/subject/question/${subjectId}/`
             );
             questionsData[subjectId] = response.data;
           } catch (err: unknown) {
