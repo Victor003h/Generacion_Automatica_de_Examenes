@@ -29,5 +29,6 @@ urlpatterns =[
     path('topic/subject/<int:topic_id>/',topic_subject),
     path('question/topic/<int:question_id>/',question_topic),
     path('subject/topics/<int:subject_id>/',subject_topics),
+    path('topic/questions/<int:topic_id>/',topic_question),
      
 ]+router.urls
