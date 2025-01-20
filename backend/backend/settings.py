@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'corsheaders',
     #Internal
     'account',
-    'exam_question_manage',
+    'questions',
     
 ]
 

@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('account', '0002_alter_student_options_alter_teacher_options_and_more'),
-        ('exam_question_manage', '0002_alter_subject_head_of_subject'),
+        ('questions', '0002_alter_subject_head_of_subject'),
     ]
 
     operations = [
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='exam',
             name='subject',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='exam_question_manage.subject'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='questions.subject'),
         ),
         migrations.AlterField(
             model_name='exam',
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='question',
             name='topic',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='exam_question_manage.topic'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='questions.topic'),
         ),
         migrations.AlterField(
             model_name='subject',

@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exam_question_manage', '0003_subject_teachers_subject_alter_exam_subject_and_more'),
+        ('questions', '0003_subject_teachers_subject_alter_exam_subject_and_more'),
     ]
 
     operations = [
         migrations.AddField(
             model_name='question',
             name='subject',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='exam_question_manage.subject'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='questions.subject'),
         ),
     ]

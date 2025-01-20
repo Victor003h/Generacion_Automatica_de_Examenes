@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('account', '0002_alter_student_options_alter_teacher_options_and_more'),
-        ('exam_question_manage', '0001_initial'),
+        ('questions', '0001_initial'),
     ]
 
     operations = [

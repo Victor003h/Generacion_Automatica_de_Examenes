@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('parameters', models.CharField(max_length=150)),
                 ('date', models.DateField(auto_now_add=True)),
                 ('teacher', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='account.teacher')),
-                ('subject', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='exam_question_manage.subject')),
+                ('subject', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='questions.subject')),
             ],
         ),
         migrations.CreateModel(
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=150)),
-                ('Subject', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='exam_question_manage.subject')),
+                ('Subject', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='questions.subject')),
             ],
         ),
         migrations.CreateModel(
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('difficulty', models.CharField(choices=[('E', 'Easy'), ('M', 'Medium'), ('D', 'Difficult')], max_length=1)),
                 ('date', models.DateField(auto_now_add=True)),
                 ('teacher', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='account.teacher')),
-                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='exam_question_manage.topic')),
+                ('topic', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='questions.topic')),
             ],
         ),
     ]
