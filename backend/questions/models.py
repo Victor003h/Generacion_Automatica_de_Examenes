@@ -13,7 +13,6 @@ class Topic(models.Model):
     Subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
     
     
-    
 class Question(models.Model):
     #Content, Type, Difficulty
     content=models.TextField()
