@@ -16,6 +16,14 @@ export interface Student {
   course: number;
 }
 
+export interface Teacher {
+  first_name: string;
+  email: string;
+  last_name: string;
+  last_name2: string;
+  speciality: string;
+}
+
 export interface Exam {
   id: number;
   type: string;

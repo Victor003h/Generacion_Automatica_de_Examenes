@@ -40,10 +40,10 @@ body {
   padding: 20px;
 }
 
-.header {
+.home-header {
   width: 100%;
   padding: 20px 50px;
-  background-color: #fc9d31cc;
+  background-color: #14273b;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
@@ -56,7 +56,7 @@ body {
 
 .logo {
   font-size: 2.5rem;
-  color: #5f1f57;
+  color: #ff05de;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
@@ -135,19 +135,20 @@ body {
   }
 }
 
-.main-content {
+.main-content-home {
   text-align: center;
   padding: 50px 20px;
   margin-top: 20px;
+  justify-content: center;
 }
 
-.main-title {
+.main-title-home {
   font-size: 3rem;
   color: #333;
   margin-bottom: 20px;
 }
 
-.main-description {
+.main-description-home {
   font-size: 1.2rem;
   color: #666;
   margin-bottom: 30px;
@@ -164,7 +165,7 @@ body {
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
-  background-color: #00aeff;
+  background-color: #14273b;
   color: white;
   border: none;
   border-radius: 30px;
@@ -176,7 +177,7 @@ body {
 
 .home-button:hover,
 .cta-button:hover {
-  background-color: #0056b3;
+  background-color: #000000;
 }
 
 .button-text {

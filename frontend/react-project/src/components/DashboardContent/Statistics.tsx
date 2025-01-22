@@ -3,12 +3,7 @@ import "../../styles/ContentSection.css";
 
 const Statistics: React.FC = () => {
   return (
-    <div className="content-container">
-      <div className="header">
-        <h2>Estadísticas</h2>
-      </div>
-      {/* Contenido para estadísticas */}
-    </div>
+    <div className="content-container">{/* Contenido para estadísticas */}</div>
   );
 };
 

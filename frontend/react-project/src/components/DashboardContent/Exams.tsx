@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/Exams.css";
-import "../../styles/DashboardContent/Header.css";
 import { Exam } from "../../components/Interfaces";
 
 const Exams: React.FC = () => {
@@ -49,15 +48,12 @@ const Exams: React.FC = () => {
 
   return (
     <div className="content-container">
-      <div className="header">
-        <h2>Listado de Exámenes</h2>
-        <button
-          className="create-exam-button"
-          onClick={() => (window.location.href = "/create-exam")}
-        >
-          Crear Examen
-        </button>
-      </div>
+      <button
+        className="create-exam-button"
+        onClick={() => (window.location.href = "/create-exam")}
+      >
+        Crear Examen
+      </button>
       {Object.keys(examsBySubject).map((subjectName) => (
         <div key={subjectName} className="subject-section">
           <h3>{subjectName}</h3>

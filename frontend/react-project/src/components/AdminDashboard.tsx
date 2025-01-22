@@ -6,20 +6,20 @@ import {
   FaBookOpen,
   FaChartBar,
   FaQuestionCircle,
-} from "react-icons/fa"; // Importamos íconos de react-icons
+  FaChartPie,
+} from "react-icons/fa";
 import "../styles/Dashboard.css";
-import "../styles/DashboardContent/Dropdown.css";
 
-const Dashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
+  //const [role, setRole] = useState("");
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
-    const storedRole = localStorage.getItem("role");
+    //const storedRole = localStorage.getItem("role");
     if (storedName) setName(storedName);
-    if (storedRole) setRole(storedRole);
+    //if (storedRole) setRole(storedRole);
   }, []);
 
   const toggleSidebar = () => {
@@ -40,23 +40,27 @@ const Dashboard: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link to={role === "teacher" ? "students" : "grades"}>
+            <Link to="students">
               <FaUserGraduate className="icon" />
-              <span>
-                {role === "teacher" ? "Estudiantes" : "Calificaciones"}
-              </span>
+              <span>Estudiantes</span>
             </Link>
           </li>
           <li>
-            <Link to={role === "teacher" ? "questions" : ""}>
-              <FaQuestionCircle className="icon" />
-              <span>{role === "teacher" ? "Banco de Preguntas" : ""}</span>
+            <Link to="teachers">
+              <FaChartPie className="icon" />
+              <span>Profesores</span>
             </Link>
           </li>
           <li>
             <Link to="subjects">
               <FaBookOpen className="icon" />
               <span>Asignaturas</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="questions">
+              <FaQuestionCircle className="icon" />
+              <span>Banco de Preguntas</span>
             </Link>
           </li>
           <li>
@@ -79,4 +83,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

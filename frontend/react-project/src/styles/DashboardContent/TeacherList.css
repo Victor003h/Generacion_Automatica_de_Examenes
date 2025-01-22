@@ -1,4 +1,4 @@
-.subject-list-container {
+.teacher-list-container {
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -11,7 +11,7 @@
   margin-bottom: 20px;
 }
 
-.subject-add-button {
+.teacher-add-button {
   background-color: #14273b;
   color: white;
   padding: 10px 15px;
@@ -19,12 +19,12 @@
   border-radius: 5px;
 }
 
-.subject-list {
+.teacher-list {
   list-style-type: none;
   padding: 0;
 }
 
-.subject-item {
+.teacher-item {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -33,21 +33,21 @@
   transition: box-shadow 0.3s ease;
 }
 
-.subject-item:hover {
+.teacher-item:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.subject-item h2 {
+.teacher-item h2 {
   margin: 0 0 10px;
   font-size: 1.5em;
 }
 
-.subject-item p {
+.teacher-item p {
   margin: 5px 0;
   font-size: 1em;
 }
 
-.subject-actions {
+.teacher-actions {
   display: flex;
   justify-content: flex-end;
 }
