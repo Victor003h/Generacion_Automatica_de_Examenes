@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-container">
-      <header className="header">
+      <header className="home-header">
         <h1 className="logo">SmartExam</h1>
       </header>
       <div className="slider">
@@ -35,9 +35,9 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
-      <main className="main-content">
-        <h2 className="main-title">Bienvenido a SmartExam</h2>
-        <p className="main-description">
+      <main className="main-content-home">
+        <h2 className="main-title-home">Bienvenido a SmartExam</h2>
+        <p className="main-description-home">
           Una aplicación web de nuestra institución educativa para la gestión
           eficiente de exámenes y calificaciones. Nuestros profesores y
           estudiantes nunca han estado tan unidos.

@@ -1,5 +1,3 @@
-/* Dashboard.css */
-
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
@@ -16,28 +14,30 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 70px;
 }
 
 .sidebar {
-  width: 250px;
-  background-color: #007bff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Ancho de la barra lateral */
+  height: 100vh; /* Altura completa */
+  background-color: #14273b;
   color: white;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  overflow-y: auto;
-  transition: width 0.3s;
-  position: relative;
+  overflow-y: auto; /* Añadir desplazamiento vertical si es necesario */
+  transition: transform 0.3s ease, width 0.3s ease; /* Añadir transición suave para la barra lateral */
+  z-index: 1000; /* Asegurarse de que la barra lateral esté sobre otros elementos */
 }
 
 .sidebar.open {
-  visibility: visible;
-  pointer-events: auto;
+  width: 250px; /* Barra lateral abierta */
 }
 
 .sidebar.closed {
-  width: 60px;
+  width: 80px; /* Barra lateral parcialmente cerrada */
 }
 
 .sidebar.closed ul {
@@ -79,7 +79,7 @@ body {
 }
 
 .sidebar ul li a:hover {
-  background-color: #0056b3;
+  background-color: #14273b;
 }
 
 .sidebar ul li a .icon {
@@ -95,6 +95,7 @@ body {
 
 .sidebar ul li.dropdown:hover .dropdown-menu {
   display: block;
+  background-color: #14273b;
 }
 
 .sidebar ul li.dropdown .arrow {
@@ -120,25 +121,34 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   position: absolute;
-  top: 600px;
-  background-color: #007bff;
+  bottom: 20px; /* Alineación al fondo */
+  left: 50%; /* Alineación hacia el centro de la barra lateral */
+  transform: translateX(-70%); /* Mover hacia el borde de la barra lateral */
+  transition: left 0.3s ease;
+  z-index: 1001; /* Asegurarse de que el toggle esté sobre la barra lateral */
+  background-color: #14273b;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: right 0.3s;
 }
 
 .sidebar.closed .sidebar-toggle {
-  right: 0px;
+  left: 50%; /* Ajustar la posición cuando la barra lateral esté cerrada parcialmente */
 }
 
 .main-content {
   flex: 1;
   background-color: #f4f6f8;
-  padding: 20px;
+  padding: 20px; /* Asegura que el contenido comience desde arriba */
+  margin-left: 270px; /* Espacio para la barra lateral fija */
+  transition: margin-left 0.3s ease; /* Añadir transición suave para el margen */
+}
+
+.sidebar.closed + .main-content {
+  margin-left: 100px; /* Ajustar margen cuando la barra lateral está cerrada parcialmente */
 }
 
 .top-bar {
@@ -148,12 +158,21 @@ body {
   padding: 20px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: calc(100% - 250px);
-  margin-left: 250px;
+  width: calc(
+    100% - 270px
+  ); /* Ajustar el ancho considerando la barra lateral fija */
+  margin-left: 270px; /* Espacio para la barra lateral fija */
+}
+
+.sidebar.closed + .top-bar {
+  width: calc(
+    100% - 100px
+  ); /* Ajustar el ancho cuando la barra lateral está cerrada parcialmente */
+  margin-left: 100px; /* Ajustar margen cuando la barra lateral está cerrada parcialmente */
 }
 
 .content-section {
-  margin-top: 80px;
+  padding: 20px;
 }
 
 .content-section h2 {
@@ -162,4 +181,86 @@ body {
 
 .profile {
   text-align: center;
+}
+
+/* Estilos adicionales para QuestionList */
+.add-button {
+  display: block;
+  background-color: #14273b;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  position: absolute;
+  top: 20px;
+  right: 20px; /* Alineación a la derecha */
+}
+
+.content-container {
+  padding: 20px;
+  margin-top: 60px; /* Aseguramos que el contenido no se superponga con el botón */
+}
+
+.subject-container {
+  margin-bottom: 30px; /* Espacio adicional entre los grupos de asignaturas */
+  border: 2px solid #ccc; /* Borde para destacar cada asignatura */
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f9f9f9; /* Fondo ligero para cada contenedor */
+}
+
+.subject-header {
+  background-color: #14273b; /* Color de fondo para el encabezado de la asignatura */
+  color: white !important;
+  padding: 10px;
+  border-radius: 8px 8px 0 0; /* Bordes redondeados para la parte superior */
+}
+
+.question-list {
+  margin-top: 16px;
+}
+
+.question-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+
+.question-text {
+  margin-top: 8px;
+  font-size: 1em;
+}
+
+/* Estilos adicionales para Exams */
+.exam-list {
+  margin-top: 16px;
+}
+
+.exam-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.exam-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+
+.exam-text {
+  margin-top: 8px;
+  font-size: 1em;
 }

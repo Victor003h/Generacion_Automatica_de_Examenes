@@ -14,6 +14,7 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
   const [role, setRole] = useState("");
+  const [error, setError] = useState<string | null>(null); // Actualiza el tipo de error
   const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,29 +28,46 @@ const Login: React.FC = () => {
     setRole(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const data = { ...formData, role };
-    axios
-      .post("http://localhost:8000/api/account/login/", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", role);
-        localStorage.setItem("username", formData.username);
-        localStorage.setItem("userId", response.data.user.id);
-        console.log("Inicio de sesión exitoso:", response.data);
-        navigate("/dashboard"); // Redirigir al dashboard
-        // Maneja la respuesta, guarda el token, redirige o muestra un mensaje de éxito
-      })
-      .catch((error) => {
-        console.error("Error en el inicio de sesión:", error.response.data);
-        // Maneja el error, muestra un mensaje de error
-      });
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/account/login/",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("username", formData.username);
+      localStorage.setItem("userId", response.data.user.id);
+      console.log("Inicio de sesión exitoso:", response.data);
+
+      if (role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setError(
+          error.response?.data?.message || "Error en el inicio de sesión"
+        );
+        console.error(
+          "Error en el inicio de sesión:",
+          error.response?.data || error.message
+        );
+      } else {
+        setError("Error inesperado");
+        console.error("Error inesperado:", error);
+      }
+    }
   };
 
   return (
@@ -80,7 +98,9 @@ const Login: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">¿Eres estudiante o profesor?</label>
+            <label className="form-label">
+              ¿Eres estudiante, profesor o administrador?
+            </label>
             <select
               className="form-input"
               value={role}
@@ -92,8 +112,10 @@ const Login: React.FC = () => {
               </option>
               <option value="student">Estudiante</option>
               <option value="teacher">Profesor</option>
+              <option value="admin">Administrador</option>
             </select>
           </div>
+          {error && <p className="error-message">{error}</p>}
           <button type="submit" className="login-button">
             Iniciar Sesión
           </button>

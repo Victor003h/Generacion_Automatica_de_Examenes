@@ -7,14 +7,19 @@ import RegisterStudent from "./components/RegisterStudent";
 import Dashboard from "./components/Dashboard";
 import "./styles/App.css";
 import Exams from "./components/DashboardContent/Exams";
-import GradesList from "./components/DashboardContent/GradesList";
-import Subjects from "./components/DashboardContent/Subjects";
+import SubjectList from "./components/DashboardContent/Subjects";
 import Statistics from "./components/DashboardContent/Statistics";
-import StudentsList from "./components/DashboardContent/StudentsList";
+import TeacherList from "./components/DashboardContent/TeacherList";
+import StudentList from "./components/DashboardContent/StudentList";
 import CreateExam from "./components/DashboardContent/CreateExam";
 import QuestionsList from "./components/DashboardContent/QuestionsList";
 import AddQuestion from "./components/DashboardContent/AddQuestion";
 import ExamDetails from "./components/DashboardContent/ExamDetails";
+import EditQuestion from "./components/DashboardContent/EditQuestion";
+import AdminDashboard from "./components/AdminDashboard";
+import AddTeacher from "./components/DashboardContent/AddTeacher";
+import AddStudent from "./components/DashboardContent/AddStudent";
+import AddSubject from "./components/DashboardContent/AddSubject";
 
 const App: React.FC = () => {
   return (
@@ -26,15 +31,26 @@ const App: React.FC = () => {
         <Route path="/register/student" element={<RegisterStudent />} />
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="exams" element={<Exams />} />
-          <Route path="grades" element={<GradesList />} />
-          <Route path="subjects" element={<Subjects />} />
+          <Route path="subjects" element={<SubjectList />} />
           <Route path="statistics" element={<Statistics />} />
-          <Route path="students" element={<StudentsList />} />
+          <Route path="students" element={<StudentList />} />
           <Route path="questions" element={<QuestionsList />} />
+        </Route>
+        <Route path="/admin-dashboard" element={<AdminDashboard />}>
+          <Route path="exams" element={<Exams />} />
+          <Route path="teachers" element={<TeacherList />} />
+          <Route path="subjects" element={<SubjectList />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="students" element={<StudentList />} />
+          <Route path="questions" element={<QuestionsList />} />
+          <Route path="add-teacher" element={<AddTeacher />} />
+          <Route path="add-student" element={<AddStudent />} />
+          <Route path="add-subject" element={<AddSubject />} />
         </Route>
         <Route path="create-exam" element={<CreateExam />} />
         <Route path="exam-details" element={<ExamDetails />} />
         <Route path="add-question" element={<AddQuestion />} />
+        <Route path="/edit-question/" element={<EditQuestion />} />
       </Routes>
     </Router>
   );
