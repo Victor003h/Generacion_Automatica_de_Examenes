@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddQuestions.css";
-import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects"; // Importa el hook
+import useFetchSubjectsByRole from "../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
 
 const EditQuestion: React.FC = () => {
   const navigate = useNavigate();
-  const teacherId = localStorage.getItem("userId") || "";
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? storedUserId : null;
+  const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
   const questionId = localStorage.getItem("editQuestionId") || "";
   const [questionData, setQuestionData] = useState({
     date: "",
@@ -15,7 +17,7 @@ const EditQuestion: React.FC = () => {
     type: "MO",
     difficulty: "E",
     content: "",
-    teacher: teacherId,
+    teacher: role === "admin" ? null : userId,
     subject: null,
   });
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -24,7 +26,7 @@ const EditQuestion: React.FC = () => {
     subjects,
     loading: subjectsLoading,
     error: subjectsError,
-  } = useFetchTeacherSubjects(teacherId);
+  } = useFetchSubjectsByRole(userId, role);
 
   const {
     topics,
@@ -32,13 +34,49 @@ const EditQuestion: React.FC = () => {
     error: topicsError,
   } = useFetchTopics(questionData.subject);
 
+  const [teachers, setTeachers] = useState<
+    { id: number; first_name: string; last_name: string }[]
+  >([]);
+  const [teachersLoading, setTeachersLoading] = useState(true);
+  const [teachersError, setTeachersError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/account/teacher/"
+        );
+        setTeachers(response.data);
+        setTeachersLoading(false);
+      } catch (error) {
+        setTeachersError("Error al cargar los profesores");
+        setTeachersLoading(false);
+      }
+    };
+
+    if (role === "admin") {
+      fetchTeachers();
+    } else {
+      setTeachersLoading(false);
+    }
+  }, [role]);
+
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/question/${questionId}/`
         );
-        setQuestionData(response.data);
+        const question = response.data;
+        setQuestionData({
+          date: question.date,
+          topic: question.topic,
+          type: question.type,
+          difficulty: question.difficulty,
+          content: question.content,
+          teacher: question.teacher,
+          subject: question.subject,
+        });
       } catch (error) {
         console.error("Error al obtener la pregunta:", error);
       }
@@ -51,7 +89,7 @@ const EditQuestion: React.FC = () => {
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value } = e.target;
@@ -72,7 +110,11 @@ const EditQuestion: React.FC = () => {
       setSuccessMessage("Pregunta editada con éxito");
       setTimeout(() => {
         setSuccessMessage(null);
-        navigate("../dashboard/questions");
+        navigate(
+          role === "admin"
+            ? "/admin-dashboard/questions"
+            : "/dashboard/questions"
+        ); // Redirige según el rol
       }, 2000); // Redirigir después de 2 segundos
     } catch (error) {
       console.error("Error al actualizar la pregunta:", error);
@@ -153,6 +195,29 @@ const EditQuestion: React.FC = () => {
             <option value="D">Difícil</option>
           </select>
         </div>
+        {role === "admin" && ( // Mostrar el campo de selección de profesor solo si el usuario es admin
+          <div className="form-group">
+            <label>Profesor Autor:</label>
+            {teachersLoading ? (
+              <p>Cargando profesores...</p>
+            ) : teachersError ? (
+              <p>{teachersError}</p>
+            ) : (
+              <select
+                name="teacher"
+                onChange={handleChange}
+                value={questionData.teacher || ""}
+              >
+                <option value="">Seleccione un profesor</option>
+                {teachers.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.first_name} {teacher.last_name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )}
         <button type="submit" className="save-button">
           Guardar Cambios
         </button>

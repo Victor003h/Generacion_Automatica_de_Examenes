@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddSubject.css";
 import { Teacher } from "../Interfaces";
 
-const AddSubject: React.FC = () => {
+const EditSubject: React.FC = () => {
   const [name, setName] = useState("");
   const [studyProgram, setStudyProgram] = useState("");
   const [course, setCourse] = useState<number | "">("");
@@ -14,6 +14,8 @@ const AddSubject: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const subjectId = localStorage.getItem("editSubjectId");
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -27,8 +29,26 @@ const AddSubject: React.FC = () => {
       }
     };
 
+    const fetchSubject = async () => {
+      if (!subjectId) return;
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/subject/${subjectId}`
+        );
+        const subject = response.data;
+        setName(subject.name);
+        setStudyProgram(subject.study_program);
+        setCourse(subject.course);
+        setHeadOfSubject(subject.head_of_subject);
+        setTeachersSubject(subject.teachers_subject.join(","));
+      } catch (err) {
+        console.error("Error al obtener la asignatura:", err);
+      }
+    };
+
     fetchTeachers();
-  }, []);
+    fetchSubject();
+  }, [subjectId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +57,8 @@ const AddSubject: React.FC = () => {
     const teachersSubjectArray = teachersSubject.split(",").map(Number); // Convertir a array de números
 
     try {
-      await axios.post("http://localhost:8000/api/subjects/", {
+      if (!subjectId) throw new Error("No subject ID found in local storage");
+      await axios.put(`http://localhost:8000/api/subject/${subjectId}/`, {
         name: name,
         study_program: studyProgram,
         course: course,
@@ -45,10 +66,12 @@ const AddSubject: React.FC = () => {
         teachers_subject: teachersSubjectArray,
       });
 
-      alert("Asignatura añadida con éxito");
+      alert("Asignatura actualizada con éxito");
       navigate("/admin-dashboard/subjects"); // Redirige a la lista de asignaturas
     } catch (err) {
-      setError("Error al añadir la asignatura. Por favor, intenta de nuevo.");
+      setError(
+        "Error al actualizar la asignatura. Por favor, intenta de nuevo."
+      );
     } finally {
       setLoading(false);
     }
@@ -63,9 +86,9 @@ const AddSubject: React.FC = () => {
   };
 
   return (
-    <div className="add-subject-container">
-      <h1>Añadir Asignatura</h1>
-      <form className="add-subject-form" onSubmit={handleSubmit}>
+    <div className="edit-subject-container">
+      <h1>Editar Asignatura</h1>
+      <form className="edit-subject-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Nombre</label>
           <input
@@ -130,11 +153,11 @@ const AddSubject: React.FC = () => {
         </div>
         {error && <div className="error-message">{error}</div>}
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? "Cargando..." : "Añadir Asignatura"}
+          {loading ? "Cargando..." : "Actualizar Asignatura"}
         </button>
       </form>
     </div>
   );
 };
 
-export default AddSubject;
+export default EditSubject;

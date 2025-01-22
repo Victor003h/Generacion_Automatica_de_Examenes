@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/AddQuestions.css";
-import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects"; // Importa el hook
+import useFetchSubjectsByRole from "../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
 
 const AddQuestion: React.FC = () => {
@@ -10,24 +10,57 @@ const AddQuestion: React.FC = () => {
   const [questionText, setQuestionText] = useState<string>("");
   const [questionType, setQuestionType] = useState<string>("MO");
   const [difficulty, setDifficulty] = useState<string>("E");
+  const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null); // Nuevo estado para el profesor seleccionado
+
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? storedUserId : null;
+  const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
+
   const {
     subjects,
     loading: subjectsLoading,
     error: subjectsError,
-  } = useFetchTeacherSubjects(userId);
+  } = useFetchSubjectsByRole(userId, role);
+
   const {
     topics,
     loading: topicsLoading,
     error: topicsError,
   } = useFetchTopics(selectedSubject);
+
+  const [teachers, setTeachers] = useState<
+    { id: number; first_name: string; last_name: string }[]
+  >([]);
+  const [teachersLoading, setTeachersLoading] = useState(true);
+  const [teachersError, setTeachersError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/account/teacher/"
+        );
+        setTeachers(response.data);
+        setTeachersLoading(false);
+      } catch (error) {
+        setTeachersError("Error al cargar los profesores");
+        setTeachersLoading(false);
+      }
+    };
+
+    if (role === "admin") {
+      fetchTeachers();
+    } else {
+      setTeachersLoading(false);
+    }
+  }, [role]);
+
   const handleSaveQuestion = async () => {
     const newQuestion = {
       content: questionText,
       type: questionType,
       difficulty: difficulty,
-      teacher: userId,
+      teacher: role === "admin" ? selectedTeacher : userId, // Utilizar el profesor seleccionado si es admin
       topic: selectedTopic,
       subject: selectedSubject,
     };
@@ -39,10 +72,12 @@ const AddQuestion: React.FC = () => {
       setDifficulty("E");
       setSelectedSubject(null);
       setSelectedTopic(null);
+      setSelectedTeacher(null);
     } catch (error) {
       console.error("Error al guardar la pregunta:", error);
     }
   };
+
   return (
     <div className="add-question-container">
       <h2>Añadir Pregunta</h2>
@@ -110,14 +145,38 @@ const AddQuestion: React.FC = () => {
           onChange={(e) => setDifficulty(e.target.value)}
           value={difficulty}
         >
-          <option value="E">Fácil</option> <option value="M">Medio</option>
+          <option value="E">Fácil</option>
+          <option value="M">Medio</option>
           <option value="D">Difícil</option>
         </select>
       </div>
+      {role === "admin" && ( // Mostrar el campo de selección de profesor solo si el usuario es admin
+        <div className="form-group">
+          <label>Profesor Autor:</label>
+          {teachersLoading ? (
+            <p>Cargando profesores...</p>
+          ) : teachersError ? (
+            <p>{teachersError}</p>
+          ) : (
+            <select
+              onChange={(e) => setSelectedTeacher(e.target.value)}
+              value={selectedTeacher || ""}
+            >
+              <option value="">Seleccione un profesor</option>
+              {teachers.map((teacher) => (
+                <option key={teacher.id} value={teacher.id}>
+                  {teacher.first_name} {teacher.last_name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      )}
       <button onClick={handleSaveQuestion} className="save-button">
         Guardar Pregunta
       </button>
     </div>
   );
 };
+
 export default AddQuestion;

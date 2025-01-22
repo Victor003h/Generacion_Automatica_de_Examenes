@@ -9,32 +9,29 @@ const Login: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    role: "",
+    rol: "",
   });
 
   const navigate = useNavigate();
-  const [role, setRole] = useState("");
   const [error, setError] = useState<string | null>(null); // Actualiza el tipo de error
   const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setRole(e.target.value);
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const data = { ...formData, role };
+    console.log(formData);
     try {
       const response = await axios.post(
         "http://localhost:8000/api/account/login/",
-        data,
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -44,12 +41,12 @@ const Login: React.FC = () => {
 
       const { token } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
+      localStorage.setItem("rol", formData.rol);
       localStorage.setItem("username", formData.username);
       localStorage.setItem("userId", response.data.user.id);
       console.log("Inicio de sesión exitoso:", response.data);
 
-      if (role === "admin") {
+      if (formData.rol === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/dashboard");
@@ -102,9 +99,10 @@ const Login: React.FC = () => {
               ¿Eres estudiante, profesor o administrador?
             </label>
             <select
+              name="rol"
               className="form-input"
-              value={role}
-              onChange={handleRoleChange}
+              value={formData.rol}
+              onChange={handleChange}
               required
             >
               <option value="" disabled>

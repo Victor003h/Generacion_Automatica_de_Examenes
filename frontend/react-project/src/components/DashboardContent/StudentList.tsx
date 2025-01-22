@@ -2,18 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/StudentList.css";
 import { Student } from "../Interfaces";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const StudentList: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role") || "";
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/account/get/students"
+          "http://localhost:8000/api/account/student/"
         );
         setStudents(response.data);
       } catch (err) {
@@ -30,13 +32,20 @@ const StudentList: React.FC = () => {
     fetchStudents();
   }, []);
 
+  const handleEditClick = (studentId: number) => {
+    localStorage.setItem("editStudentId", studentId.toString());
+    navigate("/admin-dashboard/edit-student");
+  };
+
   const handleDeleteStudent = async (studentId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este estudiante?"
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8000/api/students/${studentId}/`);
+        await axios.delete(
+          `http://localhost:8000/api/account/student/${studentId}`
+        );
         alert("Estudiante borrado con éxito");
         setStudents(students.filter((student) => student.id !== studentId));
       } catch (error) {
@@ -52,9 +61,11 @@ const StudentList: React.FC = () => {
     <div className="student-list-container">
       <div className="header">
         <h1>Lista de Estudiantes</h1>
-        <Link to="../add-student" className="student-add-button">
-          Añadir Estudiante
-        </Link>
+        {role === "admin" && ( // Mostrar el botón solo si el usuario es admin
+          <Link to="/add-student" className="add-button">
+            Añadir Estudiante
+          </Link>
+        )}
       </div>
       {students.length === 0 ? (
         <div>No hay estudiantes disponibles</div>
@@ -75,18 +86,22 @@ const StudentList: React.FC = () => {
                 <strong>Curso:</strong> {student.course}
               </p>
               <div className="student-actions">
-                <Link
-                  to={`/edit-student/${student.id}`}
-                  className="edit-button"
-                >
-                  Editar
-                </Link>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDeleteStudent(student.id)}
-                >
-                  Eliminar
-                </button>
+                {role === "admin" && ( // Mostrar los botones solo si el usuario es admin
+                  <div className="student-actions">
+                    <button
+                      className="edit-button"
+                      onClick={() => handleEditClick(student.id)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteStudent(student.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
               </div>
             </li>
           ))}

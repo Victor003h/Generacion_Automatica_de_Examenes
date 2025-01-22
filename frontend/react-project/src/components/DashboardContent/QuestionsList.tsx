@@ -13,7 +13,7 @@ const QuestionList: React.FC = () => {
   const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
   const navigate = useNavigate();
 
-  // Llamar a ambos hooks sin condicional
+  // Hooks para obtener asignaturas
   const {
     subjects: adminSubjects,
     loading: adminSubjectsLoading,
@@ -25,7 +25,7 @@ const QuestionList: React.FC = () => {
     error: teacherSubjectsError,
   } = useFetchTeacherSubjects(userId);
 
-  // Seleccionar los subjects y estados de carga/error adecuados según el rol del usuario
+  // Seleccionar las asignaturas y estados de carga/error adecuados según el rol del usuario
   const subjects = role === "admin" ? adminSubjects : teacherSubjects;
   const subjectsLoading =
     role === "admin" ? adminSubjectsLoading : teacherSubjectsLoading;
@@ -95,7 +95,7 @@ const QuestionList: React.FC = () => {
       teacherIds.map(async (id) => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/teacher/${id}/`
+            `http://localhost:8000/api/account/teacher/${id}`
           );
           teachersDict[id] = {
             firstName: response.data.first_name,

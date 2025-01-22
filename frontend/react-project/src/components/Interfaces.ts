@@ -8,6 +8,7 @@ export interface Subject {
 }
 // Interface para los estudiantes
 export interface Student {
+  id: number;
   first_name: string;
   email: string;
   last_name: string;
@@ -17,6 +18,7 @@ export interface Student {
 }
 
 export interface Teacher {
+  id: number;
   first_name: string;
   email: string;
   last_name: string;

@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/TeacherList.css";
 import { Teacher } from "../Interfaces";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TeacherList: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/account/get/teachers"
+          "http://localhost:8000/api/account/teacher"
         );
         setTeachers(response.data);
       } catch (err) {
@@ -30,13 +31,20 @@ const TeacherList: React.FC = () => {
     fetchTeachers();
   }, []);
 
+  const handleEditClick = (teacherId: number) => {
+    localStorage.setItem("editTeacherId", teacherId.toString());
+    navigate("/admin-dashboard/edit-teacher");
+  };
+
   const handleDeleteTeacher = async (teacherId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este profesor?"
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8000/api/teachers/${teacherId}/`);
+        await axios.delete(
+          `http://localhost:8000/api/account/teacher/${teacherId}`
+        );
         alert("Profesor borrado con éxito");
         setTeachers(teachers.filter((teacher) => teacher.id !== teacherId));
       } catch (error) {
@@ -72,12 +80,12 @@ const TeacherList: React.FC = () => {
                 <strong>Especialidad:</strong> {teacher.speciality}
               </p>
               <div className="teacher-actions">
-                <Link
-                  to={`/edit-teacher/${teacher.id}`}
+                <button
                   className="edit-button"
+                  onClick={() => handleEditClick(teacher.id)}
                 >
                   Editar
-                </Link>
+                </button>
                 <button
                   className="delete-button"
                   onClick={() => handleDeleteTeacher(teacher.id)}

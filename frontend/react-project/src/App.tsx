@@ -20,6 +20,9 @@ import AdminDashboard from "./components/AdminDashboard";
 import AddTeacher from "./components/DashboardContent/AddTeacher";
 import AddStudent from "./components/DashboardContent/AddStudent";
 import AddSubject from "./components/DashboardContent/AddSubject";
+import EditSubject from "./components/DashboardContent/EditSubject";
+import EditStudent from "./components/DashboardContent/EditStudent";
+import EditTeacher from "./components/DashboardContent/EditTeacher";
 
 const App: React.FC = () => {
   return (
@@ -46,6 +49,9 @@ const App: React.FC = () => {
           <Route path="add-teacher" element={<AddTeacher />} />
           <Route path="add-student" element={<AddStudent />} />
           <Route path="add-subject" element={<AddSubject />} />
+          <Route path="edit-subject" element={<EditSubject />} />
+          <Route path="edit-student" element={<EditStudent />} />
+          <Route path="edit-teacher" element={<EditTeacher />} />
         </Route>
         <Route path="create-exam" element={<CreateExam />} />
         <Route path="exam-details" element={<ExamDetails />} />
