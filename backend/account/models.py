@@ -8,14 +8,9 @@ class User(AbstractUser):
 
 class Teacher(User):
     speciality=models.CharField(max_length=100)
-
+    
 
 class Student(User):
     age=models.PositiveIntegerField()
     course=models.PositiveIntegerField()
-    
-    
-    
-    
-    
     

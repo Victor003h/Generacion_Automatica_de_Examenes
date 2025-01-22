@@ -18,7 +18,11 @@ from drf_spectacular.utils import extend_schema,OpenApiResponse
                 }, 
                 'password': { 
                     'type': 'string', 
-                } 
+                },
+                'rol': { 
+                    'type': 'string', 
+                }
+                
             },
             'required': ['nombre', 'edad'] 
         } 
@@ -28,11 +32,32 @@ from drf_spectacular.utils import extend_schema,OpenApiResponse
 )
 @api_view(['POST'])
 def login(request):
+    print(request)
     user= get_object_or_404(User,username=request.data['username'])
     
     if not user.check_password(request.data['password']):
         return Response({'error': "Invalid Password"},status=status.HTTP_400_BAD_REQUEST)
 
+    if request.data['rol']=='teacher' :
+        try:
+            teacher = Teacher.objects.get(pk=user.pk)
+        except Teacher.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    elif request.data['rol']=='student':    
+        try:
+            student = Student.objects.get(pk=user.pk)
+        except Student.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    elif request.data['rol']=='admin':
+        try:
+            user = User.objects.get(pk=user.pk)
+            if not user.is_superuser:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except Teacher.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        
     token,created=Token.objects.get_or_create(user=user)
     serializer=UserSerializer(instance=user)
     
@@ -170,22 +195,7 @@ def student_detail(request, pk):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    
-@api_view(['GET'])
-def getallTeacher(request):
-    teachers=Teacher.objects.all()
-    serializer=TeacherSerializer(teachers,many=True)
-    return Response(serializer.data,status=status.HTTP_200_OK)
-    
-@api_view(['GET'])
-def getallStudent(request):
-    stundets=Student.objects.all()
-    serializer=StudentSerializer(stundets,many=True)
-    return Response(serializer.data,status=status.HTTP_200_OK)
-    
-    
-    
-    
+
 @api_view(['GET'])
 def getUser(request,id):
     try:
