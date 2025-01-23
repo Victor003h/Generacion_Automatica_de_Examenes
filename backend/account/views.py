@@ -19,7 +19,7 @@ from drf_spectacular.utils import extend_schema,OpenApiResponse
                 'password': { 
                     'type': 'string', 
                 },
-                'rol': { 
+                'role': { 
                     'type': 'string', 
                 }
                 
@@ -38,18 +38,18 @@ def login(request):
     if not user.check_password(request.data['password']):
         return Response({'error': "Invalid Password"},status=status.HTTP_400_BAD_REQUEST)
 
-    if request.data['rol']=='teacher' :
+    if request.data['role']=='teacher' :
         try:
             teacher = Teacher.objects.get(pk=user.pk)
         except Teacher.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-    elif request.data['rol']=='student':    
+    elif request.data['role']=='student':    
         try:
             student = Student.objects.get(pk=user.pk)
         except Student.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-    elif request.data['rol']=='admin':
+    elif request.data['role']=='admin':
         try:
             user = User.objects.get(pk=user.pk)
             if not user.is_superuser:

@@ -9,7 +9,7 @@ const Login: React.FC = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    rol: "",
+    role: "",
   });
 
   const navigate = useNavigate();
@@ -41,12 +41,12 @@ const Login: React.FC = () => {
 
       const { token } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("rol", formData.rol);
+      localStorage.setItem("role", formData.role);
       localStorage.setItem("username", formData.username);
       localStorage.setItem("userId", response.data.user.id);
       console.log("Inicio de sesión exitoso:", response.data);
 
-      if (formData.rol === "admin") {
+      if (formData.role === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/dashboard");
@@ -99,14 +99,14 @@ const Login: React.FC = () => {
               ¿Eres estudiante, profesor o administrador?
             </label>
             <select
-              name="rol"
+              name="role"
               className="form-input"
-              value={formData.rol}
+              value={formData.role}
               onChange={handleChange}
               required
             >
               <option value="" disabled>
-                Selecciona tu rol
+                Selecciona tu role
               </option>
               <option value="student">Estudiante</option>
               <option value="teacher">Profesor</option>

@@ -62,7 +62,7 @@ const StudentList: React.FC = () => {
       <div className="header">
         <h1>Lista de Estudiantes</h1>
         {role === "admin" && ( // Mostrar el botón solo si el usuario es admin
-          <Link to="/add-student" className="add-button">
+          <Link to="../add-student" className="student-add-button">
             Añadir Estudiante
           </Link>
         )}
