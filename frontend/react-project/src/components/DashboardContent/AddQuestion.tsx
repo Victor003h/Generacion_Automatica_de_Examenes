@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/AddQuestions.css";
 import useFetchSubjectsByRole from "../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
+import useFetchTeachersBySubject from "../../hooks/useFetchSubjectTeachers"; // Importa el hook
 
 const AddQuestion: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
@@ -28,32 +29,11 @@ const AddQuestion: React.FC = () => {
     error: topicsError,
   } = useFetchTopics(selectedSubject);
 
-  const [teachers, setTeachers] = useState<
-    { id: number; first_name: string; last_name: string }[]
-  >([]);
-  const [teachersLoading, setTeachersLoading] = useState(true);
-  const [teachersError, setTeachersError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchTeachers = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/account/teacher/"
-        );
-        setTeachers(response.data);
-        setTeachersLoading(false);
-      } catch (error) {
-        setTeachersError("Error al cargar los profesores");
-        setTeachersLoading(false);
-      }
-    };
-
-    if (role === "admin") {
-      fetchTeachers();
-    } else {
-      setTeachersLoading(false);
-    }
-  }, [role]);
+  const {
+    teachers,
+    loading: teachersLoading,
+    error: teachersError,
+  } = useFetchTeachersBySubject(selectedSubject); // Usar el nuevo hook
 
   const handleSaveQuestion = async () => {
     const newQuestion = {
@@ -73,8 +53,17 @@ const AddQuestion: React.FC = () => {
       setSelectedSubject(null);
       setSelectedTopic(null);
       setSelectedTeacher(null);
-    } catch (error) {
-      console.error("Error al guardar la pregunta:", error);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "Error al guardar la pregunta:",
+          err.response?.data || err.message
+        );
+      } else if (err instanceof Error) {
+        console.error("Error al guardar la pregunta:", err.message);
+      } else {
+        console.error("Error desconocido al guardar la pregunta.");
+      }
     }
   };
 

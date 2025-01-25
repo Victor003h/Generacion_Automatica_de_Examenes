@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/TeacherList.css";
 import { Teacher } from "../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
+import SortOptions from "./SortOptions";
+import BackButton from "../BackButton";
 
 const TeacherList: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const [sortKey, setSortKey] = useState<string>("first_name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -19,7 +24,12 @@ const TeacherList: React.FC = () => {
         setTeachers(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          setError(err.message);
+          if (err.response?.status === 404) {
+            setError("No se encontraron profesores.");
+            setTeachers([]);
+          } else {
+            setError(err.message);
+          }
         } else {
           setError("An unexpected error occurred");
         }
@@ -30,6 +40,25 @@ const TeacherList: React.FC = () => {
 
     fetchTeachers();
   }, []);
+
+  const sortedTeachers = useMemo(() => {
+    return teachers.slice().sort((a, b) => {
+      const aValue = a[sortKey as keyof Teacher];
+      const bValue = b[sortKey as keyof Teacher];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+  }, [teachers, sortKey, sortOrder]);
 
   const handleEditClick = (teacherId: number) => {
     localStorage.setItem("editTeacherId", teacherId.toString());
@@ -56,19 +85,34 @@ const TeacherList: React.FC = () => {
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
 
+  const sortOptions = [
+    { value: "first_name", label: "Nombre" },
+    { value: "last_name", label: "Apellido" },
+    { value: "email", label: "Email" },
+    { value: "speciality", label: "Especialidad" },
+  ];
+
   return (
     <div className="teacher-list-container">
+      <BackButton />
       <div className="header">
         <h1>Lista de Profesores</h1>
         <Link to="../add-teacher" className="teacher-add-button">
           Añadir Profesor
         </Link>
       </div>
+      <SortOptions
+        sortKey={sortKey}
+        setSortKey={setSortKey}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        options={sortOptions}
+      />
       {teachers.length === 0 ? (
         <div>No hay profesores disponibles</div>
       ) : (
         <ul className="teacher-list">
-          {teachers.map((teacher) => (
+          {sortedTeachers.map((teacher) => (
             <li key={teacher.id} className="teacher-item">
               <h2>
                 {teacher.first_name} {teacher.last_name} {teacher.last_name2}

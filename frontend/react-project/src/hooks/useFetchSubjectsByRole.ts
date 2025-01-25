@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useFetchTeacherSubjects from "./useFetchTeacherSubjects";
-import useFetchSubjects from "./useFetchSubjetcs";
+import useFetchSubjects from "./useFetchSubjects";
 import { Subject } from "../components/Interfaces";
 
 const useFetchSubjectsByRole = (userId: string | null, role: string) => {

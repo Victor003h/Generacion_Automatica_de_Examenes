@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddQuestions.css";
 import useFetchSubjectsByRole from "../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
+import BackButton from "../BackButton";
 
 const EditQuestion: React.FC = () => {
   const navigate = useNavigate();
@@ -123,6 +124,7 @@ const EditQuestion: React.FC = () => {
 
   return (
     <div className="add-question-container">
+      <BackButton />
       <h2>Editar Pregunta</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

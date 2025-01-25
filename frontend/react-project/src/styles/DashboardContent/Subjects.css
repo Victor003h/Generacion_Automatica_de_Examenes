@@ -1,7 +1,8 @@
 .subject-list-container {
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -14,63 +15,77 @@
 .subject-add-button {
   background-color: #14273b;
   color: white;
-  padding: 10px 15px;
+  padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.subject-add-button:hover {
+  background-color: #000000;
 }
 
 .subject-list {
-  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 0;
+  list-style-type: none;
 }
 
 .subject-item {
-  background-color: #fff;
+  background-color: white;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 15px;
-  margin-bottom: 10px;
-  transition: box-shadow 0.3s ease;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .subject-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .subject-item h2 {
   margin: 0 0 10px;
   font-size: 1.5em;
+  color: #333;
 }
 
 .subject-item p {
-  margin: 5px 0;
+  margin: 10px 0;
   font-size: 1em;
+  color: #666;
 }
 
 .subject-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .edit-button,
 .delete-button {
-  background-color: #000;
+  background-color: #007bff;
   color: white;
   border: none;
-  padding: 5px 10px;
-  margin-left: 5px;
-  border-radius: 4px;
+  padding: 10px 15px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 0.8em;
-  text-decoration: none;
-  display: inline-block;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
 }
 
 .delete-button {
   background-color: #dc3545;
 }
 
-.edit-button:hover,
 .delete-button:hover {
-  opacity: 0.8;
+  background-color: #c82333;
 }

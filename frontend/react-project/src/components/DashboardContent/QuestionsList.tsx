@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import useFetchSubjects from "../../hooks/useFetchSubjetcs";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import useFetchSubjects from "../../hooks/useFetchSubjects";
 import useFetchQuestions from "../../hooks/useFetchQuestions";
 import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects";
 import "../../styles/DashboardContent/QuestionsList.css";
@@ -7,13 +7,14 @@ import { Subject, Question } from "../../components/Interfaces";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import QuestionItem from "./QuestionItem";
+import SortOptions from "./SortOptions";
+import BackButton from "../BackButton";
 
 const QuestionList: React.FC = () => {
-  const userId = localStorage.getItem("userId") || ""; // Obtener el userId desde localstorage
-  const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
+  const userId = localStorage.getItem("userId") || "";
+  const role = localStorage.getItem("role") || "";
   const navigate = useNavigate();
 
-  // Hooks para obtener asignaturas
   const {
     subjects: adminSubjects,
     loading: adminSubjectsLoading,
@@ -25,7 +26,6 @@ const QuestionList: React.FC = () => {
     error: teacherSubjectsError,
   } = useFetchTeacherSubjects(userId);
 
-  // Seleccionar las asignaturas y estados de carga/error adecuados según el rol del usuario
   const subjects = role === "admin" ? adminSubjects : teacherSubjects;
   const subjectsLoading =
     role === "admin" ? adminSubjectsLoading : teacherSubjectsLoading;
@@ -44,6 +44,8 @@ const QuestionList: React.FC = () => {
   const [teachers, setTeachers] = useState<{
     [key: number]: { firstName: string; lastName: string };
   }>({});
+  const [sortKey, setSortKey] = useState<string>("content");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -54,7 +56,7 @@ const QuestionList: React.FC = () => {
               .flat()
               .map((q: Question) => q.topic)
           )
-        ).map(Number); // Asegurarse de que los IDs sean números
+        ).map(Number);
         const topicsDict: { [key: number]: string } = {};
 
         await Promise.all(
@@ -64,8 +66,17 @@ const QuestionList: React.FC = () => {
                 `http://localhost:8000/api/topic/${id}/`
               );
               topicsDict[id] = response.data.name;
-            } catch (error) {
-              console.error("Error al obtener el tema:", error);
+            } catch (err: unknown) {
+              if (axios.isAxiosError(err)) {
+                console.error(
+                  "Error al obtener el tema:",
+                  err.response?.data || err.message
+                );
+              } else if (err instanceof Error) {
+                console.error("Error al obtener el tema:", err.message);
+              } else {
+                console.error("Error desconocido al obtener el tema.");
+              }
             }
           })
         );
@@ -85,7 +96,7 @@ const QuestionList: React.FC = () => {
           .flat()
           .map((q: Question) => q.teacher)
       )
-    ).map(Number); // Asegurarse de que los IDs sean números
+    ).map(Number);
 
     const teachersDict: {
       [key: number]: { firstName: string; lastName: string };
@@ -101,8 +112,17 @@ const QuestionList: React.FC = () => {
             firstName: response.data.first_name,
             lastName: response.data.last_name,
           };
-        } catch (error) {
-          console.error("Error al obtener el profesor:", error);
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            console.error(
+              "Error al obtener el profesor:",
+              err.response?.data || err.message
+            );
+          } else if (err instanceof Error) {
+            console.error("Error al obtener el profesor:", err.message);
+          } else {
+            console.error("Error desconocido al obtener el profesor.");
+          }
         }
       })
     );
@@ -116,6 +136,27 @@ const QuestionList: React.FC = () => {
     }
   }, [fetchTeachers, questions]);
 
+  const sortedQuestions = useMemo(() => {
+    const allQuestions = Object.values(questions).flat();
+
+    return allQuestions.slice().sort((a, b) => {
+      const aValue = a[sortKey as keyof Question];
+      const bValue = b[sortKey as keyof Question];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+  }, [questions, sortKey, sortOrder]);
+
   const handleDeleteQuestion = async (questionId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar esta pregunta?"
@@ -124,7 +165,7 @@ const QuestionList: React.FC = () => {
       try {
         await axios.delete(`http://localhost:8000/api/question/${questionId}/`);
         alert("Pregunta borrada con éxito");
-        window.location.reload(); // Recargar la página para actualizar la lista de preguntas
+        window.location.reload();
       } catch (error) {
         console.error("Error al borrar la pregunta:", error);
       }
@@ -139,12 +180,28 @@ const QuestionList: React.FC = () => {
   if (subjectsError) return <div>{subjectsError}</div>;
   if (questionsError) return <div>{questionsError}</div>;
 
+  const sortOptions = [
+    { value: "content", label: "Contenido" },
+    { value: "type", label: "Tipo" },
+    { value: "difficulty", label: "Dificultad" },
+    { value: "date", label: "Fecha" },
+  ];
+
   return (
     <div className="outer-container">
-      <Link to="/add-question" className="add-button">
-        Añadir Pregunta
-      </Link>
       <div className="content-container">
+        <Link to="/add-question" className="add-button">
+          Añadir Pregunta
+        </Link>
+        <BackButton />
+
+        <SortOptions
+          sortKey={sortKey}
+          setSortKey={setSortKey}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          options={sortOptions}
+        />
         {subjects.length === 0 ? (
           <div>No hay asignaturas disponibles</div>
         ) : (
@@ -154,22 +211,16 @@ const QuestionList: React.FC = () => {
                 <h2>{subject.name}</h2>
               </div>
               <div className="question-list">
-                {questions[subject.id] && questions[subject.id].length > 0 ? (
-                  questions[subject.id].map((question: Question) => (
-                    <QuestionItem
-                      key={question.id}
-                      question={question}
-                      topics={topics}
-                      teachers={teachers}
-                      onDelete={handleDeleteQuestion}
-                      onEdit={handleEditQuestion}
-                    />
-                  ))
-                ) : (
-                  <div className="question-item">
-                    No hay preguntas disponibles
-                  </div>
-                )}
+                {sortedQuestions.map((question: Question) => (
+                  <QuestionItem
+                    key={question.id}
+                    question={question}
+                    topics={topics}
+                    teachers={teachers}
+                    onDelete={handleDeleteQuestion}
+                    onEdit={handleEditQuestion}
+                  />
+                ))}
               </div>
             </div>
           ))

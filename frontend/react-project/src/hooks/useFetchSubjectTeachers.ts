@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Teacher } from "../components/Interfaces";
 
-const useFetchSubjectTeachers = (subjectId: number | null) => {
+const useFetchTeachersBySubject = (subjectId: number | null) => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -15,15 +15,26 @@ const useFetchSubjectTeachers = (subjectId: number | null) => {
             `http://localhost:8000/api/subject/teacher/${subjectId}/`
           );
           if (response.data.length === 0) {
-            setError("No se encontraron profesores.");
+            throw new Error(
+              "No se encuentra ningun profesor para esta asignatura."
+            );
           }
           setTeachers(response.data);
-        } catch (error) {
-          setError("Error al obtener los profesores.");
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            setError(
+              err.response?.data?.message || "Error al obtener los profesores."
+            );
+          } else if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("Error desconocido al obtener los profesores.");
+          }
         } finally {
           setLoading(false);
         }
       };
+
       fetchTeachers();
     } else {
       setLoading(false);
@@ -33,4 +44,4 @@ const useFetchSubjectTeachers = (subjectId: number | null) => {
   return { teachers, loading, error };
 };
 
-export default useFetchSubjectTeachers;
+export default useFetchTeachersBySubject;

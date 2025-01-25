@@ -11,6 +11,7 @@ import SubjectList from "./components/DashboardContent/Subjects";
 import Statistics from "./components/DashboardContent/Statistics";
 import TeacherList from "./components/DashboardContent/TeacherList";
 import StudentList from "./components/DashboardContent/StudentList";
+import TopicsList from "./components/DashboardContent/TopicsList";
 import CreateExam from "./components/DashboardContent/CreateExam";
 import QuestionsList from "./components/DashboardContent/QuestionsList";
 import AddQuestion from "./components/DashboardContent/AddQuestion";
@@ -20,9 +21,11 @@ import AdminDashboard from "./components/AdminDashboard";
 import AddTeacher from "./components/DashboardContent/AddTeacher";
 import AddStudent from "./components/DashboardContent/AddStudent";
 import AddSubject from "./components/DashboardContent/AddSubject";
+import AddTopic from "./components/DashboardContent/AddTopic";
 import EditSubject from "./components/DashboardContent/EditSubject";
 import EditStudent from "./components/DashboardContent/EditStudent";
 import EditTeacher from "./components/DashboardContent/EditTeacher";
+import EditTopic from "./components/DashboardContent/EditTopic";
 
 const App: React.FC = () => {
   return (
@@ -45,13 +48,16 @@ const App: React.FC = () => {
           <Route path="subjects" element={<SubjectList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="students" element={<StudentList />} />
+          <Route path="topics" element={<TopicsList />} />
           <Route path="questions" element={<QuestionsList />} />
           <Route path="add-teacher" element={<AddTeacher />} />
           <Route path="add-student" element={<AddStudent />} />
           <Route path="add-subject" element={<AddSubject />} />
+          <Route path="add-topic" element={<AddTopic />} />
           <Route path="edit-subject" element={<EditSubject />} />
           <Route path="edit-student" element={<EditStudent />} />
           <Route path="edit-teacher" element={<EditTeacher />} />
+          <Route path="edit-topic" element={<EditTopic />} />
         </Route>
         <Route path="create-exam" element={<CreateExam />} />
         <Route path="exam-details" element={<ExamDetails />} />

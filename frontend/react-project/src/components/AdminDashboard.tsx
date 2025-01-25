@@ -58,6 +58,12 @@ const AdminDashboard: React.FC = () => {
             </Link>
           </li>
           <li>
+            <Link to="topics">
+              <FaBookOpen className="icon" />
+              <span>Temas</span>
+            </Link>
+          </li>
+          <li>
             <Link to="questions">
               <FaQuestionCircle className="icon" />
               <span>Banco de Preguntas</span>
