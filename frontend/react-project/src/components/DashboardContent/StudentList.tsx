@@ -1,40 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/StudentList.css";
 import { Student } from "../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
+import useFetchAllStudents from "../../hooks/useFetchAllStudents";
+import SortOptions from "./SortOptions";
+import BackButton from "../BackButton";
 
 const StudentList: React.FC = () => {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { students, loading, error } = useFetchAllStudents();
   const navigate = useNavigate();
   const role = localStorage.getItem("role") || "";
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/account/student/"
-        );
-        setStudents(response.data);
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          setError(err.message);
-        } else {
-          setError("An unexpected error occurred");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [sortKey, setSortKey] = useState<string>("first_name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-    fetchStudents();
-  }, []);
+  const sortedStudents = useMemo(() => {
+    return students.slice().sort((a, b) => {
+      const aValue = a[sortKey as keyof Student];
+      const bValue = b[sortKey as keyof Student];
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+  }, [students, sortKey, sortOrder]);
 
   const handleEditClick = (studentId: number) => {
     localStorage.setItem("editStudentId", studentId.toString());
-    navigate("/admin-dashboard/edit-student");
+    navigate("/edit-student");
   };
 
   const handleDeleteStudent = async (studentId: number) => {
@@ -43,13 +45,20 @@ const StudentList: React.FC = () => {
     );
     if (confirmDelete) {
       try {
-        await axios.delete(
-          `http://localhost:8000/api/account/student/${studentId}`
-        );
+        await axios.delete(`http://localhost:8000/api/students/${studentId}/`);
         alert("Estudiante borrado con éxito");
-        setStudents(students.filter((student) => student.id !== studentId));
-      } catch (error) {
-        console.error("Error al borrar el estudiante:", error);
+        window.location.reload(); // Recargar la página para actualizar la lista de estudiantes
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.error(
+            "Error al borrar el estudiante:",
+            err.response?.data || err.message
+          );
+        } else if (err instanceof Error) {
+          console.error("Error al borrar el estudiante:", err.message);
+        } else {
+          console.error("Error desconocido al borrar el estudiante.");
+        }
       }
     }
   };
@@ -57,57 +66,88 @@ const StudentList: React.FC = () => {
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
 
+  const sortOptions = [
+    { value: "first_name", label: "Nombre" },
+    { value: "last_name", label: "Apellido" },
+    { value: "email", label: "Email" },
+    { value: "speciality", label: "Especialidad" },
+  ];
+
   return (
     <div className="student-list-container">
+      <BackButton />
       <div className="header">
         <h1>Lista de Estudiantes</h1>
-        {role === "admin" && ( // Mostrar el botón solo si el usuario es admin
-          <Link to="../add-student" className="student-add-button">
+        {role === "admin" && (
+          <Link to="/add-student" className="student-add-button">
             Añadir Estudiante
           </Link>
         )}
       </div>
-      {students.length === 0 ? (
+      <SortOptions
+        sortKey={sortKey}
+        setSortKey={setSortKey}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        options={sortOptions}
+      />
+      {sortedStudents.length === 0 ? (
         <div>No hay estudiantes disponibles</div>
       ) : (
         <ul className="student-list">
-          {students.map((student) => (
-            <li key={student.id} className="student-item">
-              <h2>
-                {student.first_name} {student.last_name} {student.last_name2}
-              </h2>
-              <p>
-                <strong>Email:</strong> {student.email}
-              </p>
-              <p>
-                <strong>Edad:</strong> {student.age}
-              </p>
-              <p>
-                <strong>Curso:</strong> {student.course}
-              </p>
-              <div className="student-actions">
-                {role === "admin" && ( // Mostrar los botones solo si el usuario es admin
-                  <div className="student-actions">
-                    <button
-                      className="edit-button"
-                      onClick={() => handleEditClick(student.id)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDeleteStudent(student.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                )}
-              </div>
-            </li>
+          {sortedStudents.map((student) => (
+            <StudentItem
+              key={student.id}
+              student={student}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteStudent}
+            />
           ))}
         </ul>
       )}
     </div>
+  );
+};
+
+interface StudentItemProps {
+  student: Student;
+  onEditClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
+}
+
+const StudentItem: React.FC<StudentItemProps> = ({
+  student,
+  onEditClick,
+  onDeleteClick,
+}) => {
+  return (
+    <li className="student-item">
+      <h2>
+        {student.first_name} {student.last_name} {student.last_name2}
+      </h2>
+      <p>
+        <strong>Email:</strong> {student.email}
+      </p>
+      <p>
+        <strong>Curso:</strong> {student.course}
+      </p>
+      {localStorage.getItem("role") === "admin" && (
+        <div className="student-actions">
+          <button
+            className="edit-button"
+            onClick={() => onEditClick(student.id)}
+          >
+            Editar
+          </button>
+          <button
+            className="delete-button"
+            onClick={() => onDeleteClick(student.id)}
+          >
+            Eliminar
+          </button>
+        </div>
+      )}
+    </li>
   );
 };
 

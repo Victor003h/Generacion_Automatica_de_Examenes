@@ -1,37 +1,43 @@
 import React from "react";
+import "../../styles/DashboardContent/SortOptions.css";
 
 interface SortOptionsProps {
-  sortCriterion: string;
-  sortOrder: string;
-  onSortChange: (criterion: string) => void;
-  onSortOrderChange: (order: string) => void;
+  sortKey: string;
+  setSortKey: (key: string) => void;
+  sortOrder: "asc" | "desc";
+  setSortOrder: (order: "asc" | "desc") => void;
+  options: { value: string; label: string }[];
 }
 
 const SortOptions: React.FC<SortOptionsProps> = ({
-  sortCriterion,
+  sortKey,
+  setSortKey,
   sortOrder,
-  onSortChange,
-  onSortOrderChange,
-}) => (
-  <div className="sort-options">
-    <label>Ordenar por:</label>
-    <select
-      onChange={(e) => onSortChange(e.target.value)}
-      value={sortCriterion}
-    >
-      <option value="date">Fecha</option>
-      <option value="topic">Tema</option>
-      <option value="type">Tipo</option>
-      <option value="difficulty">Dificultad</option>
-    </select>
-    <select
-      onChange={(e) => onSortOrderChange(e.target.value)}
-      value={sortOrder}
-    >
-      <option value="asc">Ascendente</option>
-      <option value="desc">Descendente</option>
-    </select>
-  </div>
-);
+  setSortOrder,
+  options,
+}) => {
+  return (
+    <div className="sort-options">
+      <label htmlFor="sort-key">Ordenar por:</label>
+      <select
+        id="sort-key"
+        value={sortKey}
+        onChange={(e) => setSortKey(e.target.value)}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      <button
+        className="sort-order-button"
+        onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+      >
+        {sortOrder === "asc" ? "Ascendente" : "Descendente"}
+      </button>
+    </div>
+  );
+};
 
 export default SortOptions;

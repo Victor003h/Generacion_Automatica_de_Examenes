@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddStudent.css";
+import BackButton from "../BackButton";
 
 const EditStudent: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -72,6 +73,7 @@ const EditStudent: React.FC = () => {
 
   return (
     <div className="edit-student-container">
+      <BackButton />
       <h1>Editar Estudiante</h1>
       <form className="edit-student-form" onSubmit={handleSubmit}>
         <div className="form-group">

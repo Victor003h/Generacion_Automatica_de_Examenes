@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/Exams.css";
 import { Exam } from "../../components/Interfaces";
+import BackButton from "../BackButton";
 
 const Exams: React.FC = () => {
   const [examsBySubject, setExamsBySubject] = useState<Record<string, Exam[]>>(
@@ -48,6 +49,7 @@ const Exams: React.FC = () => {
 
   return (
     <div className="content-container">
+      <BackButton />
       <button
         className="create-exam-button"
         onClick={() => (window.location.href = "/create-exam")}
