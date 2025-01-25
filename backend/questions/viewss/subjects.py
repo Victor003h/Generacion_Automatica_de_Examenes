@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
 
 from account.models import Teacher
+from account.serializer import TeacherSerializer
 from ..models import Exam, Question, Subject, Topic
 from ..serializer import ExamSerializer, QuestionSerializer, SubjectSerializer,TopicSerializer
 from rest_framework import viewsets
@@ -93,5 +94,16 @@ def teacher_subjects(request,teacher_id):
     
     subjects=teacher.subjects.all()
     serializer=SubjectSerializer(subjects,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def subject_teachers(request,subject_id):
+    try:
+        subject = Subject.objects.get(pk=subject_id)
+    except Teacher.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    teachers=subject.teachers_subject.all()
+    serializer=TeacherSerializer(teachers,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 

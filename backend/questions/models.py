@@ -1,12 +1,21 @@
 from django.db import models
 from account.models import Teacher
 
+    
+class Course(models.Model):
+    name=models.CharField(max_length=150)
+    startDate=models.DateTimeField()
+    endDate=models.DateTimeField()
+    
+    
+
 class Subject(models.Model):
     name=models.CharField(max_length=150)
     study_program=models.TextField()
-    course=models.IntegerField()
+    course=models.ForeignKey(Course,null=False,on_delete=models.CASCADE)
     teachers_subject=models.ManyToManyField(Teacher,related_name='subjects')
     head_of_subject=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
+    
 
 class Topic(models.Model):
     name=models.CharField(max_length=150)
@@ -42,4 +51,5 @@ class Exam(models.Model):
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
     date=models.DateField(auto_now_add=True)
+    
     
