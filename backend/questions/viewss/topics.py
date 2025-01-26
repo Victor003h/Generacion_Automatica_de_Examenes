@@ -2,11 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
-
-from account.models import Teacher
-from ..models import Exam, Question, Subject, Topic
-from ..serializer import ExamSerializer, QuestionSerializer, SubjectSerializer,TopicSerializer
-from rest_framework import viewsets
+from ..models import *
+from ..serializer import *
 from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
 
 

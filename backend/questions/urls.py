@@ -1,12 +1,9 @@
 from django.urls import path
 from rest_framework import routers
-
 from .views import *
 from .viewss.subjects import *
 from .viewss.topics import *
 from .viewss.questions import *
-from .viewss.courses import *
-
 
 
 router=routers.DefaultRouter()
@@ -32,17 +29,7 @@ urlpatterns =[
     path('question/<int:pk>/',question_detail),
     path('question/topic/<int:question_id>/',question_topic),
     
-    path('exam/', exam_list),
-    path('exam/<int:pk>/',exam_detail),
-    
-    path('course/', course_list),
-    path('course/<int:pk>/',course_detail),
-    
+  
     path('teacher/subjects/<int:teacher_id>/',teacher_subjects),
-   
-    
-    
-    
-    
      
 ]+router.urls

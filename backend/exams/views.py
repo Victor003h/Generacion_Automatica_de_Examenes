@@ -1,61 +1,57 @@
 from django.shortcuts import render
+from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import viewsets ,permissions,status
+from rest_framework import status
+from .serializer import *
+from .models import *
 
-from account.models import Teacher
-from account.serializer import TeacherSerializer
-from ..models import Exam, Question, Subject, Topic,Course
-from ..serializer import ExamSerializer, QuestionSerializer, SubjectSerializer,TopicSerializer,CourseSerializer
-from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
-
-
+# Create your views here.
 @extend_schema(
     methods=['GET'],
-    responses={200:CourseSerializer(many=True)}
+    responses={200:ExamSerializer(many=True)}
 )
 @extend_schema(
     methods=['POST'],
-    request=CourseSerializer,
+    request=ExamSerializer,
     responses={
-        201:CourseSerializer,
+        201:ExamSerializer,
         400: OpenApiResponse(description='Bad resquest')
     }
 )
 @api_view(['GET','POST'])
-def course_list(request):
+def exam_list(request):
     if request.method=='GET':
-        courses=Course.objects.all()
-        serializer=CourseSerializer(courses,many=True)
+        exam=Exam.objects.all()
+        serializer=ExamSerializer(exam,many=True)
         return Response(serializer.data)
 
-    serializer=CourseSerializer(data=request.data)
+    serializer=ExamSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def course_detail(request, pk):
+def exam_detail(request, pk):
 
     try:
-        course = Course.objects.get(pk=pk)
-    except Course.DoesNotExist:
+        exam = Exam.objects.get(pk=pk)
+    except Exam.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = CourseSerializer(course)
+        serializer = ExamSerializer(exam)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = CourseSerializer(course, data=request.data)
+        serializer = ExamSerializer(exam, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        course.delete()
+        exam.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+    
