@@ -7,9 +7,11 @@ import useFetchAllSubjects from "../../hooks/useFetchSubjects";
 import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects";
 import useFetchTopicsBySubject from "../../hooks/useFetchSubjectTopics";
 import useFetchTeachersBySubject from "../../hooks/useFetchSubjectTeachers";
+import useFetchCourses from "../../hooks/useFetchCourses";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
 import "../../styles/DashboardContent/CrudButtons.css";
+import "../../styles/DashboardContent/Pagination.css";
 
 const SubjectList: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
@@ -34,8 +36,17 @@ const SubjectList: React.FC = () => {
   const subjectsError =
     role === "admin" ? adminSubjectsError : teacherSubjectsError;
 
+  const { courses } = useFetchCourses();
+
   const [sortKey, setSortKey] = useState<string>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
+
+  const getCourseName = (courseId: number) => {
+    const course = courses.find((course) => course.id === courseId);
+    return course ? course.name : "Curso no encontrado";
+  };
 
   const sortedSubjects = useMemo(() => {
     return subjects.slice().sort((a, b) => {
@@ -56,6 +67,14 @@ const SubjectList: React.FC = () => {
     });
   }, [subjects, sortKey, sortOrder]);
 
+  const paginatedSubjects = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedSubjects.slice(startIndex, endIndex);
+  }, [sortedSubjects, currentPage]);
+
+  const totalPages = Math.ceil(sortedSubjects.length / itemsPerPage);
+
   const handleEditClick = (subjectId: number) => {
     localStorage.setItem("editSubjectId", subjectId.toString());
     navigate("../edit-subject");
@@ -69,7 +88,7 @@ const SubjectList: React.FC = () => {
       try {
         await axios.delete(`http://localhost:8000/api/subject/${subjectId}/`);
         alert("Asignatura borrada con éxito");
-        window.location.reload();
+        window.location.reload(); // Recargar la página para actualizar la lista de asignaturas
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
           console.error(
@@ -112,32 +131,54 @@ const SubjectList: React.FC = () => {
         setSortOrder={setSortOrder}
         options={sortOptions}
       />
-      {sortedSubjects.length === 0 ? (
+      {paginatedSubjects.length === 0 ? (
         <div>No hay asignaturas disponibles</div>
       ) : (
         <ul className="subject-list">
-          {sortedSubjects.map((subject) => (
+          {paginatedSubjects.map((subject) => (
             <SubjectItem
               key={subject.id}
               subject={subject}
+              courseName={getCourseName(subject.course)}
               onEditClick={handleEditClick}
               onDeleteClick={handleDeleteSubject}
             />
           ))}
         </ul>
       )}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
   );
 };
 
 interface SubjectItemProps {
   subject: Subject;
+  courseName: string;
   onEditClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
 }
 
 const SubjectItem: React.FC<SubjectItemProps> = ({
   subject,
+  courseName,
   onEditClick,
   onDeleteClick,
 }) => {
@@ -159,7 +200,7 @@ const SubjectItem: React.FC<SubjectItemProps> = ({
         <strong>Programa de Estudio:</strong> {subject.study_program}
       </p>
       <p>
-        <strong>Curso:</strong> {subject.course}
+        <strong>Curso:</strong> {courseName}
       </p>
       <p>
         <strong>Jefe de Asignatura:</strong> {subject.head_of_subject}

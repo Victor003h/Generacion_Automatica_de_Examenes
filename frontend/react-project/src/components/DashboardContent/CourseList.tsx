@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import useFetchCourses from "../../hooks/useFetchCourses";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
+import "../../styles/DashboardContent/Pagination.css"; // Importar los estilos de paginación
 
 const CourseList: React.FC = () => {
   const { courses, loading, error } = useFetchCourses();
@@ -14,6 +16,8 @@ const CourseList: React.FC = () => {
 
   const [sortKey, setSortKey] = useState<string>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   const sortedCourses = useMemo(() => {
     return courses.slice().sort((a, b) => {
@@ -34,8 +38,16 @@ const CourseList: React.FC = () => {
     });
   }, [courses, sortKey, sortOrder]);
 
+  const paginatedCourses = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedCourses.slice(startIndex, endIndex);
+  }, [sortedCourses, currentPage]);
+
+  const totalPages = Math.ceil(sortedCourses.length / itemsPerPage);
+
   const handleEditClick = (courseId: number) => {
-    navigate("../edit-course", { state: { courseId } });
+    navigate("/admin-dashboard/edit-course", { state: { courseId } });
   };
 
   const handleDeleteCourse = async (courseId: number) => {
@@ -77,7 +89,7 @@ const CourseList: React.FC = () => {
       <div className="header">
         <h1>Lista de Cursos</h1>
         {role === "admin" && (
-          <Link to="../add-course" className="course-add-button">
+          <Link to="/admin-dashboard/add-course" className="course-add-button">
             Añadir Curso
           </Link>
         )}
@@ -89,11 +101,11 @@ const CourseList: React.FC = () => {
         setSortOrder={setSortOrder}
         options={sortOptions}
       />
-      {courses.length === 0 ? (
+      {paginatedCourses.length === 0 ? (
         <div>No hay cursos disponibles</div>
       ) : (
         <ul className="course-list">
-          {sortedCourses.map((course) => (
+          {paginatedCourses.map((course) => (
             <li key={course.id} className="course-item">
               <h2>{course.name}</h2>
               <p>
@@ -124,6 +136,25 @@ const CourseList: React.FC = () => {
           ))}
         </ul>
       )}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
   );
 };

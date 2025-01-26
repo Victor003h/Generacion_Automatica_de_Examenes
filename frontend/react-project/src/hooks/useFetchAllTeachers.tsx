@@ -10,7 +10,9 @@ const useFetchAllTeachers = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/teachers/");
+        const response = await axios.get(
+          "http://localhost:8000/api/account/teacher/"
+        );
         if (response.data.length === 0) {
           throw new Error("No se encuentra ningun profesor.");
         }

@@ -13,9 +13,6 @@ const useFetchAllStudents = () => {
         const response = await axios.get(
           "http://localhost:8000/api/account/student/"
         );
-        if (response.data.length === 0) {
-          throw new Error("No se encuentra ningun estudiante.");
-        }
         setStudents(response.data);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {

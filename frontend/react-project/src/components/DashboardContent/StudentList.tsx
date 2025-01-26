@@ -1,20 +1,30 @@
 import React, { useState, useMemo } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/StudentList.css";
+import "../../styles/DashboardContent/Pagination.css"; // Importar los estilos de paginación
 import { Student } from "../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import useFetchAllStudents from "../../hooks/useFetchAllStudents";
+import useFetchCourses from "../../hooks/useFetchCourses";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
 import "../../styles/DashboardContent/CrudButtons.css";
 
 const StudentList: React.FC = () => {
   const { students, loading, error } = useFetchAllStudents();
+  const { courses } = useFetchCourses();
   const navigate = useNavigate();
   const role = localStorage.getItem("role") || "";
 
   const [sortKey, setSortKey] = useState<string>("first_name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
+
+  const getCourseName = (courseId: number) => {
+    const course = courses.find((course) => course.id === courseId);
+    return course ? course.name : "Curso no encontrado";
+  };
 
   const sortedStudents = useMemo(() => {
     return students.slice().sort((a, b) => {
@@ -35,6 +45,14 @@ const StudentList: React.FC = () => {
     });
   }, [students, sortKey, sortOrder]);
 
+  const paginatedStudents = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return sortedStudents.slice(startIndex, endIndex);
+  }, [sortedStudents, currentPage]);
+
+  const totalPages = Math.ceil(sortedStudents.length / itemsPerPage);
+
   const handleEditClick = (studentId: number) => {
     localStorage.setItem("editStudentId", studentId.toString());
     navigate("../edit-student");
@@ -46,7 +64,9 @@ const StudentList: React.FC = () => {
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8000/api/students/${studentId}/`);
+        await axios.delete(
+          `http://localhost:8000/api/account/student/${studentId}/`
+        );
         alert("Estudiante borrado con éxito");
         window.location.reload(); // Recargar la página para actualizar la lista de estudiantes
       } catch (err: unknown) {
@@ -91,36 +111,54 @@ const StudentList: React.FC = () => {
         setSortOrder={setSortOrder}
         options={sortOptions}
       />
-      {students.length === 0 && <div>No hay estudiantes disponibles</div>}
-      {role === "admin" && students.length === 0 && (
-        <Link to="../add-student" className="student-add-button">
-          Añadir Estudiante
-        </Link>
-      )}
-      {students.length > 0 && (
+      {paginatedStudents.length === 0 ? (
+        <div>No hay estudiantes disponibles</div>
+      ) : (
         <ul className="student-list">
-          {sortedStudents.map((student) => (
+          {paginatedStudents.map((student) => (
             <StudentItem
               key={student.id}
               student={student}
+              courseName={getCourseName(student.course)}
               onEditClick={handleEditClick}
               onDeleteClick={handleDeleteStudent}
             />
           ))}
         </ul>
       )}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
   );
 };
 
 interface StudentItemProps {
   student: Student;
+  courseName: string;
   onEditClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
 }
 
 const StudentItem: React.FC<StudentItemProps> = ({
   student,
+  courseName,
   onEditClick,
   onDeleteClick,
 }) => {
@@ -133,7 +171,7 @@ const StudentItem: React.FC<StudentItemProps> = ({
         <strong>Email:</strong> {student.email}
       </p>
       <p>
-        <strong>Curso:</strong> {student.course}
+        <strong>Curso:</strong> {courseName}
       </p>
       {localStorage.getItem("role") === "admin" && (
         <div className="student-actions">

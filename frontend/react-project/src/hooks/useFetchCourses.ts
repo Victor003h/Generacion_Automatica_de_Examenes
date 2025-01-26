@@ -10,7 +10,9 @@ const useFetchCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/course/");
+        const response = await axios.get(
+          "http://localhost:8000/api/account/course/"
+        );
         if (response.status === 404) {
           setError("No se encontraron cursos.");
           setCourses([]);
