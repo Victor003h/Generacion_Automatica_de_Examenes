@@ -1,14 +1,9 @@
 from django.db import models
-from account.models import Teacher
+from account.models import Teacher,Course
 
     
-class Course(models.Model):
-    name=models.CharField(max_length=150)
-    startDate=models.DateTimeField()
-    endDate=models.DateTimeField()
-    
-    
 
+    
 class Subject(models.Model):
     name=models.CharField(max_length=150)
     study_program=models.TextField()
@@ -42,14 +37,5 @@ class Question(models.Model):
     date=models.DateField(auto_now_add=True)
     topic=models.ForeignKey(Topic,null=True,on_delete=models.SET_NULL)
     subject=models.ForeignKey(Subject,null=True,on_delete=models.SET_NULL)
-    
-    
-class Exam(models.Model):
-    type=models.CharField(max_length=150)
-    validation=models.BooleanField()
-    parameters=models.CharField(max_length=150)
-    teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
-    subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
-    date=models.DateField(auto_now_add=True)
     
     
