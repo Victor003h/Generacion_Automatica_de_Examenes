@@ -8,6 +8,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import SortOptions from "./SortOptions"; // Asegúrate de tener este componente
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
 
 const TopicsList: React.FC = () => {
   const userId = localStorage.getItem("userId") || ""; // Obtener el userId desde localstorage

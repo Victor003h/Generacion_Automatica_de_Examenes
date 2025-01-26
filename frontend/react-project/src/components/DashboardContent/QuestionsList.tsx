@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import QuestionItem from "./QuestionItem";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
 
 const QuestionList: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
@@ -211,16 +212,18 @@ const QuestionList: React.FC = () => {
                 <h2>{subject.name}</h2>
               </div>
               <div className="question-list">
-                {sortedQuestions.map((question: Question) => (
-                  <QuestionItem
-                    key={question.id}
-                    question={question}
-                    topics={topics}
-                    teachers={teachers}
-                    onDelete={handleDeleteQuestion}
-                    onEdit={handleEditQuestion}
-                  />
-                ))}
+                {sortedQuestions
+                  .filter((question) => question.subject === subject.id)
+                  .map((question: Question) => (
+                    <QuestionItem
+                      key={question.id}
+                      question={question}
+                      topics={topics}
+                      teachers={teachers}
+                      onDelete={handleDeleteQuestion}
+                      onEdit={handleEditQuestion}
+                    />
+                  ))}
               </div>
             </div>
           ))

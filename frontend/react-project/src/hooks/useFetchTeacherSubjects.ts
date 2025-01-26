@@ -13,21 +13,39 @@ const useFetchTeacherSubjects = (teacherId: string | null) => {
           const response = await axios.get(
             `http://localhost:8000/api/teacher/subjects/${teacherId}/`
           );
-          if (response.data.length === 0) {
-            setError("No se encontraron asignaturas.");
+          if (response.status === 404) {
+            setError("No se encontraron asignaturas para este profesor.");
+            setSubjects([]);
+          } else {
+            setSubjects(response.data);
           }
-          setSubjects(response.data);
-        } catch (error) {
-          setError("Error al obtener las asignaturas.");
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            if (err.response?.status === 404) {
+              setError("No se encontraron asignaturas para este profesor.");
+              setSubjects([]);
+            } else {
+              setError(
+                err.response?.data?.message ||
+                  "Error al obtener las asignaturas."
+              );
+            }
+          } else if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("Error desconocido al obtener las asignaturas.");
+          }
         } finally {
           setLoading(false);
         }
       };
+
       fetchSubjects();
     } else {
       setLoading(false);
     }
   }, [teacherId]);
+
   return { subjects, loading, error };
 };
 

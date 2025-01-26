@@ -1,4 +1,4 @@
-.teacher-list-container {
+.course-list-container {
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -12,7 +12,7 @@
   margin-bottom: 20px;
 }
 
-.teacher-add-button {
+.course-add-button {
   background-color: #14273b;
   color: white;
   padding: 10px 20px;
@@ -21,7 +21,7 @@
   transition: background-color 0.3s ease;
 }
 
-.teacher-add-button:hover {
+.course-add-button:hover {
   background-color: #000000;
 }
 
@@ -56,7 +56,7 @@
   background-color: #000000;
 }
 
-.teacher-list {
+.course-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -64,7 +64,7 @@
   list-style-type: none;
 }
 
-.teacher-item {
+.course-item {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -73,25 +73,45 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.teacher-item:hover {
+.course-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.teacher-item h2 {
+.course-item h2 {
   margin: 0 0 10px;
   font-size: 1.5em;
   color: #333;
 }
 
-.teacher-item p {
+.course-item p {
   margin: 10px 0;
   font-size: 1em;
   color: #666;
 }
 
-.teacher-actions {
+.course-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+
+.edit-button,
+.delete-button {
+  background-color: #14273b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #000000;
+}
+
+.delete-button:hover {
+  background-color: #000000;
 }

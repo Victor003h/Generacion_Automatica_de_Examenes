@@ -6,9 +6,11 @@ import {
   FaBookOpen,
   FaChartBar,
   FaQuestionCircle,
-  FaChartPie,
+  FaChalkboardTeacher,
 } from "react-icons/fa";
+import { MdClass, MdAssignment } from "react-icons/md";
 import "../styles/Dashboard.css";
+import LogoutButton from "./DashboardContent/LogoutButton";
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -47,19 +49,25 @@ const AdminDashboard: React.FC = () => {
           </li>
           <li>
             <Link to="teachers">
-              <FaChartPie className="icon" />
+              <FaChalkboardTeacher className="icon" />
               <span>Profesores</span>
             </Link>
           </li>
           <li>
-            <Link to="subjects">
+            <Link to="courses">
               <FaBookOpen className="icon" />
+              <span>Cursos</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="subjects">
+              <MdClass className="icon" />
               <span>Asignaturas</span>
             </Link>
           </li>
           <li>
             <Link to="topics">
-              <FaBookOpen className="icon" />
+              <MdAssignment className="icon" />
               <span>Temas</span>
             </Link>
           </li>
@@ -75,6 +83,7 @@ const AdminDashboard: React.FC = () => {
               <span>Estadísticas</span>
             </Link>
           </li>
+          <LogoutButton />
         </ul>
         <button className="sidebar-toggle" onClick={toggleSidebar}>
           {isSidebarOpen ? "❮" : "❯"}

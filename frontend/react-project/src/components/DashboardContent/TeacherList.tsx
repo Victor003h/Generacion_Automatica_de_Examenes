@@ -5,6 +5,7 @@ import { Teacher } from "../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
 
 const TeacherList: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);

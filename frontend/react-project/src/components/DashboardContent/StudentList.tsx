@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import useFetchAllStudents from "../../hooks/useFetchAllStudents";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
 
 const StudentList: React.FC = () => {
   const { students, loading, error } = useFetchAllStudents();
@@ -36,7 +37,7 @@ const StudentList: React.FC = () => {
 
   const handleEditClick = (studentId: number) => {
     localStorage.setItem("editStudentId", studentId.toString());
-    navigate("/edit-student");
+    navigate("../edit-student");
   };
 
   const handleDeleteStudent = async (studentId: number) => {
@@ -70,7 +71,6 @@ const StudentList: React.FC = () => {
     { value: "first_name", label: "Nombre" },
     { value: "last_name", label: "Apellido" },
     { value: "email", label: "Email" },
-    { value: "speciality", label: "Especialidad" },
   ];
 
   return (
@@ -79,7 +79,7 @@ const StudentList: React.FC = () => {
       <div className="header">
         <h1>Lista de Estudiantes</h1>
         {role === "admin" && (
-          <Link to="/add-student" className="student-add-button">
+          <Link to="../add-student" className="student-add-button">
             Añadir Estudiante
           </Link>
         )}
@@ -91,9 +91,13 @@ const StudentList: React.FC = () => {
         setSortOrder={setSortOrder}
         options={sortOptions}
       />
-      {sortedStudents.length === 0 ? (
-        <div>No hay estudiantes disponibles</div>
-      ) : (
+      {students.length === 0 && <div>No hay estudiantes disponibles</div>}
+      {role === "admin" && students.length === 0 && (
+        <Link to="../add-student" className="student-add-button">
+          Añadir Estudiante
+        </Link>
+      )}
+      {students.length > 0 && (
         <ul className="student-list">
           {sortedStudents.map((student) => (
             <StudentItem

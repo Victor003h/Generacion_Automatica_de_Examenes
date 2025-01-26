@@ -9,6 +9,7 @@ import useFetchTopicsBySubject from "../../hooks/useFetchSubjectTopics";
 import useFetchTeachersBySubject from "../../hooks/useFetchSubjectTeachers";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
+import "../../styles/DashboardContent/CrudButtons.css";
 
 const SubjectList: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
