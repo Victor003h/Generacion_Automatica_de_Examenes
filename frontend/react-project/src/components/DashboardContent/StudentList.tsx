@@ -173,6 +173,9 @@ const StudentItem: React.FC<StudentItemProps> = ({
       <p>
         <strong>Curso:</strong> {courseName}
       </p>
+      <p>
+        <strong>Edad:</strong> {student.age}
+      </p>
       {localStorage.getItem("role") === "admin" && (
         <div className="student-actions">
           <button

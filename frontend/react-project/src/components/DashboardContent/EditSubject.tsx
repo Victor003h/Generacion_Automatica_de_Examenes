@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddSubject.css";
 import { Teacher } from "../Interfaces";
 import useFetchCourses from "../../hooks/useFetchCourses";
+import BackButton from "../BackButton";
 
 const EditSubject: React.FC = () => {
   const [name, setName] = useState("");
@@ -93,6 +94,7 @@ const EditSubject: React.FC = () => {
 
   return (
     <div className="edit-subject-container">
+      <BackButton />
       <h1>Editar Asignatura</h1>
       <form className="edit-subject-form" onSubmit={handleSubmit}>
         <div className="form-group">
