@@ -104,3 +104,17 @@ def subject_teachers(request,subject_id):
     serializer=TeacherSerializer(teachers,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def headofsubject(request,teacher_id):
+    try:
+        teacher=Teacher.objects.get(pk=teacher_id)
+    except Teacher.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
+    subject=Subject.objects.filter(head_of_subject=teacher)
+   
+    
+    serializer= SubjectSerializer(subject,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
