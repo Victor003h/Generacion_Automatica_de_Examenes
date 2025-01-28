@@ -5,6 +5,7 @@ export interface Subject {
   study_program: string;
   course: number;
   head_of_subject: number;
+  subject_teachers: number[];
 }
 // Interface para los estudiantes
 export interface Student {
@@ -31,7 +32,7 @@ export interface Exam {
   type: string;
   date: string;
   teacher: number;
-  validation: boolean;
+  validation: number;
   subject: number;
   questions: number[];
 }

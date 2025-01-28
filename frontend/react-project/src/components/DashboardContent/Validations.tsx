@@ -16,20 +16,66 @@ const ValidarExamenes: React.FC = () => {
   } = useFetchHeadOfSubjects(userId);
 
   const [exams, setExams] = useState<Exam[]>([]);
+  const [examDetails, setExamDetails] = useState<{
+    [key: number]: { subjectName: string; teacherName: string };
+  }>({});
+  const [selectedExam, setSelectedExam] = useState<Exam | null>(null);
+  const [observations, setObservations] = useState<string>("");
+  const [showValidationModal, setShowValidationModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExams = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/exam/");
-        setExams(response.data);
+        const examList: Exam[] = response.data;
+        const filteredExamList = await Promise.all(
+          examList.map(async (exam) => {
+            try {
+              await axios.get(
+                `http://localhost:8000/api/exam/isvalidated/${exam.id}`
+              );
+              return null;
+            } catch (error) {
+              if (axios.isAxiosError(error) && error.response?.status === 404) {
+                return exam;
+              }
+              return null;
+            }
+          })
+        );
+        setExams(filteredExamList.filter((exam) => exam !== null) as Exam[]);
       } catch (err: unknown) {
         console.error("Error al obtener los exámenes:", err);
       }
     };
 
+    const fetchExamDetails = async (
+      examId: number,
+      subjectId: number,
+      teacherId: number
+    ) => {
+      const subjectResponse = await axios.get(
+        `http://localhost:8000/api/subject/${subjectId}/`
+      );
+      const teacherResponse = await axios.get(
+        `http://localhost:8000/api/teacher/${teacherId}`
+      );
+      setExamDetails((prevDetails) => ({
+        ...prevDetails,
+        [examId]: {
+          subjectName: subjectResponse.data.name,
+          teacherName: `${teacherResponse.data.first_name} ${teacherResponse.data.last_name}`,
+        },
+      }));
+    };
+
     fetchExams();
-  }, []);
+    exams.forEach((exam) => {
+      fetchExamDetails(exam.id, exam.subject, exam.teacher);
+    });
+  }, [exams]);
 
   const filteredExams = useMemo(() => {
     if (subjectIds.length === 0) {
@@ -44,12 +90,28 @@ const ValidarExamenes: React.FC = () => {
     });
   };
 
-  const handleValidateExam = async (examId: number) => {
+  const handleValidateExam = (exam: Exam) => {
+    setSelectedExam(exam);
+    setShowValidationModal(true);
+  };
+
+  const handleValidationSubmit = async () => {
+    if (!selectedExam) return;
+
     try {
-      await axios.post(`http://localhost:8000/api/validate_exam/${examId}/`);
+      await axios.post(
+        `http://localhost:8000/api/validated_exam/${selectedExam.id}/`,
+        {
+          observations: observations,
+          exam: selectedExam.id,
+          teacher: userId,
+        }
+      );
       alert("Examen validado exitosamente");
-      // Remove the validated exam from the list
-      setExams((prevExams) => prevExams.filter((exam) => exam.id !== examId));
+      setShowValidationModal(false);
+      setExams((prevExams) =>
+        prevExams.filter((exam) => exam.id !== selectedExam.id)
+      );
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -84,10 +146,12 @@ const ValidarExamenes: React.FC = () => {
                   {new Date(exam.date).toLocaleDateString()}
                 </p>
                 <p>
-                  <strong>Profesor:</strong> {exam.teacher}
+                  <strong>Profesor:</strong>{" "}
+                  {examDetails[exam.id]?.teacherName || "Cargando..."}
                 </p>
                 <p>
-                  <strong>Asignatura:</strong> {exam.subject}
+                  <strong>Asignatura:</strong>{" "}
+                  {examDetails[exam.id]?.subjectName || "Cargando..."}
                 </p>
               </div>
               <div className="exam-actions">
@@ -99,7 +163,7 @@ const ValidarExamenes: React.FC = () => {
                 </button>
                 <button
                   className="validate-button"
-                  onClick={() => handleValidateExam(exam.id)}
+                  onClick={() => handleValidateExam(exam)}
                 >
                   Validar Examen
                 </button>
@@ -107,6 +171,23 @@ const ValidarExamenes: React.FC = () => {
             </li>
           ))}
         </ul>
+      )}
+
+      {showValidationModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Validar Examen</h3>
+            <textarea
+              value={observations}
+              onChange={(e) => setObservations(e.target.value)}
+              placeholder="Observaciones"
+            ></textarea>
+            <button onClick={handleValidationSubmit}>Aceptar</button>
+            <button onClick={() => setShowValidationModal(false)}>
+              Cancelar
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

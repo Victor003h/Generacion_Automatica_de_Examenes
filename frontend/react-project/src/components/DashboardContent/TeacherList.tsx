@@ -156,7 +156,8 @@ const TeacherItem: React.FC<TeacherItemProps> = ({
   onDeleteClick,
 }) => {
   const { subjects, loading, error } = useFetchTeacherSubjects(
-    String(teacher.id)
+    teacher.id,
+    role
   );
 
   return (

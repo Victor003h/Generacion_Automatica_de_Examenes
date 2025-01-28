@@ -1,10 +1,7 @@
 import React, { useState, useMemo } from "react";
-import axios from "axios";
 import "../../styles/DashboardContent/Subjects.css";
 import { Subject } from "../Interfaces";
-import { Link, useNavigate } from "react-router-dom";
-import useFetchAllSubjects from "../../hooks/useFetchSubjects";
-import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects";
+import useFetchStudentSubjects from "../../hooks/useFetchStudentSubjects";
 import useFetchTopicsBySubject from "../../hooks/useFetchSubjectTopics";
 import useFetchTeachersBySubject from "../../hooks/useFetchSubjectTeachers";
 import useFetchCourses from "../../hooks/useFetchCourses";
@@ -13,28 +10,14 @@ import BackButton from "../BackButton";
 import "../../styles/DashboardContent/CrudButtons.css";
 import "../../styles/DashboardContent/Pagination.css";
 
-const SubjectList: React.FC = () => {
+const StudentSubjects: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
-  const role = localStorage.getItem("role") || "";
-  const navigate = useNavigate();
 
   const {
-    subjects: adminSubjects,
-    loading: adminSubjectsLoading,
-    error: adminSubjectsError,
-  } = useFetchAllSubjects();
-
-  const {
-    subjects: teacherSubjects,
-    loading: teacherSubjectsLoading,
-    error: teacherSubjectsError,
-  } = useFetchTeacherSubjects(Number(userId), role);
-
-  const subjects = role === "admin" ? adminSubjects : teacherSubjects;
-  const subjectsLoading =
-    role === "admin" ? adminSubjectsLoading : teacherSubjectsLoading;
-  const subjectsError =
-    role === "admin" ? adminSubjectsError : teacherSubjectsError;
+    subjects: studentSubjects,
+    loading: studentSubjectsLoading,
+    error: studentSubjectsError,
+  } = useFetchStudentSubjects(parseInt(userId));
 
   const { courses } = useFetchCourses();
 
@@ -49,7 +32,8 @@ const SubjectList: React.FC = () => {
   };
 
   const sortedSubjects = useMemo(() => {
-    return subjects.slice().sort((a, b) => {
+    if (!Array.isArray(studentSubjects)) return [];
+    return studentSubjects.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Subject];
       const bValue = b[sortKey as keyof Subject];
 
@@ -65,7 +49,7 @@ const SubjectList: React.FC = () => {
 
       return 0;
     });
-  }, [subjects, sortKey, sortOrder]);
+  }, [studentSubjects, sortKey, sortOrder]);
 
   const paginatedSubjects = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -75,37 +59,8 @@ const SubjectList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedSubjects.length / itemsPerPage);
 
-  const handleEditClick = (subjectId: number) => {
-    localStorage.setItem("editSubjectId", subjectId.toString());
-    navigate("../edit-subject");
-  };
-
-  const handleDeleteSubject = async (subjectId: number) => {
-    const confirmDelete = window.confirm(
-      "¿Estás seguro de que quieres borrar esta asignatura?"
-    );
-    if (confirmDelete) {
-      try {
-        await axios.delete(`http://localhost:8000/api/subject/${subjectId}/`);
-        alert("Asignatura borrada con éxito");
-        window.location.reload(); // Recargar la página para actualizar la lista de asignaturas
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          console.error(
-            "Error al borrar la asignatura:",
-            err.response?.data || err.message
-          );
-        } else if (err instanceof Error) {
-          console.error("Error al borrar la asignatura:", err.message);
-        } else {
-          console.error("Error desconocido al borrar la asignatura.");
-        }
-      }
-    }
-  };
-
-  if (subjectsLoading) return <div>Cargando...</div>;
-  if (subjectsError) return <div>{subjectsError}</div>;
+  if (studentSubjectsLoading) return <div>Cargando...</div>;
+  if (studentSubjectsError) return <div>{studentSubjectsError}</div>;
 
   const sortOptions = [
     { value: "name", label: "Nombre" },
@@ -118,11 +73,6 @@ const SubjectList: React.FC = () => {
       <div className="header">
         <BackButton />
         <h1>Lista de Asignaturas</h1>
-        {role === "admin" && (
-          <Link to="../add-subject" className="subject-add-button">
-            Añadir Asignatura
-          </Link>
-        )}
       </div>
       <SortOptions
         sortKey={sortKey}
@@ -140,8 +90,6 @@ const SubjectList: React.FC = () => {
               key={subject.id}
               subject={subject}
               courseName={getCourseName(subject.course)}
-              onEditClick={handleEditClick}
-              onDeleteClick={handleDeleteSubject}
             />
           ))}
         </ul>
@@ -172,16 +120,9 @@ const SubjectList: React.FC = () => {
 interface SubjectItemProps {
   subject: Subject;
   courseName: string;
-  onEditClick: (id: number) => void;
-  onDeleteClick: (id: number) => void;
 }
 
-const SubjectItem: React.FC<SubjectItemProps> = ({
-  subject,
-  courseName,
-  onEditClick,
-  onDeleteClick,
-}) => {
+const SubjectItem: React.FC<SubjectItemProps> = ({ subject, courseName }) => {
   const {
     topics,
     loading: topicsLoading,
@@ -226,24 +167,8 @@ const SubjectItem: React.FC<SubjectItemProps> = ({
             .join(", ")}
         </p>
       )}
-      {localStorage.getItem("role") === "admin" && (
-        <div className="subject-actions">
-          <button
-            className="edit-button"
-            onClick={() => onEditClick(subject.id)}
-          >
-            Editar
-          </button>
-          <button
-            className="delete-button"
-            onClick={() => onDeleteClick(subject.id)}
-          >
-            Eliminar
-          </button>
-        </div>
-      )}
     </li>
   );
 };
 
-export default SubjectList;
+export default StudentSubjects;
