@@ -71,9 +71,6 @@ def exam_questions(request,pk):
     
     
     
-    
-
-
 # VALIDATED EXAM
 @extend_schema(
     methods=['GET'],
@@ -133,10 +130,8 @@ def isvalidated(request,pk):
     if ValidatedExam.objects.filter(exam=exam).exists():
         return Response(status=status.HTTP_200_OK)
     
-    return Response (status=status.HTTP_200_OK)
+    return Response (status=status.HTTP_404_NOT_FOUND) 
     
-
-
 
 # EXAM DONE
 @extend_schema(
