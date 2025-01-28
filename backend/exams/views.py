@@ -58,9 +58,6 @@ def exam_detail(request, pk):
         exam.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-
-
-
 @api_view(['GET'])
 def exam_questions(request,pk):
     try:
@@ -126,6 +123,21 @@ def validated_exam_detail(request, pk):
         validatedexam.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+@api_view(['GET'])
+def isvalidated(request,pk):
+    try:
+        exam=Exam.objects.get(pk=pk)
+    except Exam.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if ValidatedExam.objects.filter(exam=exam).exists():
+        return Response(status=status.HTTP_200_OK)
+    
+    return Response (status=status.HTTP_200_OK)
+    
+
+
+
 # EXAM DONE
 @extend_schema(
     methods=['GET'],
