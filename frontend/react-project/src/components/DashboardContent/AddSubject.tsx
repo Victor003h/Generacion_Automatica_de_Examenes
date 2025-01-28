@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddSubject.css";
 import { Teacher } from "../Interfaces";
 import useFetchCourses from "../../hooks/useFetchCourses";
+import BackButton from "../BackButton";
 
 const AddSubject: React.FC = () => {
   const [name, setName] = useState("");
@@ -71,6 +72,7 @@ const AddSubject: React.FC = () => {
 
   return (
     <div className="add-subject-container">
+      <BackButton />
       <h1>Añadir Asignatura</h1>
       <form className="add-subject-form" onSubmit={handleSubmit}>
         <div className="form-group">

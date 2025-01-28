@@ -6,7 +6,7 @@ import RegisterProfessor from "./components/RegisterProfessor";
 import RegisterStudent from "./components/RegisterStudent";
 import Dashboard from "./components/Dashboard";
 import "./styles/App.css";
-import Exams from "./components/DashboardContent/Exams";
+import ExamList from "./components/DashboardContent/ExamList";
 import SubjectList from "./components/DashboardContent/Subjects";
 import Statistics from "./components/DashboardContent/Statistics";
 import TeacherList from "./components/DashboardContent/TeacherList";
@@ -24,12 +24,21 @@ import AddStudent from "./components/DashboardContent/AddStudent";
 import AddSubject from "./components/DashboardContent/AddSubject";
 import AddTopic from "./components/DashboardContent/AddTopic";
 import AddCourse from "./components/DashboardContent/AddCourse";
+import AddExam from "./components/DashboardContent/AddExam";
+import AddExamQuestions from "./components/DashboardContent/AddExamQuestions";
 import EditSubject from "./components/DashboardContent/EditSubject";
 import EditStudent from "./components/DashboardContent/EditStudent";
 import EditTeacher from "./components/DashboardContent/EditTeacher";
 import EditTopic from "./components/DashboardContent/EditTopic";
 import EditCourse from "./components/DashboardContent/EditCourse";
+import EditExam from "./components/DashboardContent/EditExam";
+import EditExamQuestions from "./components/DashboardContent/EditExamQuestions";
 import StudentDashboard from "./components/StudentDashboard";
+import ViewExam from "./components/DashboardContent/ViewExam";
+import Validations from "./components/DashboardContent/Validations";
+import ViewExamForValidation from "./components/DashboardContent/ViewExamForValidation";
+import StudentSubjects from "./components/DashboardContent/StudentSubjects";
+import StudentExam from "./components/DashboardContent/StudentExam";
 
 const App: React.FC = () => {
   return (
@@ -40,19 +49,33 @@ const App: React.FC = () => {
         <Route path="/register/professor" element={<RegisterProfessor />} />
         <Route path="/register/student" element={<RegisterStudent />} />
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="exams" element={<Exams />} />
+          <Route path="exams" element={<ExamList />} />
           <Route path="subjects" element={<SubjectList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="students" element={<StudentList />} />
           <Route path="questions" element={<QuestionsList />} />
+          <Route path="add-exam" element={<AddExam />} />
+          <Route path="add-question" element={<AddQuestion />} />
+          <Route path="edit-exam" element={<EditExam />} />
+          <Route path="edit-question" element={<EditQuestion />} />
+          <Route path="add-exam-questions" element={<AddExamQuestions />} />
+          <Route path="edit-exam-questions" element={<EditExamQuestions />} />
+          <Route path="view-exam" element={<ViewExam />} />
+          <Route path="validations" element={<Validations />} />
+          <Route
+            path="validate-exam-view"
+            element={<ViewExamForValidation />}
+          />
         </Route>
-        <Route path="/student-dashboard/*" element={<StudentDashboard />}>
+        <Route path="/student-dashboard" element={<StudentDashboard />}>
           {/*Estas son referencias a las opciones de profesor, temporales*/}
-          <Route path="subjects" element={<SubjectList />} />
+          <Route path="student-exam" element={<StudentExam />} />
+          <Route path="view-exam" element={<ViewExam />} />
+          <Route path="student-subjects" element={<StudentSubjects />} />
           <Route path="statistics" element={<Statistics />} />
         </Route>
         <Route path="/admin-dashboard" element={<AdminDashboard />}>
-          <Route path="exams" element={<Exams />} />
+          <Route path="exams" element={<ExamList />} />
           <Route path="teachers" element={<TeacherList />} />
           <Route path="subjects" element={<SubjectList />} />
           <Route path="statistics" element={<Statistics />} />
@@ -65,16 +88,26 @@ const App: React.FC = () => {
           <Route path="add-subject" element={<AddSubject />} />
           <Route path="add-topic" element={<AddTopic />} />
           <Route path="add-course" element={<AddCourse />} />
+          <Route path="add-exam" element={<AddExam />} />
+          <Route path="add-question" element={<AddQuestion />} />
           <Route path="edit-subject" element={<EditSubject />} />
           <Route path="edit-student" element={<EditStudent />} />
           <Route path="edit-teacher" element={<EditTeacher />} />
           <Route path="edit-topic" element={<EditTopic />} />
           <Route path="edit-course" element={<EditCourse />} />
+          <Route path="edit-exam" element={<EditExam />} />
+          <Route path="edit-question" element={<EditQuestion />} />
+          <Route path="add-exam-questions" element={<AddExamQuestions />} />
+          <Route path="edit-exam-questions" element={<EditExamQuestions />} />
+          <Route path="view-exam" element={<ViewExam />} />
+          <Route path="validations" element={<Validations />} />
+          <Route
+            path="validate-exam-view"
+            element={<ViewExamForValidation />}
+          />
         </Route>
         <Route path="create-exam" element={<CreateExam />} />
         <Route path="exam-details" element={<ExamDetails />} />
-        <Route path="add-question" element={<AddQuestion />} />
-        <Route path="/edit-question/" element={<EditQuestion />} />
       </Routes>
     </Router>
   );

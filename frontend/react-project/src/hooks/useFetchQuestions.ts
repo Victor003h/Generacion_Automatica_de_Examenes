@@ -1,28 +1,27 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
-import { Question } from "../components/Interfaces"; // Asegúrate de importar la interfaz
+import { Question } from "../components/Interfaces";
 
 const useFetchQuestions = (subjectIds: number[]) => {
-  const [questions, setQuestions] = useState<Record<number, Question[]>>({});
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [fetched, setFetched] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        if (subjectIds.length > 0 && !fetched) {
-          const questionsData: Record<number, Question[]> = {};
+        if (subjectIds.length > 0) {
+          const questionsData: Question[] = [];
           for (const subjectId of subjectIds) {
             try {
               const response = await axios.get(
                 `http://localhost:8000/api/subject/question/${subjectId}/`
               );
-              questionsData[subjectId] = response.data;
+              questionsData.push(...response.data);
             } catch (err: unknown) {
               if (err instanceof AxiosError) {
                 if (err.response && err.response.status === 404) {
-                  questionsData[subjectId] = []; // Si no se encuentran preguntas, asignar un array vacío
+                  // Si no se encuentran preguntas, continuar sin añadir nada
                 } else {
                   throw err; // Para otros errores, lanzarlos
                 }
@@ -32,7 +31,6 @@ const useFetchQuestions = (subjectIds: number[]) => {
             }
           }
           setQuestions(questionsData);
-          setFetched(true);
         }
       } catch (error) {
         setError("Error al obtener las preguntas");
@@ -42,7 +40,7 @@ const useFetchQuestions = (subjectIds: number[]) => {
     };
 
     fetchQuestions();
-  }, [subjectIds, fetched]);
+  }, [subjectIds]);
 
   return { questions, loading, error };
 };

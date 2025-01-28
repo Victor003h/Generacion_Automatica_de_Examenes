@@ -1,4 +1,4 @@
-.subject-list-container {
+.view-exam-container {
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -7,35 +7,29 @@
   margin: 0 auto; /* Centrar el contenedor */
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+h2 {
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.subject-add-button {
-  background-color: #14273b;
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+h3 {
+  margin-top: 20px;
+  text-align: center;
 }
 
-.subject-add-button:hover {
-  background-color: #000000;
+.exam-details p,
+.question-content p {
+  margin: 0;
+  font-size: 1em;
+  color: #666;
 }
 
-.subject-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.question-list {
   padding: 0;
   list-style-type: none;
 }
 
-.subject-item {
+.question-item {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -47,29 +41,21 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.subject-item:hover {
+.question-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.subject-item h2 {
+.question-content h2 {
   flex: 1 0 100%; /* Hacer que el encabezado ocupe toda la fila */
   margin: 0 0 10px;
   font-size: 1.5em;
   color: #333;
 }
 
-.subject-item p {
+.question-content p {
   flex: 1 0 45%; /* Hacer que los párrafos ocupen el 45% del ancho */
   margin: 10px 0;
   font-size: 1em;
   color: #666;
-}
-
-.subject-actions {
-  flex: 1 0 100%; /* Hacer que las acciones ocupen toda la fila */
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px; /* Añadir espacio entre los botones */
-  margin-top: 20px;
 }

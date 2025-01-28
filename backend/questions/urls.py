@@ -25,9 +25,9 @@ urlpatterns = [
     path('topic/subject/<int:topic_id>/', topic_subject, name='topic-subject'),
     path('topic/questions/<int:topic_id>/', topic_question, name='topic-questions'),
     
-    path('question/', question_list, name='question-list'),
-    path('question/<int:pk>/', question_detail, name='question-detail'),
-    path('question/topic/<int:question_id>/', question_topic, name='question-topic'),
-    
-    path('teacher/subjects/<int:teacher_id>/', teacher_subjects, name='teacher-subjects'),
-] + router.urls
+  
+    path('teacher/subjects/<int:teacher_id>/',teacher_subjects),
+    path('teacher/head_of_subject/<int:teacher_id>',headofsubject),
+    path('student/subjects/<int:pk>/',student_subjects),
+     
+]+router.urls

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddTeacher.css";
+import BackButton from "../BackButton";
 
 const AddTeacher: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -39,6 +40,7 @@ const AddTeacher: React.FC = () => {
 
   return (
     <div className="add-teacher-container">
+      <BackButton />
       <h1>Añadir Profesor</h1>
       <form className="add-teacher-form" onSubmit={handleSubmit}>
         <div className="form-group">

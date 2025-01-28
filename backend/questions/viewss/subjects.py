@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
-from account.models import Teacher
+from account.models import *
 from account.serializer import TeacherSerializer
 from ..models import *
 from ..serializer import *
@@ -104,3 +104,28 @@ def subject_teachers(request,subject_id):
     serializer=TeacherSerializer(teachers,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def headofsubject(request,teacher_id):
+    try:
+        teacher=Teacher.objects.get(pk=teacher_id)
+    except Teacher.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
+    subject=Subject.objects.filter(head_of_subject=teacher)
+   
+    
+    serializer= SubjectSerializer(subject,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def student_subjects(request,pk):
+    try:
+        student=Student.objects.get(pk=pk)
+    except Student.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    course=student.course
+    subjects= Subject.objects.filter(course=course)
+    serializer=SubjectSerializer(subjects,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)

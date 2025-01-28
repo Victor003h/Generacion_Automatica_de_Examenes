@@ -2,29 +2,27 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Subject } from "../components/Interfaces";
 
-const useFetchTeacherSubjects = (teacherId: number | null, role: string) => {
+const useFetchTeacherSubjects = (studentId: number) => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSubjects = async () => {
-      if (role === "admin" || teacherId !== null) {
+      if (studentId !== null) {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/teacher/subjects/${teacherId}/`
+            `http://localhost:8000/api/student/subjects/${studentId}/`
           );
           if (response.data.length === 0) {
-            setError("No se encontraron asignaturas para este profesor.");
+            setError("No se encontraron asignaturas para este estudiante.");
           } else {
             setSubjects(response.data);
           }
         } catch (err: unknown) {
           if (axios.isAxiosError(err)) {
             if (err.response?.status === 404) {
-              if (role !== "admin") {
-                setError("No se encontraron asignaturas para este profesor.");
-              }
+              setError("No se encontraron asignaturas para este estudiante.");
             } else {
               setError(
                 err.response?.data?.message ||
@@ -45,7 +43,7 @@ const useFetchTeacherSubjects = (teacherId: number | null, role: string) => {
     };
 
     fetchSubjects();
-  }, [teacherId, role]);
+  }, [studentId]);
 
   return { subjects, loading, error };
 };

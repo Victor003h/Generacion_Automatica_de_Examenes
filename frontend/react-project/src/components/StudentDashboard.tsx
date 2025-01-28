@@ -26,13 +26,13 @@ const StudentDashboard: React.FC = () => {
             <span>Bienvenido, {name}</span>
           </li>
           <li>
-            <Link to="exams">
+            <Link to="student-exam">
               <FaClipboardList className="icon" />
               <span>Exámenes</span>
             </Link>
           </li>
           <li>
-            <Link to="subjects">
+            <Link to="student-subjects">
               <FaBookOpen className="icon" />
               <span>Asignaturas</span>
             </Link>

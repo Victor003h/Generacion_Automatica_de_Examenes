@@ -25,7 +25,7 @@ const TopicsList: React.FC = () => {
     subjects: teacherSubjects,
     loading: teacherSubjectsLoading,
     error: teacherSubjectsError,
-  } = useFetchTeacherSubjects(userId);
+  } = useFetchTeacherSubjects(Number(userId), role);
 
   // Seleccionar las asignaturas y estados de carga/error adecuados según el rol del usuario
   const subjects = role === "admin" ? adminSubjects : teacherSubjects;

@@ -4,6 +4,7 @@ import "../../styles/DashboardContent/TeacherList.css";
 import { Teacher } from "../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import useFetchAllTeachers from "../../hooks/useFetchAllTeachers";
+import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects";
 import SortOptions from "./SortOptions";
 import BackButton from "../BackButton";
 import "../../styles/DashboardContent/CrudButtons.css";
@@ -17,7 +18,7 @@ const TeacherList: React.FC = () => {
   const [sortKey, setSortKey] = useState<string>("first_name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
 
   const sortedTeachers = useMemo(() => {
     return teachers.slice().sort((a, b) => {
@@ -57,7 +58,7 @@ const TeacherList: React.FC = () => {
     if (confirmDelete) {
       try {
         await axios.delete(
-          `http://localhost:8000/api/account/teacher/${teacherId}/`
+          `http://localhost:8000/api/account/teacher/${teacherId}`
         );
         alert("Profesor borrado con éxito");
         window.location.reload(); // Recargar la página para actualizar la lista de profesores
@@ -108,30 +109,13 @@ const TeacherList: React.FC = () => {
       ) : (
         <ul className="teacher-list">
           {paginatedTeachers.map((teacher) => (
-            <li key={teacher.id} className="teacher-item">
-              <h2>
-                {teacher.first_name} {teacher.last_name}
-              </h2>
-              <p>
-                <strong>Email:</strong> {teacher.email}
-              </p>
-              {role === "admin" && (
-                <div className="teacher-actions">
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEditClick(teacher.id)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteTeacher(teacher.id)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              )}
-            </li>
+            <TeacherItem
+              key={teacher.id}
+              teacher={teacher}
+              role={role}
+              onEditClick={handleEditClick}
+              onDeleteClick={handleDeleteTeacher}
+            />
           ))}
         </ul>
       )}
@@ -155,6 +139,65 @@ const TeacherList: React.FC = () => {
         </button>
       </div>
     </div>
+  );
+};
+
+interface TeacherItemProps {
+  teacher: Teacher;
+  role: string;
+  onEditClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({
+  teacher,
+  role,
+  onEditClick,
+  onDeleteClick,
+}) => {
+  const { subjects, loading, error } = useFetchTeacherSubjects(
+    teacher.id,
+    role
+  );
+
+  return (
+    <li className="teacher-item">
+      <h2>
+        {teacher.first_name} {teacher.last_name}
+      </h2>
+      <p>
+        <strong>Email:</strong> {teacher.email}
+      </p>
+      <p>
+        <strong>Especialidad:</strong> {teacher.speciality}
+      </p>
+      {loading ? (
+        <p>Cargando asignaturas...</p>
+      ) : error ? (
+        <p>No se encuantran asignaturas</p>
+      ) : (
+        <p>
+          <strong>Asignaturas que imparte: </strong>
+          {subjects.map((subject) => subject.name).join(", ")}
+        </p>
+      )}
+      {role === "admin" && (
+        <div className="teacher-actions">
+          <button
+            className="edit-button"
+            onClick={() => onEditClick(teacher.id)}
+          >
+            Editar
+          </button>
+          <button
+            className="delete-button"
+            onClick={() => onDeleteClick(teacher.id)}
+          >
+            Eliminar
+          </button>
+        </div>
+      )}
+    </li>
   );
 };
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddStudent.css";
 import useFetchCourses from "../../hooks/useFetchCourses";
+import BackButton from "../BackButton";
 
 const AddStudent: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -48,6 +49,7 @@ const AddStudent: React.FC = () => {
 
   return (
     <div className="add-student-container">
+      <BackButton />
       <h1>Añadir Estudiante</h1>
       <form className="add-student-form" onSubmit={handleSubmit}>
         <div className="form-group">
