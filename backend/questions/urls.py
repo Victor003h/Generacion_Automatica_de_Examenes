@@ -31,5 +31,6 @@ urlpatterns =[
     
   
     path('teacher/subjects/<int:teacher_id>/',teacher_subjects),
+    path('teacher/head_of_subject/<int:teacher_id>',headofsubject),
      
 ]+router.urls
