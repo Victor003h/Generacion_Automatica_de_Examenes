@@ -69,7 +69,7 @@ def exam_questions(request,pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     questions=exam.questions.all()
-    serializer=QuestionSerializer(questions.data,many=True)
+    serializer=QuestionSerializer(questions,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
     
     
