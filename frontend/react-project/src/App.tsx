@@ -35,6 +35,8 @@ import EditExam from "./components/DashboardContent/EditExam";
 import EditExamQuestions from "./components/DashboardContent/EditExamQuestions";
 import StudentDashboard from "./components/StudentDashboard";
 import ViewExam from "./components/DashboardContent/ViewExam";
+import Validations from "./components/DashboardContent/Validations";
+import ViewExamForValidation from "./components/DashboardContent/ViewExamForValidation";
 
 const App: React.FC = () => {
   return (
@@ -57,6 +59,11 @@ const App: React.FC = () => {
           <Route path="add-exam-questions" element={<AddExamQuestions />} />
           <Route path="edit-exam-questions" element={<EditExamQuestions />} />
           <Route path="view-exam" element={<ViewExam />} />
+          <Route path="validations" element={<Validations />} />
+          <Route
+            path="validate-exam-view"
+            element={<ViewExamForValidation />}
+          />
         </Route>
         <Route path="/student-dashboard/*" element={<StudentDashboard />}>
           {/*Estas son referencias a las opciones de profesor, temporales*/}
@@ -89,6 +96,11 @@ const App: React.FC = () => {
           <Route path="add-exam-questions" element={<AddExamQuestions />} />
           <Route path="edit-exam-questions" element={<EditExamQuestions />} />
           <Route path="view-exam" element={<ViewExam />} />
+          <Route path="validations" element={<Validations />} />
+          <Route
+            path="validate-exam-view"
+            element={<ViewExamForValidation />}
+          />
         </Route>
         <Route path="create-exam" element={<CreateExam />} />
         <Route path="exam-details" element={<ExamDetails />} />

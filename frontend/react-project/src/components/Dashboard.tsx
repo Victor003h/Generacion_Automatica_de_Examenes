@@ -6,15 +6,22 @@ import {
   FaBookOpen,
   FaChartBar,
   FaQuestionCircle,
+  FaCheck,
 } from "react-icons/fa"; // Importamos íconos de react-icons
 import "../styles/Dashboard.css";
 import "../styles/DashboardContent/Dropdown.css";
 import LogoutButton from "./DashboardContent/LogoutButton";
+import useFetchHeadOfSubjects from "../hooks/useFetchHeadOfSubjects";
 
 const Dashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
+
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId) : null;
+
+  const { subjectIds, loading, error } = useFetchHeadOfSubjects(userId);
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -60,6 +67,14 @@ const Dashboard: React.FC = () => {
               <span>Asignaturas</span>
             </Link>
           </li>
+          {subjectIds.length > 0 && (
+            <li>
+              <Link to="validations">
+                <FaCheck className="icon" />
+                <span>Validar Exámenes</span>
+              </Link>
+            </li>
+          )}
           <li>
             <Link to="statistics">
               <FaChartBar className="icon" />

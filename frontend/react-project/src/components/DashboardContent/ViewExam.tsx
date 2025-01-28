@@ -20,7 +20,7 @@ const ViewExam: React.FC = () => {
         setExam(examResponse.data);
 
         const questionsResponse = await axios.get(
-          `http://localhost:8000/api/exam/${examId}/questions/`
+          `http://localhost:8000/api/exam/questions/${examId}/`
         );
         setQuestions(questionsResponse.data);
       } catch (err: unknown) {

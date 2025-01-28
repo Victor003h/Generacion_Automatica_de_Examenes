@@ -169,15 +169,15 @@ const ExamList: React.FC = () => {
             <li key={exam.id} className="exam-item">
               <h2>{exam.type}</h2>
               <p>
-                <strong>Fecha:</strong>{" "}
+                <strong>Fecha:</strong>
                 {new Date(exam.date).toLocaleDateString()}
               </p>
               <p>
-                <strong>Profesor:</strong>{" "}
+                <strong>Profesor:</strong>
                 {examDetails[exam.id]?.teacherName || "Cargando..."}
               </p>
               <p>
-                <strong>Asignatura:</strong>{" "}
+                <strong>Asignatura:</strong>
                 {examDetails[exam.id]?.subjectName || "Cargando..."}
               </p>
               <div className="exam-actions">
