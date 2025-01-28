@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
-import {
-  FaClipboardList,
-  FaUserGraduate,
-  FaBookOpen,
-  FaChartBar,
-  FaQuestionCircle,
-} from "react-icons/fa"; // Importamos íconos de react-icons
+import { FaClipboardList, FaBookOpen, FaChartBar } from "react-icons/fa"; // Importamos íconos de react-icons
 import "../styles/Dashboard.css";
 import "../styles/DashboardContent/Dropdown.css";
 import LogoutButton from "./DashboardContent/LogoutButton";
 
-const Dashboard: React.FC = () => {
+const StudentDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
-    const storedRole = localStorage.getItem("role");
     if (storedName) setName(storedName);
-    if (storedRole) setRole(storedRole);
   }, []);
 
   const toggleSidebar = () => {
@@ -37,21 +28,7 @@ const Dashboard: React.FC = () => {
           <li>
             <Link to="exams">
               <FaClipboardList className="icon" />
-              <span>Gestionar Exámenes</span>
-            </Link>
-          </li>
-          <li>
-            <Link to={role === "teacher" ? "students" : "grades"}>
-              <FaUserGraduate className="icon" />
-              <span>
-                {role === "teacher" ? "Estudiantes" : "Calificaciones"}
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link to={role === "teacher" ? "questions" : ""}>
-              <FaQuestionCircle className="icon" />
-              <span>{role === "teacher" ? "Banco de Preguntas" : ""}</span>
+              <span>Exámenes</span>
             </Link>
           </li>
           <li>
@@ -81,4 +58,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default StudentDashboard;

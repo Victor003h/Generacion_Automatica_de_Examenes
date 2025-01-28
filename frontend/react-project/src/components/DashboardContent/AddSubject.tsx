@@ -3,17 +3,25 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddSubject.css";
 import { Teacher } from "../Interfaces";
+import useFetchCourses from "../../hooks/useFetchCourses";
+import BackButton from "../BackButton";
 
 const AddSubject: React.FC = () => {
   const [name, setName] = useState("");
   const [studyProgram, setStudyProgram] = useState("");
-  const [course, setCourse] = useState<number | "">("");
+  const [courseId, setCourseId] = useState<number | "">("");
   const [headOfSubject, setHeadOfSubject] = useState<number | "">("");
   const [teachersSubject, setTeachersSubject] = useState<string>("");
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const {
+    courses,
+    loading: coursesLoading,
+    error: coursesError,
+  } = useFetchCourses();
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -40,7 +48,7 @@ const AddSubject: React.FC = () => {
       await axios.post("http://localhost:8000/api/subjects/", {
         name: name,
         study_program: studyProgram,
-        course: course,
+        course: courseId, // Asignar el ID del curso seleccionado
         head_of_subject: headOfSubject,
         teachers_subject: teachersSubjectArray,
       });
@@ -64,6 +72,7 @@ const AddSubject: React.FC = () => {
 
   return (
     <div className="add-subject-container">
+      <BackButton />
       <h1>Añadir Asignatura</h1>
       <form className="add-subject-form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -88,13 +97,21 @@ const AddSubject: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="course">Curso</label>
-          <input
-            type="number"
+          <select
             id="course"
-            value={course}
-            onChange={(e) => setCourse(Number(e.target.value))}
+            value={courseId}
+            onChange={(e) => setCourseId(Number(e.target.value))}
             required
-          />
+          >
+            <option value="">Seleccionar Curso</option>
+            {coursesLoading && <option>Cargando cursos...</option>}
+            {coursesError && <option>Error al cargar cursos</option>}
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="headOfSubject">Jefe de Asignatura</label>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/AddStudent.css";
 import BackButton from "../BackButton";
+import useFetchCourses from "../../hooks/useFetchCourses";
 
 const EditStudent: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -11,11 +12,16 @@ const EditStudent: React.FC = () => {
   const [lastName, setLastName] = useState("");
   const [lastName2, setLastName2] = useState("");
   const [age, setAge] = useState<number | "">("");
-  const [course, setCourse] = useState<number | "">("");
+  const [courseId, setCourseId] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const {
+    courses,
+    loading: coursesLoading,
+    error: coursesError,
+  } = useFetchCourses();
   const studentId = localStorage.getItem("editStudentId");
 
   useEffect(() => {
@@ -32,7 +38,7 @@ const EditStudent: React.FC = () => {
         setLastName(student.last_name);
         setLastName2(student.last_name2);
         setAge(student.age);
-        setCourse(student.course);
+        setCourseId(student.course);
       } catch (err) {
         console.error("Error al obtener el estudiante:", err);
       }
@@ -56,7 +62,7 @@ const EditStudent: React.FC = () => {
           last_name: lastName,
           last_name2: lastName2,
           age: age,
-          course: course,
+          course: courseId,
         }
       );
 
@@ -137,13 +143,21 @@ const EditStudent: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="course">Curso</label>
-          <input
-            type="number"
+          <select
             id="course"
-            value={course}
-            onChange={(e) => setCourse(Number(e.target.value))}
+            value={courseId}
+            onChange={(e) => setCourseId(Number(e.target.value))}
             required
-          />
+          >
+            <option value="">Seleccionar Curso</option>
+            {coursesLoading && <option>Cargando cursos...</option>}
+            {coursesError && <option>Error al cargar cursos</option>}
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.name}
+              </option>
+            ))}
+          </select>
         </div>
         {error && <div className="error-message">{error}</div>}
         <button type="submit" className="submit-button" disabled={loading}>

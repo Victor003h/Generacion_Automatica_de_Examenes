@@ -12,7 +12,7 @@ const useFetchTeachersBySubject = (subjectId: number | null) => {
       const fetchTeachers = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/subject/teacher/${subjectId}/`
+            `http://localhost:8000/api/subject/teachers/${subjectId}/`
           );
           if (response.data.length === 0) {
             throw new Error(

@@ -48,6 +48,8 @@ const Login: React.FC = () => {
 
       if (formData.role === "admin") {
         navigate("/admin-dashboard");
+      } else if (formData.role === "student") {
+        navigate("/student-dashboard");
       } else {
         navigate("/dashboard");
       }
@@ -106,7 +108,7 @@ const Login: React.FC = () => {
               required
             >
               <option value="" disabled>
-                Selecciona tu role
+                Selecciona tu rol
               </option>
               <option value="student">Estudiante</option>
               <option value="teacher">Profesor</option>

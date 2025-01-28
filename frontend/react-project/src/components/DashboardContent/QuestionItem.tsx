@@ -86,7 +86,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
           onClick={() => onDelete(question.id)}
           disabled={!isActionAllowed}
         >
-          Borrar
+          Eliminar
         </button>
       </div>
     </div>

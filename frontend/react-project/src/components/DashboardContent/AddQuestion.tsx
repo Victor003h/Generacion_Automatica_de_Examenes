@@ -4,6 +4,8 @@ import "../../styles/DashboardContent/AddQuestions.css";
 import useFetchSubjectsByRole from "../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
 import useFetchTeachersBySubject from "../../hooks/useFetchSubjectTeachers"; // Importa el hook
+import { useNavigate } from "react-router-dom";
+import BackButton from "../BackButton";
 
 const AddQuestion: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
@@ -12,6 +14,7 @@ const AddQuestion: React.FC = () => {
   const [questionType, setQuestionType] = useState<string>("MO");
   const [difficulty, setDifficulty] = useState<string>("E");
   const [selectedTeacher, setSelectedTeacher] = useState<string | null>(null); // Nuevo estado para el profesor seleccionado
+  const navigate = useNavigate();
 
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? storedUserId : null;
@@ -53,6 +56,7 @@ const AddQuestion: React.FC = () => {
       setSelectedSubject(null);
       setSelectedTopic(null);
       setSelectedTeacher(null);
+      navigate(-1); // Redirigir a la página anterior
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -69,6 +73,7 @@ const AddQuestion: React.FC = () => {
 
   return (
     <div className="add-question-container">
+      <BackButton />
       <h2>Añadir Pregunta</h2>
       <div className="form-group">
         <label>Asignatura:</label>
