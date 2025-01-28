@@ -1,0 +1,61 @@
+.view-exam-container {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1000px; /* Limitar el ancho del contenedor */
+  margin: 0 auto; /* Centrar el contenedor */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.exam-details p,
+.question-content p {
+  margin: 0;
+  font-size: 1em;
+  color: #666;
+}
+
+.question-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.question-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex; /* Utilizar flexbox para organizar el contenido */
+  flex-wrap: wrap; /* Permitir que los elementos se ajusten */
+  gap: 5px; /* Añadir espacio entre los elementos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.question-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.question-content h2 {
+  flex: 1 0 100%; /* Hacer que el encabezado ocupe toda la fila */
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.question-content p {
+  flex: 1 0 45%; /* Hacer que los párrafos ocupen el 45% del ancho */
+  margin: 10px 0;
+  font-size: 1em;
+  color: #666;
+}

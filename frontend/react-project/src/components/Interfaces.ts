@@ -29,11 +29,11 @@ export interface Teacher {
 export interface Exam {
   id: number;
   type: string;
-  validation: boolean;
-  parameters: string;
   date: string;
   teacher: number;
+  validation: boolean;
   subject: number;
+  questions: number[];
 }
 // Interface para los temas
 export interface Topic {

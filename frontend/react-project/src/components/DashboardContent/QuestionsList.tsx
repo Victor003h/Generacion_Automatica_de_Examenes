@@ -25,7 +25,7 @@ const QuestionList: React.FC = () => {
     subjects: teacherSubjects,
     loading: teacherSubjectsLoading,
     error: teacherSubjectsError,
-  } = useFetchTeacherSubjects(userId);
+  } = useFetchTeacherSubjects(Number(userId), role);
 
   const subjects = role === "admin" ? adminSubjects : teacherSubjects;
   const subjectsLoading =
@@ -174,7 +174,7 @@ const QuestionList: React.FC = () => {
   };
 
   const handleEditQuestion = (questionId: number) => {
-    navigate("/edit-question", { state: { questionId } });
+    navigate("../edit-question", { state: { questionId } });
   };
 
   if (subjectsLoading || questionsLoading) return <div>Cargando...</div>;
@@ -191,7 +191,7 @@ const QuestionList: React.FC = () => {
   return (
     <div className="outer-container">
       <div className="content-container">
-        <Link to="/add-question" className="add-button">
+        <Link to="../add-question" className="add-button">
           Añadir Pregunta
         </Link>
         <BackButton />
