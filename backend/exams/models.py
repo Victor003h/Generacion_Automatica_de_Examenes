@@ -6,7 +6,6 @@ from questions.models import Subject,Question
 
 # jefe de asig , revisa y valida el examen
 
-
 class Exam(models.Model):
     type=models.CharField(max_length=150) # final , Inter-Semester ,etc
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
@@ -40,8 +39,6 @@ class ExamDone(models.Model):
     #     ]
     
        
-   # add unique field
-
 class ExamQuestionResponse(models.Model):
     exam_Done=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
     question=models.ForeignKey(Question,null=True,on_delete=models.SET_NULL)

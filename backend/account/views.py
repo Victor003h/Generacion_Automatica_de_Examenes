@@ -64,7 +64,6 @@ def login(request):
     return Response({'token': token.key, 'user':serializer.data},status=status.HTTP_200_OK)
 
 
-
 @extend_schema(
     request=TeacherSerializer, 
     responses={201: TeacherSerializer}, 
@@ -205,10 +204,6 @@ def getUser(request,id):
     
     serializer=UserSerializer(user)
     return Response(serializer.data,status=status.HTTP_200_OK)
-
-
-
-
 
 
 @extend_schema(

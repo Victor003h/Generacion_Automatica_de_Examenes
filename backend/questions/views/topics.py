@@ -58,6 +58,10 @@ def topic_detail(request, pk):
 
 @api_view(['GET'])
 def topic_subject(request,topic_id):
+    """
+    Obtains the subject to which the topic belongs.
+
+    """
     try:
         topic=Topic.objects.get(pk=topic_id)
     except Topic.DoesNotExist:
@@ -70,6 +74,10 @@ def topic_subject(request,topic_id):
 
 @api_view(['GET'])
 def topic_question(request,topic_id):
+    """
+    Obtain all the questions of a topic.
+    
+    """
     try:
         topic=Topic.objects.get(pk=topic_id)
     except Topic.DoesNotExist:

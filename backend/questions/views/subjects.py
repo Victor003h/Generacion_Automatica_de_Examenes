@@ -56,22 +56,29 @@ def subject_detail(request, pk):
         subject.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-
 @api_view(['GET'])
 def subject_questions(request,subject_id):
+    """
+    Obtain all the questions of a subject.
+
+    """
     try:
         subject = Subject.objects.get(pk=subject_id)
     except Subject.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-    questions=Question.objects.filter(subject=subject_id)
+    questions=Question.objects.filter(subject=subject)
     serializer=QuestionSerializer(questions,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 
+
 @api_view(['GET'])
 def subject_topics(request,subject_id):
+    """
+    Obtain all the topics of a subject.
+
+    """
     try:
         subject=Subject.objects.get(pk=subject_id)
     except Subject.DoesNotExist:
@@ -84,6 +91,11 @@ def subject_topics(request,subject_id):
 
 @api_view(['GET'])
 def teacher_subjects(request,teacher_id):
+    """
+    To obtain all the subjects taught by a teacher.
+
+    """
+    
     try:
         teacher = Teacher.objects.get(pk=teacher_id)
     except Teacher.DoesNotExist:
@@ -95,6 +107,10 @@ def teacher_subjects(request,teacher_id):
 
 @api_view(['GET'])
 def subject_teachers(request,subject_id):
+    """
+    Obtain all the teacher of a subject.
+
+    """
     try:
         subject = Subject.objects.get(pk=subject_id)
     except Teacher.DoesNotExist:
@@ -106,6 +122,10 @@ def subject_teachers(request,subject_id):
 
 @api_view(['GET'])
 def headofsubject(request,teacher_id):
+    """
+    Obtain the Head of the subject.
+
+    """
     try:
         teacher=Teacher.objects.get(pk=teacher_id)
     except Teacher.DoesNotExist:
@@ -120,6 +140,11 @@ def headofsubject(request,teacher_id):
 
 @api_view(['GET'])
 def student_subjects(request,pk):
+    """
+    To obtain all the subjects that a student is taking.
+
+    """
+    
     try:
         student=Student.objects.get(pk=pk)
     except Student.DoesNotExist:

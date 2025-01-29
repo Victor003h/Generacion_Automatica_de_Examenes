@@ -1,9 +1,9 @@
 from django.urls import path
 from rest_framework import routers
 from .views import *
-from .viewss.subjects import *
-from .viewss.topics import *
-from .viewss.questions import *
+from .views.subjects import *
+from .views.topics import *
+from .views.questions import *
 
 
 router=routers.DefaultRouter()
