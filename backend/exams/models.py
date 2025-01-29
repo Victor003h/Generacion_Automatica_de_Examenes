@@ -46,7 +46,7 @@ class ExamQuestionResponse(models.Model):
     exam_Done=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
     question=models.ForeignKey(Question,null=True,on_delete=models.SET_NULL)
     response=models.TextField()
-    observation=models.CharField(max_length=500)
+    observation=models.CharField(max_length=500,null=True,blank=True)
     
     # class Meta:
     #     constraints = [

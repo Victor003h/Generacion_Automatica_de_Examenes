@@ -163,7 +163,7 @@ def exam_done_list(request):
 def exam_done_detail(request, pk):
 
     try:
-        examdone = ExamDoneSerializer.objects.get(pk=pk)
+        examdone = ExamDone.objects.get(pk=pk)
     except ExamDone.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
