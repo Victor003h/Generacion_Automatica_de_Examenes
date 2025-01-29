@@ -3,9 +3,9 @@ from django.urls import resolve, reverse
 from account.views import *
 from exams.views import *
 from questions.views import *
-from questions.viewss.topics import *
-from questions.viewss.subjects import *
-from questions.viewss.questions import *
+from questions.views.topics import *
+from questions.views.subjects import *
+from questions.views.questions import *
 
 
 class TestUrls(SimpleTestCase):
