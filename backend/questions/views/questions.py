@@ -6,8 +6,6 @@ from ..serializer import *
 from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
 
 
-
-
 @extend_schema(
     methods=['GET'],
     responses={200:QuestionSerializer(many=True)}
@@ -57,9 +55,12 @@ def question_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
-
 @api_view(['GET'])
 def question_topic(request,question_id):
+    """
+    Obtains the topic to which the question belongs.
+
+    """
     try:
         question=Question.objects.get(pk=question_id)
     except Question.DoesNotExist:

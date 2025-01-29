@@ -60,6 +60,10 @@ def exam_detail(request, pk):
     
 @api_view(['GET'])
 def exam_questions(request,pk):
+    """
+    Obtains all the question in an exam.
+
+    """
     try:
         exam = Exam.objects.get(pk=pk)
     except Exam.DoesNotExist:
@@ -122,6 +126,10 @@ def validated_exam_detail(request, pk):
     
 @api_view(['GET'])
 def isvalidated(request,pk):
+    """
+    Check if an exam is validated.
+
+    """
     try:
         exam=Exam.objects.get(pk=pk)
     except Exam.DoesNotExist:
@@ -163,7 +171,7 @@ def exam_done_list(request):
 def exam_done_detail(request, pk):
 
     try:
-        examdone = ExamDoneSerializer.objects.get(pk=pk)
+        examdone = ExamDone.objects.get(pk=pk)
     except ExamDone.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -231,6 +239,3 @@ def exam_question_response_detail(request, pk):
     elif request.method == 'DELETE':
         examquestionresponse.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-
-
