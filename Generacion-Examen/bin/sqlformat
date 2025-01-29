@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' "/media/jotogo/01DA0B8AD515D0A0/Universidad/3er Año/1er Semetre/IS/Generacion_Automatica_de_Examenes/Generacion-Examen/bin/python3" "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from sqlparse.__main__ import main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())
