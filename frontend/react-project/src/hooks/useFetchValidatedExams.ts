@@ -1,37 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Exam } from "../components/Interfaces";
-import useFetchAllExams from "./useFetchAllExams";
 
 const useFetchValidatedExams = () => {
-  const {
-    exams: allExams,
-    loading: allExamsLoading,
-    error: allExamsError,
-  } = useFetchAllExams();
-  const [validatedExams, setValidatedExams] = useState<Exam[]>([]);
+  const [validatedExams, setValidatedExams] = useState<
+    { exam: number; id: number }[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchValidatedExams = async () => {
       try {
-        const validatedExams: Exam[] = [];
-
-        await Promise.all(
-          allExams.map(async (exam) => {
-            try {
-              await axios.get(`/api/exam/isvalidated/${exam.id}`);
-              validatedExams.push(exam);
-            } catch (err) {
-              if (!axios.isAxiosError(err) || err.response?.status !== 404) {
-                throw err;
-              }
-            }
-          })
+        const response = await axios.get(
+          `http://localhost:8000/api/validated_exam/`
         );
-
-        setValidatedExams(validatedExams);
+        const validatedExamList: { exam: number; id: number }[] = response.data;
+        setValidatedExams(validatedExamList);
         setLoading(false);
       } catch (err: unknown) {
         if (axios.isAxiosError(err)) {
@@ -45,10 +29,8 @@ const useFetchValidatedExams = () => {
       }
     };
 
-    if (!allExamsLoading && !allExamsError) {
-      fetchValidatedExams();
-    }
-  }, [allExams, allExamsLoading, allExamsError]);
+    fetchValidatedExams();
+  }, []);
 
   return { validatedExams, loading, error };
 };

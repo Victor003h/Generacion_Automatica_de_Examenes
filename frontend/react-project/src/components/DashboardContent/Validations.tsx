@@ -30,11 +30,12 @@ const ValidarExamenes: React.FC = () => {
       try {
         const response = await axios.get("http://localhost:8000/api/exam/");
         const examList: Exam[] = response.data;
-        const filteredExamList = await Promise.all(
+
+        const nonValidatedExams = await Promise.all(
           examList.map(async (exam) => {
             try {
               await axios.get(
-                `http://localhost:8000/api/exam/isvalidated/${exam.id}`
+                `http://localhost:8000/api/exam/isvalidated/${exam.id}/`
               );
               return null;
             } catch (error) {
@@ -45,33 +46,41 @@ const ValidarExamenes: React.FC = () => {
             }
           })
         );
-        setExams(filteredExamList.filter((exam) => exam !== null) as Exam[]);
-      } catch (err: unknown) {
+
+        setExams(nonValidatedExams.filter((exam) => exam !== null) as Exam[]);
+      } catch (err) {
         console.error("Error al obtener los exámenes:", err);
       }
     };
 
+    fetchExams();
+  }, []);
+
+  useEffect(() => {
     const fetchExamDetails = async (
       examId: number,
       subjectId: number,
       teacherId: number
     ) => {
-      const subjectResponse = await axios.get(
-        `http://localhost:8000/api/subject/${subjectId}/`
-      );
-      const teacherResponse = await axios.get(
-        `http://localhost:8000/api/teacher/${teacherId}`
-      );
-      setExamDetails((prevDetails) => ({
-        ...prevDetails,
-        [examId]: {
-          subjectName: subjectResponse.data.name,
-          teacherName: `${teacherResponse.data.first_name} ${teacherResponse.data.last_name}`,
-        },
-      }));
+      try {
+        const subjectResponse = await axios.get(
+          `http://localhost:8000/api/subject/${subjectId}/`
+        );
+        const teacherResponse = await axios.get(
+          `http://localhost:8000/api/account/teacher/${teacherId}`
+        );
+        setExamDetails((prevDetails) => ({
+          ...prevDetails,
+          [examId]: {
+            subjectName: subjectResponse.data.name,
+            teacherName: `${teacherResponse.data.first_name} ${teacherResponse.data.last_name}`,
+          },
+        }));
+      } catch (error) {
+        console.error(`Error al obtener detalles del examen ${examId}:`, error);
+      }
     };
 
-    fetchExams();
     exams.forEach((exam) => {
       fetchExamDetails(exam.id, exam.subject, exam.teacher);
     });
@@ -99,19 +108,17 @@ const ValidarExamenes: React.FC = () => {
     if (!selectedExam) return;
 
     try {
-      await axios.post(
-        `http://localhost:8000/api/validated_exam/${selectedExam.id}/`,
-        {
-          observations: observations,
-          exam: selectedExam.id,
-          teacher: userId,
-        }
-      );
+      await axios.post(`http://localhost:8000/api/validated_exam/`, {
+        observations: observations,
+        exam: selectedExam.id,
+        teacher: userId,
+      });
       alert("Examen validado exitosamente");
       setShowValidationModal(false);
       setExams((prevExams) =>
         prevExams.filter((exam) => exam.id !== selectedExam.id)
       );
+      setObservations(""); // Clear observations after submission
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -174,8 +181,8 @@ const ValidarExamenes: React.FC = () => {
       )}
 
       {showValidationModal && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="validation-modal">
+          <div className="validation-modal-content">
             <h3>Validar Examen</h3>
             <textarea
               value={observations}

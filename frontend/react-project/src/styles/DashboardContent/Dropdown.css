@@ -8,7 +8,7 @@
 
 /* Estilo del botón de dropdown */
 .dropdown-toggle {
-  background-color: #007bff;
+  background-color: #14273b;
   color: white;
   padding: 10px;
   font-size: 1rem;
@@ -20,14 +20,14 @@
 }
 
 .dropdown-toggle:hover {
-  background-color: #0056b3;
+  background-color: #000000;
 }
 
 /* Estilo del contenido del dropdown */
 .dropdown-menu {
   display: none;
   position: absolute;
-  background-color: #007bff;
+  background-color: #14273b;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;

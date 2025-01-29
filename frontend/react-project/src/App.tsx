@@ -39,6 +39,8 @@ import Validations from "./components/DashboardContent/Validations";
 import ViewExamForValidation from "./components/DashboardContent/ViewExamForValidation";
 import StudentSubjects from "./components/DashboardContent/StudentSubjects";
 import StudentExam from "./components/DashboardContent/StudentExam";
+import TakeExam from "./components/DashboardContent/TakeExam";
+//import PrivateRoute from "./components/PrivateRoute";
 
 const App: React.FC = () => {
   return (
@@ -72,6 +74,7 @@ const App: React.FC = () => {
           <Route path="student-exam" element={<StudentExam />} />
           <Route path="view-exam" element={<ViewExam />} />
           <Route path="student-subjects" element={<StudentSubjects />} />
+          <Route path="take-exam" element={<TakeExam />} />
           <Route path="statistics" element={<Statistics />} />
         </Route>
         <Route path="/admin-dashboard" element={<AdminDashboard />}>

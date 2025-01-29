@@ -26,13 +26,39 @@ const StudentExam: React.FC = () => {
     error: validatedExamsError,
   } = useFetchValidatedExams();
 
+  const [exams, setExams] = useState<(Exam & { validatedExamId: number })[]>(
+    []
+  );
   const [examDetails, setExamDetails] = useState<{
     [key: number]: { subjectName: string; teacherName: string };
   }>({});
 
   useEffect(() => {
-    if (!Array.isArray(studentSubjects) || !Array.isArray(validatedExams))
-      return;
+    if (validatedExams.length > 0) {
+      const fetchExams = async () => {
+        try {
+          const examPromises = validatedExams.map((validatedExam) =>
+            axios
+              .get(`http://localhost:8000/api/exam/${validatedExam.exam}/`)
+              .then((res) => ({
+                ...res.data,
+                validatedExamId: validatedExam.id,
+              }))
+          );
+
+          const examsData = await Promise.all(examPromises);
+          setExams(examsData);
+        } catch (error) {
+          console.error("Error fetching exams:", error);
+        }
+      };
+
+      fetchExams();
+    }
+  }, [validatedExams]);
+
+  useEffect(() => {
+    if (!Array.isArray(studentSubjects) || !Array.isArray(exams)) return;
 
     const fetchExamDetails = async (
       examId: number,
@@ -55,24 +81,27 @@ const StudentExam: React.FC = () => {
             },
           }));
         } catch (error) {
-          console.error(`Error fetching details for exam ${examId}:`, error);
+          if (axios.isAxiosError(error) && error.response?.status === 404) {
+            console.error(
+              `No se encontró el recurso: ${error.response.config.url}`
+            );
+          } else {
+            console.error(`Error fetching details for exam ${examId}:`, error);
+          }
         }
       }
     };
 
-    validatedExams.forEach((exam) => {
-      if (exam) fetchExamDetails(exam.id, exam.subject, exam.teacher);
+    exams.forEach((exam) => {
+      fetchExamDetails(exam.id, exam.subject, exam.teacher);
     });
-  }, [validatedExams, studentSubjects]);
+  }, [exams, studentSubjects]);
 
   const filteredExams = useMemo(() => {
-    if (!Array.isArray(studentSubjects) || !Array.isArray(validatedExams))
-      return [];
+    if (!Array.isArray(studentSubjects) || !Array.isArray(exams)) return [];
     const studentSubjectIds = studentSubjects.map((subject) => subject.id);
-    return validatedExams.filter((exam) =>
-      studentSubjectIds.includes(exam.subject)
-    );
-  }, [validatedExams, studentSubjects]);
+    return exams.filter((exam) => studentSubjectIds.includes(exam.subject));
+  }, [exams, studentSubjects]);
 
   const [sortKey, setSortKey] = useState<string>("type");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -106,11 +135,17 @@ const StudentExam: React.FC = () => {
     return sortedExams.slice(startIndex, endIndex);
   }, [sortedExams, currentPage]);
 
-  const totalPages = Math.ceil(paginatedExams.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredExams.length / itemsPerPage);
 
   const handleViewExam = (examId: number) => {
     navigate("../view-exam", {
       state: { examId },
+    });
+  };
+
+  const handleTakeExam = (examId: number, validatedExamId: number) => {
+    navigate("../take-exam", {
+      state: { examId, validatedExamId },
     });
   };
 
@@ -164,6 +199,12 @@ const StudentExam: React.FC = () => {
                   onClick={() => handleViewExam(exam.id)}
                 >
                   Ver Preguntas
+                </button>
+                <button
+                  className="take-exam-button"
+                  onClick={() => handleTakeExam(exam.id, exam.validatedExamId)}
+                >
+                  Responder Examen
                 </button>
               </div>
             </li>

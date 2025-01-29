@@ -11,7 +11,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   path,
   ...rest
 }) => {
-  const isAuthenticated = Boolean(localStorage.getItem("userId"));
+  const token = localStorage.getItem("token");
+  const isAuthenticated = Boolean(token);
 
   return (
     <Route
