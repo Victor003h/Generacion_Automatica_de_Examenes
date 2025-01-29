@@ -10,7 +10,7 @@ const LogoutButton: React.FC = () => {
     // Eliminar las credenciales del usuario (esto es solo un ejemplo, ajusta según tu lógica de autenticación)
     localStorage.removeItem("userId");
     localStorage.removeItem("role");
-
+    localStorage.removeItem("authToken");
     // Redireccionar a la página de inicio
     navigate("/");
   };

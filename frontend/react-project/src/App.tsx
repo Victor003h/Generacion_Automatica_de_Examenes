@@ -40,7 +40,7 @@ import ViewExamForValidation from "./components/DashboardContent/ViewExamForVali
 import StudentSubjects from "./components/DashboardContent/StudentSubjects";
 import StudentExam from "./components/DashboardContent/StudentExam";
 import TakeExam from "./components/DashboardContent/TakeExam";
-//import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App: React.FC = () => {
   return (
@@ -50,7 +50,14 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register/professor" element={<RegisterProfessor />} />
         <Route path="/register/student" element={<RegisterStudent />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
           <Route path="exams" element={<ExamList />} />
           <Route path="subjects" element={<SubjectList />} />
           <Route path="statistics" element={<Statistics />} />
@@ -69,7 +76,14 @@ const App: React.FC = () => {
             element={<ViewExamForValidation />}
           />
         </Route>
-        <Route path="/student-dashboard" element={<StudentDashboard />}>
+        <Route
+          path="/student-dashboard"
+          element={
+            <PrivateRoute>
+              <StudentDashboard />
+            </PrivateRoute>
+          }
+        >
           {/*Estas son referencias a las opciones de profesor, temporales*/}
           <Route path="student-exam" element={<StudentExam />} />
           <Route path="view-exam" element={<ViewExam />} />
@@ -77,7 +91,14 @@ const App: React.FC = () => {
           <Route path="take-exam" element={<TakeExam />} />
           <Route path="statistics" element={<Statistics />} />
         </Route>
-        <Route path="/admin-dashboard" element={<AdminDashboard />}>
+        <Route
+          path="/admin-dashboard"
+          element={
+            <PrivateRoute>
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        >
           <Route path="exams" element={<ExamList />} />
           <Route path="teachers" element={<TeacherList />} />
           <Route path="subjects" element={<SubjectList />} />
@@ -109,8 +130,22 @@ const App: React.FC = () => {
             element={<ViewExamForValidation />}
           />
         </Route>
-        <Route path="create-exam" element={<CreateExam />} />
-        <Route path="exam-details" element={<ExamDetails />} />
+        <Route
+          path="create-exam"
+          element={
+            <PrivateRoute>
+              <CreateExam />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="exam-details"
+          element={
+            <PrivateRoute>
+              <ExamDetails />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

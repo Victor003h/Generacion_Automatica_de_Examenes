@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../styles/TakeExam.css";
+import "../../styles/DashboardContent/TakeExam.css";
 import { Question } from "../Interfaces";
 
 const TakeExam: React.FC = () => {
@@ -23,22 +23,10 @@ const TakeExam: React.FC = () => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/exam/${examId}/`
+          `http://localhost:8000/api/exam/questions/${examId}/`
         );
-        const questionIds: number[] = response.data.questions || [];
-
-        if (questionIds.length > 0) {
-          const questionPromises = questionIds.map((id) =>
-            axios
-              .get(`http://localhost:8000/api/question/${id}/`)
-              .then((res) => res.data)
-          );
-
-          const questionsData = await Promise.all(questionPromises);
-          setQuestions(questionsData);
-        } else {
-          setQuestions([]);
-        }
+        const questionsData: Question[] = response.data || [];
+        setQuestions(questionsData);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -60,7 +48,7 @@ const TakeExam: React.FC = () => {
       const examDoneResponse = await axios.post(
         `http://localhost:8000/api/exam_done/`,
         {
-          date: new Date().toISOString().split("T")[0],
+          //date: new Date().toISOString().split("T")[0],
           validated_exam: validatedExamId,
           student: parseInt(userId),
         }
@@ -73,7 +61,7 @@ const TakeExam: React.FC = () => {
         axios.post(`http://localhost:8000/api/exam_question_response/`, {
           response: answers[question.id] || "",
           observation: "",
-          exam_done: examDoneId,
+          exam_Done: examDoneId,
           question: question.id,
         })
       );

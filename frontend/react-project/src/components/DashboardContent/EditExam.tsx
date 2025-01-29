@@ -96,10 +96,31 @@ const EditExam: React.FC = () => {
     }
   };
 
-  const handleAddQuestions = () => {
-    navigate("../edit-exam-questions", {
-      state: { examId, type, date, teacher, subject, selectedQuestions },
-    });
+  const handleAddQuestions = async () => {
+    try {
+      const updatedExam = {
+        type: type,
+        date: date,
+        teacher: role === "admin" ? teacher : userId,
+        validation_teacher:
+          role === "admin"
+            ? teacher
+            : subjects.find((s) => s.id === subject)?.head_of_subject,
+        subject: subject,
+        questions: selectedQuestions,
+      };
+
+      await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
+
+      navigate("../edit-exam-questions", {
+        state: { examId, type, date, teacher, subject, selectedQuestions },
+      });
+    } catch (err: unknown) {
+      console.error(
+        "Error al guardar el examen antes de añadir preguntas:",
+        err
+      );
+    }
   };
 
   return (

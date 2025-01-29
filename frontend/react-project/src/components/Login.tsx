@@ -40,7 +40,7 @@ const Login: React.FC = () => {
       );
 
       const { token } = response.data;
-      localStorage.setItem("token", token);
+      localStorage.setItem("authToken", token);
       localStorage.setItem("role", formData.role);
       localStorage.setItem("username", formData.username);
       localStorage.setItem("userId", response.data.user.id);

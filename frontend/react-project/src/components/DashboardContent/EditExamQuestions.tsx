@@ -4,6 +4,7 @@ import useFetchQuestions from "../../hooks/useFetchQuestions";
 import { Question } from "../Interfaces";
 import BackButton from "../BackButton";
 import "../../styles/DashboardContent/AddExamQuestions.css";
+import axios from "axios";
 
 const EditExamQuestions: React.FC = () => {
   const location = useLocation();
@@ -57,10 +58,24 @@ const EditExamQuestions: React.FC = () => {
     });
   }, [filteredQuestions, sortKey, sortOrder]);
 
-  const handleConfirmSelection = () => {
-    navigate("../edit-exam", {
-      state: { examId, selectedQuestions, subject, type, date, teacher },
-    });
+  const handleConfirmSelection = async () => {
+    try {
+      const updatedExam = {
+        type: type,
+        date: date,
+        teacher: teacher,
+        subject: subject,
+        questions: selectedQuestions,
+      };
+
+      await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
+
+      navigate("../edit-exam", {
+        state: { examId, selectedQuestions, subject, type, date, teacher },
+      });
+    } catch (err: unknown) {
+      console.error("Error al guardar las preguntas seleccionadas:", err);
+    }
   };
 
   if (loading) return <div>Cargando preguntas...</div>;
