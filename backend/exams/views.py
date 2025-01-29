@@ -164,7 +164,7 @@ def exam_done_detail(request, pk):
 
     try:
         examdone = ExamDoneSerializer.objects.get(pk=pk)
-    except ExamDoneSerializer.DoesNotExist:
+    except ExamDone.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
@@ -213,8 +213,8 @@ def exam_question_response_list(request):
 def exam_question_response_detail(request, pk):
 
     try:
-        examquestionresponse = ExamQuestionResponseSerializer.objects.get(pk=pk)
-    except ExamQuestionResponseSerializer.DoesNotExist:
+        examquestionresponse = ExamQuestionResponse.objects.get(pk=pk)
+    except ExamQuestionResponse.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
