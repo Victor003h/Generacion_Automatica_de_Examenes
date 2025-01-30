@@ -7,10 +7,11 @@ import {
   FaChartBar,
   FaQuestionCircle,
   FaCheck,
+  FaCogs,
 } from "react-icons/fa"; // Importamos íconos de react-icons
 import "../styles/Dashboard.css";
 import "../styles/DashboardContent/Dropdown.css";
-import LogoutButton from "./DashboardContent/LogoutButton";
+import LogoutButton from "./DashboardContent/Common/LogoutButton";
 import useFetchHeadOfSubjects from "../hooks/useFetchHeadOfSubjects";
 
 const Dashboard: React.FC = () => {
@@ -68,12 +69,20 @@ const Dashboard: React.FC = () => {
             </Link>
           </li>
           {subjectIds.length > 0 && (
-            <li>
-              <Link to="validations">
-                <FaCheck className="icon" />
-                <span>Validar Exámenes</span>
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link to="validations">
+                  <FaCheck className="icon" />
+                  <span>Validar Exámenes</span>
+                </Link>
+              </li>
+              <li>
+                <Link to="define-exam-type">
+                  <FaCogs className="icon" />
+                  <span>Definir Tipo de Examen</span>
+                </Link>
+              </li>
+            </>
           )}
           <li>
             <Link to="statistics">

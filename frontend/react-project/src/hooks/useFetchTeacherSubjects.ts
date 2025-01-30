@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Subject } from "../components/Interfaces";
 
-const useFetchTeacherSubjects = (teacherId: number | null, role: string) => {
+const useFetchTeacherSubjects = (teacherId: number | null, role: string = "teacher") => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
