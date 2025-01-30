@@ -35,6 +35,19 @@ def exam_list(request):
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+@extend_schema(
+    methods=['GET','PUT','DELETE'],
+   # responses={200:ExamQuestionResponseSerializer(many=True)}
+)
+@extend_schema(
+    methods=['GET','PUT','DELETE'],
+    request=ExamSerializer,
+    responses={
+        201:ExamSerializer,
+        400: OpenApiResponse(description='Bad resquest'),
+        404:OpenApiResponse(description='It was successfully removed.')
+    }
+)
 @api_view(['GET', 'PUT', 'DELETE'])
 def exam_detail(request, pk):
 
@@ -72,74 +85,116 @@ def exam_questions(request,pk):
     questions=exam.questions.all()
     serializer=QuestionSerializer(questions,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
-    
-    
-    
-# VALIDATED EXAM
+ 
+
+@api_view(['GET'])
+def exams_by_state(request,state):
+    if state not in ['V', 'P','R']:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    exams=Exam.objects.filter(state=state)
+    serializer=ExamSerializer(exams,many=True)
+    return Response(serializer.data,status=status.HTTP_200_OK)
+   
+
+#ASSIGNED EXAM
 @extend_schema(
     methods=['GET'],
-    responses={200:ValidatedExamSerializer(many=True)}
+    responses={200:AssignedExamSerializer(many=True)}
 )
 @extend_schema(
     methods=['POST'],
-    request=ValidatedExamSerializer,
+    request=AssignedExamSerializer,
     responses={
-        201:ValidatedExamSerializer,
+        201:AssignedExamSerializer,
         400: OpenApiResponse(description='Bad resquest')
     }
 )
 @api_view(['GET','POST'])
-def validated_exam_list(request):
+def assigned_exam_list(request):
     if request.method=='GET':
-        validatedexam=ValidatedExam.objects.all()
-        serializer=ValidatedExamSerializer(validatedexam,many=True)
+        assignedexam=AssignedExam.objects.all()
+        serializer=AssignedExamSerializer(assignedexam,many=True)
         return Response(serializer.data)
 
-    serializer=ValidatedExamSerializer(data=request.data)
+    serializer=AssignedExamSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def validated_exam_detail(request, pk):
+def assigned_exam_detail(request, pk):
 
     try:
-        validatedexam = ValidatedExam.objects.get(pk=pk)
-    except ValidatedExam.DoesNotExist:
+        assignedexam = AssignedExam.objects.get(pk=pk)
+    except AssignedExam.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ValidatedExamSerializer(validatedexam)
+        serializer = AssignedExamSerializer(assignedexam)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = ValidatedExamSerializer(validatedexam, data=request.data)
+        serializer = AssignedExamSerializer(assignedexam, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        validatedexam.delete()
+        assignedexam.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-@api_view(['GET'])
-def isvalidated(request,pk):
-    """
-    Check if an exam is validated.
+    
+# OBSERVATION
+@extend_schema(
+    methods=['GET'],
+    responses={200:ObservationSerializer(many=True)}
+)
+@extend_schema(
+    methods=['POST'],
+    request=ObservationSerializer,
+    responses={
+        201:ObservationSerializer,
+        400: OpenApiResponse(description='Bad resquest')
+    }
+)
+@api_view(['GET','POST'])
+def observation_list(request):
+    if request.method=='GET':
+        observation=Observation.objects.all()
+        serializer=ObservationSerializer(observation,many=True)
+        return Response(serializer.data)
 
-    """
+    serializer=ObservationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def observation_detail(request, pk):
+
     try:
-        exam=Exam.objects.get(pk=pk)
-    except Exam.DoesNotExist:
+        observation = Observation.objects.get(pk=pk)
+    except Observation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    if ValidatedExam.objects.filter(exam=exam).exists():
-        return Response(status=status.HTTP_200_OK)
-    
-    return Response (status=status.HTTP_404_NOT_FOUND) 
-    
+
+    if request.method == 'GET':
+        serializer = ObservationSerializer(observation)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ObservationSerializer(observation, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        observation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+      
 
 # EXAM DONE
 @extend_schema(
@@ -239,3 +294,72 @@ def exam_question_response_detail(request, pk):
     elif request.method == 'DELETE':
         examquestionresponse.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+# # VALIDATED EXAM
+# @extend_schema(
+#     methods=['GET'],
+#     responses={200:ValidatedExamSerializer(many=True)}
+# )
+# @extend_schema(
+#     methods=['POST'],
+#     request=ValidatedExamSerializer,
+#     responses={
+#         201:ValidatedExamSerializer,
+#         400: OpenApiResponse(description='Bad resquest')
+#     }
+# )
+# @api_view(['GET','POST'])
+# def validated_exam_list(request):
+#     if request.method=='GET':
+#         validatedexam=ValidatedExam.objects.all()
+#         serializer=ValidatedExamSerializer(validatedexam,many=True)
+#         return Response(serializer.data)
+
+#     serializer=ValidatedExamSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data,status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def validated_exam_detail(request, pk):
+
+#     try:
+#         validatedexam = ValidatedExam.objects.get(pk=pk)
+#     except ValidatedExam.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+
+#     if request.method == 'GET':
+#         serializer = ValidatedExamSerializer(validatedexam)
+#         return Response(serializer.data)
+
+#     elif request.method == 'PUT':
+#         serializer = ValidatedExamSerializer(validatedexam, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     elif request.method == 'DELETE':
+#         validatedexam.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# @api_view(['GET'])
+# def isvalidated(request,pk):
+#     """
+#     Check if an exam is validated.
+
+#     """
+#     try:
+#         exam=Exam.objects.get(pk=pk)
+#     except Exam.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+#     if ValidatedExam.objects.filter(exam=exam).exists():
+#         return Response(status=status.HTTP_200_OK)
+    
+#     return Response (status=status.HTTP_404_NOT_FOUND) 
+    
