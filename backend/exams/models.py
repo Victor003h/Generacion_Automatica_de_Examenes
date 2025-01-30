@@ -13,23 +13,31 @@ class Exam(models.Model):
     subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
     date=models.DateField(auto_now_add=True)
     questions=models.ManyToManyField(Question,related_name='exams')
-    
-# que pasa si deseo obtener todos los examnevalidads y sus profesores , si un profesor se borra
-class ValidatedExam(models.Model):
+    POSSIBLES_STATES=[
+        ("V","Validated"),
+        ("R", "Rejected"),
+        ("P","Pending"),
+    ]
+    state=models.CharField(max_length=1,choices=POSSIBLES_STATES,default="P")
+
+
+class Observation(models.Model):
     exam=models.ForeignKey(Exam,null=False,on_delete=models.CASCADE)
-    teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     date=models.DateField(auto_now_add=True)
     observations=models.CharField(max_length=500)
-    
-    # class Meta:
-    #     constraints = [
-    #         models.UniqueConstraint(fields=['teacher', 'exam'], name='unique_validacion')
-    #     ]
+    checked=models.BooleanField(default=False)
     
     
+class AssignedExam(models.Model):
+    exam=models.ForeignKey(Exam,null=False,on_delete=models.CASCADE)
+    type=models.CharField(max_length=150)
+    date=models.DateField(auto_now_add=True)
 
+
+
+#duda al borrar un examen
 class ExamDone(models.Model):
-    validated_exam=models.ForeignKey(ValidatedExam,null=True,on_delete=models.SET_NULL)
+    exam=models.ForeignKey(Exam,null=True,on_delete=models.SET_NULL)
     student=models.ForeignKey(Student,null=True,on_delete=models.SET_NULL)
     date=models.DateField(auto_now_add=True)
     
@@ -43,9 +51,29 @@ class ExamQuestionResponse(models.Model):
     exam_Done=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
     question=models.ForeignKey(Question,null=True,on_delete=models.SET_NULL)
     response=models.TextField()
-    observation=models.CharField(max_length=500,null=True,blank=True)
+    note=models.DecimalField(max_digits=5,null=True,blank=True, decimal_places=2)
     
-    # class Meta:
-    #     constraints = [
-    #         models.UniqueConstraint(fields=['question', 'exam_Done'], name='unique_validacion')
-    #     ]
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(note__gte=0) & models.Q(note__lte=100),
+                name='note_range'
+            )
+        ]
+    
+    
+    
+class ExamGrade(models.Model):
+    examdone=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
+    teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
+    date=models.DateField(auto_now_add=True)
+    finalnote=models.DecimalField(max_digits=5,decimal_places=2)
+    
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(finalnote__gte=0) & models.Q(finalnote__lte=100),
+                name='finalnote_range'
+            )
+        ]
+    

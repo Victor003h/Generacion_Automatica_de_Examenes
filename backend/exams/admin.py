@@ -4,6 +4,7 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Exam)
-admin.site.register(ValidatedExam)
+admin.site.register(Observation)
+admin.site.register(AssignedExam)
 admin.site.register(ExamDone)
 admin.site.register(ExamQuestionResponse)
