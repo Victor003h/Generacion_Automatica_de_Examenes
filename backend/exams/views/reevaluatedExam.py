@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -76,3 +77,21 @@ def reevaluated_exam_detail(request, pk):
     elif request.method == 'DELETE':
         reevaluatedExam.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:ReevaluatedExamSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")
+    }
+)
+def teacher_reevaluatedexam(request,pk):
+    """
+    Obtain all the re-evaluated exam of a teacher 
+
+    """
+    teacher=get_object_or_404(Teacher,pk=pk)
+    reevaluatedexam=ReevaluatedExam.objects.filter(teacher=pk)
+    serializer=ReevaluatedExamSerializer(reevaluatedexam,many=True)
+    return Response(serializer.data)

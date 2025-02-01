@@ -65,7 +65,7 @@ class ExamQuestionResponse(models.Model):
     
 
 class ExamGrade(models.Model):
-    examdone=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
+    examdone=models.OneToOneField(ExamDone,on_delete=models.CASCADE)
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     date=models.DateField(auto_now_add=True)
     finalnote=models.DecimalField(max_digits=5,decimal_places=2)
@@ -80,7 +80,7 @@ class ExamGrade(models.Model):
    
    
 class ReevaluatedExam(models.Model):
-    examgrade=models.ForeignKey(ExamGrade,on_delete=models.CASCADE)
+    examgrade=models.OneToOneField(ExamGrade,on_delete=models.CASCADE)
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     note=models.DecimalField(max_digits=5,null=True,blank=True, decimal_places=2)
     
