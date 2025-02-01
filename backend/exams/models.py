@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from account.models import Teacher,Student
 from questions.models import Subject,Question
@@ -10,6 +11,7 @@ class Exam(models.Model):
     type=models.CharField(max_length=150) # final , Inter-Semester ,etc
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     validation_teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL,related_name='validation_teacher')
+    validation_date=date=models.DateField(null=True,blank=True)
     subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
     date=models.DateField(auto_now_add=True)
     questions=models.ManyToManyField(Question,related_name='exams')
@@ -19,8 +21,8 @@ class Exam(models.Model):
         ("P","Pending"),
     ]
     state=models.CharField(max_length=1,choices=POSSIBLES_STATES,default="P")
-
-
+    
+    
 class Observation(models.Model):
     exam=models.ForeignKey(Exam,null=False,on_delete=models.CASCADE)
     date=models.DateField(auto_now_add=True)
@@ -61,8 +63,7 @@ class ExamQuestionResponse(models.Model):
             )
         ]
     
-    
-    
+
 class ExamGrade(models.Model):
     examdone=models.ForeignKey(ExamDone,on_delete=models.CASCADE)
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
@@ -76,4 +77,19 @@ class ExamGrade(models.Model):
                 name='finalnote_range'
             )
         ]
+   
+   
+class ReevaluatedExam(models.Model):
+    examgrade=models.ForeignKey(ExamGrade,on_delete=models.CASCADE)
+    teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
+    note=models.DecimalField(max_digits=5,null=True,blank=True, decimal_places=2)
+    
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(note__gte=0) & models.Q(note__lte=100),
+                name='reevaluated_note_range'
+            )
+        ]
+    
     

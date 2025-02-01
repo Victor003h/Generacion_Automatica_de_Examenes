@@ -1,47 +1,50 @@
+from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import viewsets ,permissions,status
-from ..models import *
+from rest_framework import status
+from questions.serializer import QuestionSerializer
 from ..serializer import *
-from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
+from ..models import *
 
 
 @extend_schema(
     methods=['GET'],
-    responses={200:QuestionSerializer(many=True)}
+    responses={200:ObservationSerializer(many=True)}
 )
 @extend_schema(
     methods=['POST'],
-    request=QuestionSerializer,
+    request=ObservationSerializer,
     responses={
-        201:QuestionSerializer,
+        201:ObservationSerializer,
         400: OpenApiResponse(description='Bad resquest')
     }
 )
 @api_view(['GET','POST'])
-def question_list(request):
+def observation_list(request):
     if request.method=='GET':
-        question=Question.objects.all()
-        serializer=QuestionSerializer(question,many=True)
+        observation=Observation.objects.all()
+        serializer=ObservationSerializer(observation,many=True)
         return Response(serializer.data)
 
-    serializer=QuestionSerializer(data=request.data)
+    serializer=ObservationSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
 @extend_schema(
     methods=['GET'],
     responses={
-        200:QuestionSerializer,
+        200:ObservationSerializer,
         404: OpenApiResponse(description='Primary key not found.')}
 )
 @extend_schema(
     methods=['PUT'],
-    request=QuestionSerializer,
+    request=ObservationSerializer,
     responses={
-        201:QuestionSerializer,
+        201:ObservationSerializer,
         400: OpenApiResponse(description='Bad resquest.'),
         404: OpenApiResponse(description='Primary key not found.')}
 )
@@ -52,45 +55,42 @@ def question_list(request):
         404: OpenApiResponse(description='Primary key not found.')}
 )
 @api_view(['GET', 'PUT', 'DELETE'])
-def question_detail(request, pk):
+def observation_detail(request, pk):
 
     try:
-        question = Question.objects.get(pk=pk)
-    except Question.DoesNotExist:
+        observation = Observation.objects.get(pk=pk)
+    except Observation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = QuestionSerializer(question)
+        serializer = ObservationSerializer(observation)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = QuestionSerializer(question, data=request.data)
+        serializer = ObservationSerializer(observation, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        question.delete()
+        observation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+   
+   
 @extend_schema(
     methods=['GET'],
     responses={
-        200:TopicSerializer,
-        404:OpenApiResponse(description="Primary key not found.")}
+        200:OpenApiResponse(description='OK'),
+        404: OpenApiResponse(description='Primary key not found')
+    }
 )
-@api_view(['GET'])
-def question_topic(request,question_id):
+def exam_observations(request,pk):
     """
-    Obtains the topic to which the question belongs.
+    Obtain all observations of an exam.
 
     """
-    try:
-        question=Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-        
-    topic=question.topic
-    serializer=TopicSerializer(topic)
-    return Response(serializer.data,status=status.HTTP_200_OK)
+    exam=get_object_or_404(Exam,pk)
+    observations=Observation.objects.filter(exam=exam)
+    serializer=ObservationSerializer(observations,many=True)
+    return Response(serializer.data)

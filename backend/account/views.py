@@ -121,6 +121,27 @@ def teacher_list(request):
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:TeacherSerializer,
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['PUT'],
+    request=TeacherSerializer,
+    responses={
+        201:TeacherSerializer,
+        400: OpenApiResponse(description='Bad resquest.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['DELETE'],
+    responses={
+        204: OpenApiResponse(description='It was successfully removed.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
 @api_view(['GET', 'PUT', 'DELETE'])
 def teacher_detail(request, pk):
 
@@ -137,7 +158,7 @@ def teacher_detail(request, pk):
         serializer = TeacherSerializer(teacher, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
@@ -171,6 +192,27 @@ def student_list(request):
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:StudentSerializer,
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['PUT'],
+    request=StudentSerializer,
+    responses={
+        201:StudentSerializer,
+        400: OpenApiResponse(description='Bad resquest.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['DELETE'],
+    responses={
+        204: OpenApiResponse(description='It was successfully removed.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
 @api_view(['GET', 'PUT', 'DELETE'])
 def student_detail(request, pk):
 
@@ -187,7 +229,7 @@ def student_detail(request, pk):
         serializer = StudentSerializer(student, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
@@ -231,6 +273,28 @@ def course_list(request):
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:CourseSerializer,
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['PUT'],
+    request=CourseSerializer,
+    responses={
+        201:CourseSerializer,
+        400: OpenApiResponse(description='Bad resquest.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
+@extend_schema(
+    methods=['DELETE'],
+    responses={
+        204: OpenApiResponse(description='It was successfully removed.'),
+        404: OpenApiResponse(description='Primary key not found.')}
+)
 @api_view(['GET', 'PUT', 'DELETE'])
 def course_detail(request, pk):
 
@@ -247,7 +311,7 @@ def course_detail(request, pk):
         serializer = CourseSerializer(course, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
