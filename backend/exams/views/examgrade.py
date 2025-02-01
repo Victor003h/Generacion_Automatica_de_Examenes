@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -76,3 +77,23 @@ def examgrade_detail(request, pk):
     elif request.method == 'DELETE':
         observation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:ExamGradeSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")
+    }
+)
+@api_view(['GET'])
+def student_examgrade(request,pk):
+    """
+    Obtains all the exams grade of a student.
+
+    """
+    student=get_object_or_404(Student,pk=pk)
+    examgrade=ExamGrade.objects.filter(examdone__student=student)
+    serializer=ExamGradeSerializer(examgrade,many=True)
+    return Response(serializer.data)
+    

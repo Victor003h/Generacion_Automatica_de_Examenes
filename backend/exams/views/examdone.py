@@ -114,3 +114,21 @@ def subject_examsdone(request,pk):
     examsdone=ExamDone.objects.filter(exam__subject=subject)
     serializer=ExamDoneSerializer(examsdone,many=True)
     return Response(serializer.data)
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:ExamDoneSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")
+    }
+)
+@api_view(['GET'])
+def examsdone_ungraded(request):
+    """
+    Obtains all the exams done ungraded.
+
+    """
+    examsdone=ExamDone.objects.exclude(id__in=ExamGrade.objects.values('examdone_id'))
+    serializer=ExamDoneSerializer(examsdone,many=True)
+    return Response(serializer.data)
