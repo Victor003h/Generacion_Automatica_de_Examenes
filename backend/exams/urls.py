@@ -31,6 +31,7 @@ urlpatterns = [
     path('exam_done/',exam_done_list),
     path('exam_done/<int:pk>/',exam_done_detail),
     path('exam_done/questions/<int:pk>/',questions_response),
+    path('subject/exams_done/<int:pk>/',subject_examsdone),
     
     
     

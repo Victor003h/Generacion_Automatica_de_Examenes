@@ -93,3 +93,24 @@ def questions_response(request,pk):
     questions_response=examdone.examquestionresponse_set.all()
     serializer=ExamQuestionResponseSerializer(questions_response,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:ExamDoneSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")
+    }
+)
+@api_view(['GET'])
+def subject_examsdone(request,pk):
+    """
+    Obtains all the exams done of a subject.
+
+    """
+    
+    subject=get_object_or_404(Subject,pk=pk)
+    examsdone=ExamDone.objects.filter(exam__subject=subject)
+    serializer=ExamDoneSerializer(examsdone,many=True)
+    return Response(serializer.data)
