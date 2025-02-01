@@ -56,7 +56,9 @@ const CourseList: React.FC = () => {
     );
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8000/api/course/${courseId}/`);
+        await axios.delete(
+          `http://localhost:8000/api/account/course/${courseId}`
+        );
         alert("Curso borrado con éxito");
         window.location.reload(); // Recargar la página para actualizar la lista de cursos
       } catch (err: unknown) {

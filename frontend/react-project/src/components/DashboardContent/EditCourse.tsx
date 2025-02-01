@@ -20,7 +20,7 @@ const EditCourse: React.FC = () => {
     const fetchCourseDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/course/${courseId}/`
+          `http://localhost:8000/api/account/course/${courseId}`
         );
         const courseData: Course = response.data;
         setCourse(courseData);
@@ -55,7 +55,7 @@ const EditCourse: React.FC = () => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:8000/api/course/${courseId}/`, {
+      await axios.put(`http://localhost:8000/api/account/course/${courseId}`, {
         name,
         startDate,
         endDate,

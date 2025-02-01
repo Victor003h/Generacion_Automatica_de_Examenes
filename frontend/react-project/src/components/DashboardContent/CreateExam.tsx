@@ -2,7 +2,7 @@ import React, { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 import "../../styles/DashboardContent/CreateExam.css";
 import { Question } from "../../components/Interfaces";
-import useFetchSubjects from "../../hooks/useFetchTeacherSubjects"; // Importa el hook
+import useFetchTeacherSubjects from "../../hooks/useFetchTeacherSubjects"; // Importa el hook
 import useFetchTopics from "../../hooks/useFetchSubjectTopics"; // Importa el hook
 
 const CreateExam: React.FC = () => {
@@ -20,7 +20,7 @@ const CreateExam: React.FC = () => {
     subjects,
     loading: subjectsLoading,
     error: subjectsError,
-  } = useFetchSubjects(userId);
+  } = useFetchTeacherSubjects(userId);
   const {
     topics,
     loading: topicsLoading,

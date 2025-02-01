@@ -14,7 +14,7 @@ const AddCourse: React.FC = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/api/course/", {
+      await axios.post("http://localhost:8000/api/account/course/", {
         name,
         startDate,
         endDate,

@@ -183,12 +183,6 @@ const EditExam: React.FC = () => {
         </div>
       )}
       <div className="form-group">
-        <label>Preguntas añadidas:</label>
-        <ul>
-          {selectedQuestions.map((questionId) => (
-            <li key={questionId}>Pregunta ID: {questionId}</li>
-          ))}
-        </ul>
         <button type="button" onClick={handleAddQuestions} disabled={!subject}>
           Añadir Preguntas
         </button>
