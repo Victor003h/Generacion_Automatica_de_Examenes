@@ -1,47 +1,50 @@
+from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import viewsets ,permissions,status
-from ..models import *
+from rest_framework import status
+from questions.serializer import QuestionSerializer
 from ..serializer import *
-from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
+from ..models import *
+
 
 
 @extend_schema(
     methods=['GET'],
-    responses={200:QuestionSerializer(many=True)}
+    responses={200:ExamGradeSerializer(many=True)}
 )
 @extend_schema(
     methods=['POST'],
-    request=QuestionSerializer,
+    request=ExamGradeSerializer,
     responses={
-        201:QuestionSerializer,
+        201:ExamGradeSerializer,
         400: OpenApiResponse(description='Bad resquest')
     }
 )
 @api_view(['GET','POST'])
-def question_list(request):
+def examgrade_list(request):
     if request.method=='GET':
-        question=Question.objects.all()
-        serializer=QuestionSerializer(question,many=True)
+        examgrade=ExamGrade.objects.all()
+        serializer=ExamGradeSerializer(examgrade,many=True)
         return Response(serializer.data)
 
-    serializer=QuestionSerializer(data=request.data)
+    serializer=ExamGradeSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
 @extend_schema(
     methods=['GET'],
     responses={
-        200:QuestionSerializer,
+        200:ExamGradeSerializer,
         404: OpenApiResponse(description='Primary key not found.')}
 )
 @extend_schema(
     methods=['PUT'],
-    request=QuestionSerializer,
+    request=ExamGradeSerializer,
     responses={
-        201:QuestionSerializer,
+        201:ExamGradeSerializer,
         400: OpenApiResponse(description='Bad resquest.'),
         404: OpenApiResponse(description='Primary key not found.')}
 )
@@ -52,45 +55,24 @@ def question_list(request):
         404: OpenApiResponse(description='Primary key not found.')}
 )
 @api_view(['GET', 'PUT', 'DELETE'])
-def question_detail(request, pk):
+def examgrade_detail(request, pk):
 
     try:
-        question = Question.objects.get(pk=pk)
-    except Question.DoesNotExist:
+        observation = ExamGrade.objects.get(pk=pk)
+    except ExamGrade.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = QuestionSerializer(question)
+        serializer = ExamGradeSerializer(observation)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = QuestionSerializer(question, data=request.data)
+        serializer = ExamGradeSerializer(observation, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        question.delete()
+        observation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-@extend_schema(
-    methods=['GET'],
-    responses={
-        200:TopicSerializer,
-        404:OpenApiResponse(description="Primary key not found.")}
-)
-@api_view(['GET'])
-def question_topic(request,question_id):
-    """
-    Obtains the topic to which the question belongs.
-
-    """
-    try:
-        question=Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-        
-    topic=question.topic
-    serializer=TopicSerializer(topic)
-    return Response(serializer.data,status=status.HTTP_200_OK)
