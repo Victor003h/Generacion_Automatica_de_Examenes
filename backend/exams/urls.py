@@ -18,6 +18,9 @@ urlpatterns = [
     path('exam/validatedby/<int:pk>/',validatedby),
     path('exam/observations/<int:pk>/',exam_observations),
    
+   
+    path('exam_grade/',examgrade_list),
+    path('exam_grade/<int:pk>/',examgrade_detail),
     
     path('assigned_exam/',assigned_exam_list),
     path('assigned_exam/<int:pk>/',assigned_exam_detail),
