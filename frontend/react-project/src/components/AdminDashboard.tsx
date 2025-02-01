@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { MdClass, MdAssignment } from "react-icons/md";
 import "../styles/Dashboard.css";
-import LogoutButton from "./DashboardContent/LogoutButton";
+import LogoutButton from "./DashboardContent/Common/LogoutButton";
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

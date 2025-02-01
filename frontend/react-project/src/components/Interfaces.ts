@@ -52,6 +52,7 @@ export interface Question {
   date: string;
   teacher: string;
   topic: number;
+  subject: number;
 }
 
 // Interface para el usuario

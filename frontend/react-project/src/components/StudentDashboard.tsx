@@ -3,7 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 import { FaClipboardList, FaBookOpen, FaChartBar } from "react-icons/fa"; // Importamos íconos de react-icons
 import "../styles/Dashboard.css";
 import "../styles/DashboardContent/Dropdown.css";
-import LogoutButton from "./DashboardContent/LogoutButton";
+import LogoutButton from "./DashboardContent/Common/LogoutButton";
 
 const StudentDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
