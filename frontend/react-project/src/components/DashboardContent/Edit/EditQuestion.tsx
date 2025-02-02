@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../../../styles/DashboardContent/AddQuestions.css";
 import useFetchSubjectsByRole from "../../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
 import useFetchTopics from "../../../hooks/useFetchSubjectTopics"; // Importa el hook
 import BackButton from "../../BackButton";
 
 const EditQuestion: React.FC = () => {
+  const location= useLocation();
   const navigate = useNavigate();
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? storedUserId : null;
   const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
-  const questionId = localStorage.getItem("editQuestionId") || "";
-  const [questionData, setQuestionData] = useState({
+  const {questionId} = location.state;
+
+  
+  const [ questionData, setQuestionData] = useState({
     date: "",
     topic: null,
     type: "MO",
@@ -69,6 +72,7 @@ const EditQuestion: React.FC = () => {
           `http://localhost:8000/api/question/${questionId}/`
         );
         const question = response.data;
+        
         setQuestionData({
           date: question.date,
           topic: question.topic,
@@ -82,7 +86,6 @@ const EditQuestion: React.FC = () => {
         console.error("Error al obtener la pregunta:", error);
       }
     };
-
     if (questionId) {
       fetchQuestion();
     }
@@ -103,7 +106,9 @@ const EditQuestion: React.FC = () => {
       ...questionData,
       date: new Date().toISOString().split("T")[0],
     }; // Actualizar fecha a la actual
+   
     try {
+     
       await axios.put(
         `http://localhost:8000/api/question/${questionId}/`,
         updatedQuestionData

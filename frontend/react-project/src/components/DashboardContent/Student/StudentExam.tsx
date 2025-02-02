@@ -26,7 +26,7 @@ const StudentExam: React.FC = () => {
     error: validatedExamsError,
   } = useFetchValidatedExams();
 
-  const [exams, setExams] = useState<(Exam & { validatedExamId: number })[]>(
+  const [exams, setExams] = useState<(Exam & { validatedExamId: number,typeExam: string })[]>(
     []
   );
   const [examDetails, setExamDetails] = useState<{
@@ -34,18 +34,21 @@ const StudentExam: React.FC = () => {
   }>({});
 
   useEffect(() => {
+    console.log (validatedExams)
+    console.log(validatedExams.map(exam => exam.exam));
+    
     if (validatedExams.length > 0) {
       const fetchExams = async () => {
         try {
-          const examPromises = validatedExams.map((validatedExam) =>
+          const examPromises = validatedExams.map( (validatedExam) =>
             axios
               .get(`http://localhost:8000/api/exam/${validatedExam.exam}/`)
               .then((res) => ({
                 ...res.data,
                 validatedExamId: validatedExam.id,
-              }))
+                typeExam:validatedExam.type
+              })),              
           );
-
           const examsData = await Promise.all(examPromises);
           setExams(examsData);
         } catch (error) {
@@ -179,7 +182,7 @@ const StudentExam: React.FC = () => {
           {paginatedExams.map((exam) => (
             <li key={exam.id} className="exam-item">
               <div className="exam-details">
-                <h2>{exam.type}</h2>
+                <h2>{exam.typeExam}</h2>
                 <p>
                   <strong>Fecha:</strong>{" "}
                   {new Date(exam.date).toLocaleDateString()}

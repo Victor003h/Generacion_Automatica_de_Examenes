@@ -31,6 +31,8 @@ export interface Exam {
   id: number;
   type: string;
   date: string;
+  state: string;
+  validation_date: string;
   teacher: number;
   validation: number;
   subject: number;
@@ -50,6 +52,14 @@ export interface ExamGrade {
   finalnote: number;
   examdone: number;
   teacher: number;
+  // interface para Observaciones
+}
+export interface Observation {
+  id: number;
+  date: string;
+  obsrvation: string;
+  checked: boolean;
+  exam: number;
 }
 // Interface para los temas
 export interface Topic {

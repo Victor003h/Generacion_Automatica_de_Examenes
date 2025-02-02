@@ -68,7 +68,7 @@ const TakeExam: React.FC = () => {
 
       await Promise.all(promises);
 
-      navigate("/student-dashboard");
+      navigate("/student-dashboard/student-exam");
     } catch (error) {
       console.error("Error submitting exam answers:", error);
     }

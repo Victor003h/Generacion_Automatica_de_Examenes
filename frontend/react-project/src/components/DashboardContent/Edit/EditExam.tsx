@@ -17,6 +17,8 @@ const EditExam: React.FC = () => {
   const [teacher, setTeacher] = useState<number | null>(null);
   const [subject, setSubject] = useState<number | null>(null);
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
+  const [states,setStates] = useState("");
+  const [validation_date, setvalidation_date]= useState("");
 
   const {
     subjects,
@@ -45,6 +47,8 @@ const EditExam: React.FC = () => {
         setTeacher(exam.teacher);
         setSubject(exam.subject);
         setSelectedQuestions(exam.questions);
+        setStates(exam.state)
+        setvalidation_date(exam.validation_date)
       } catch (err: unknown) {
         console.error("Error al obtener los detalles del examen:", err);
       }
@@ -58,6 +62,7 @@ const EditExam: React.FC = () => {
       alert("Debe añadir al menos una pregunta al examen.");
       return;
     }
+   
 
     const validationTeacherId =
       role === "admin"
@@ -66,17 +71,24 @@ const EditExam: React.FC = () => {
 
     const updatedExam = {
       type: type,
-      date: date,
+      validation_date: validation_date,
+      state: states=="R"? "P":states,
       teacher: role === "admin" ? teacher : userId,
       validation_teacher: validationTeacherId,
       subject: subject,
-      questions: selectedQuestions,
-    };
+      questions: selectedQuestions
 
+    };
+     
+     
     try {
+       console.log(updatedExam);
+       
       await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
+      
       alert("Examen actualizado exitosamente");
 
+      
       if (role === "admin") {
         navigate("/admin-dashboard/exams");
       } else {
@@ -100,8 +112,9 @@ const EditExam: React.FC = () => {
     try {
       const updatedExam = {
         type: type,
-        date: date,
+        states:states,
         teacher: role === "admin" ? teacher : userId,
+        validation_date: validation_date,
         validation_teacher:
           role === "admin"
             ? teacher
@@ -109,6 +122,8 @@ const EditExam: React.FC = () => {
         subject: subject,
         questions: selectedQuestions,
       };
+      
+      
 
       await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
 

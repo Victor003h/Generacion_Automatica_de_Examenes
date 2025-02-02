@@ -49,7 +49,5 @@ urlpatterns = [
     path('reevaluated_exam/',reevaluated_exam_list),
     path('reevaluated_exam/<int:pk>/',reevaluated_exam_detail),
     path('teacher/re_evaluated_exam/<int:pk>/',teacher_reevaluatedexam),
-    path('examgrade/re_evaluated_exam/<int:pk>/',examgrade_exam_reevaluted),
-    
+    path('examgrade/re_evaluated_exam/<int:pk>/',examgrade_exam_reevaluted),   
 ]
-

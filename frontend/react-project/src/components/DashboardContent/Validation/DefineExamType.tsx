@@ -1,27 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useMemo, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/DefineExamType.css";
 import { Exam } from "../../Interfaces";
+import { useNavigate } from "react-router-dom";
+import useFetchHeadOfSubjects from "../../../hooks/useFetchHeadOfSubjects";
+import BackButton from "../../BackButton";
+
+
 
 const DefineExamType: React.FC = () => {
+  
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId) : null;
+  const {
+    subjectIds,
+    loading: subjectsLoading,
+    
+    error: subjectsError,
+  } = useFetchHeadOfSubjects(userId);
+
+  const options = ['Intrasemestral', 'Final', 'Extraordinario', 'Mundial'];
   const [exams, setExams] = useState<Exam[]>([]);
   const [examDetails, setExamDetails] = useState<{
     [key: number]: { subjectName: string; teacherName: string };
   }>({});
-  const [selectedExamId, setSelectedExamId] = useState<number | null>(null);
-  const [examType, setExamType] = useState("");
+  const [selectedExamid, setSelectedExamid] = useState<number | null>(null);
+  const [ShowDefineModal,setShowDefineModal]= useState<boolean>(false);
+  const [Type,setType]= useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch validated exams
-    axios.get("/api/exams/validated").then((response) => {
-      if (Array.isArray(response.data)) {
-        setExams(response.data);
-      } else {
-        console.error("Expected an array of exams");
+    const fetchExams = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/exam/bystate/V");
+        const examList: Exam[] = response.data;
+        setExams(examList);
+
+      } catch (err) {
+        console.error("Error al obtener los exámenes:", err);
       }
-    }).catch(error => {
-      console.error("Error fetching validated exams:", error);
-    });
+    };
+
+    fetchExams();
   }, []);
 
   useEffect(() => {
@@ -54,31 +74,62 @@ const DefineExamType: React.FC = () => {
     });
   }, [exams]);
 
-  const handleDefineType = (examId: number) => {
-    setSelectedExamId(examId);
-  };
-
-  const handleSubmit = () => {
-    if (selectedExamId && examType) {
-      axios
-        .put(`/api/exams/${selectedExamId}/define-type`, { type: examType })
-        .then((response) => {
-          alert("Tipo de examen definido con éxito");
-          setSelectedExamId(null);
-          setExamType("");
-        })
-        .catch((error) => {
-          console.error("Error al definir el tipo de examen:", error);
-        });
+  const filteredExams = useMemo(() => {
+    if (subjectIds.length === 0) {
+      return [];
     }
+    return exams.filter((exam) => subjectIds.includes(exam.subject));
+  }, [exams, subjectIds]);
+
+  const handleViewExam = (examId: number) => {
+    navigate("../view-exam", {
+      state: { examId },
+    });
   };
 
+  const handleDefineType = (exam_id:number) => {
+    setSelectedExamid(exam_id);
+    setShowDefineModal(true);
+
+  };
+  const handleDefineExamen = async () => {
+    if (!selectedExamid) return;
+    try {
+      await axios.post('http://localhost:8000/api/assigned_exam/', {
+        type: Type,
+        exam: selectedExamid
+      });
+    setShowDefineModal(false);
+    alert("Tipo de Examen definido exitosamente");
+    setExams((prevExams) =>
+      prevExams.filter((ex) => ex.id !== selectedExamid)
+    );
+   } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      console.error(
+        "Error al definir Tipo de Examen:",
+        err.response?.data || err.message
+      );
+    } else if (err instanceof Error) {
+      console.error("Error al definir Tipo de Examen:", err.message);
+    } else {
+      console.error("Error desconocido al  definir Tipo de Examen.");
+    }
+  }
+  };
+  if (subjectsLoading) return <div>Cargando...</div>;
+  if (subjectsError) return <div>{subjectsError}</div>;
+  
   return (
     <div className="define-exam-type-container">
+      <BackButton/>
       <h2>Definir Tipo de Examen</h2>
-      <div className="exam-list">
-        {exams.map((exam) => (
-          <div key={exam.id} className="exam-item">
+      {filteredExams.length === 0 ? (
+        <div>No hay exámenes disponibles para validar.</div>
+      ):(
+      <ul className="exam-list">
+        {filteredExams.map((exam) => (
+          <li key={exam.id} className="exam-item">
             <div className="exam-details">
               <h2>{exam.type}</h2>
               <p>
@@ -93,25 +144,49 @@ const DefineExamType: React.FC = () => {
                 <strong>Asignatura:</strong>{" "}
                 {examDetails[exam.id]?.subjectName || "Cargando..."}
               </p>
+              
             </div>
-            <button onClick={() => handleDefineType(exam.id)}>Definir Tipo</button>
-          </div>
-        ))}
-      </div>
-      {selectedExamId && (
-        <div className="define-type-form">
-          <h3>Definir Tipo para el Examen ID: {selectedExamId}</h3>
-          <input
-            type="text"
-            value={examType}
-            onChange={(e) => setExamType(e.target.value)}
-            placeholder="Ingrese el tipo de examen"
-          />
-          <button onClick={handleSubmit}>Guardar</button>
-        </div>
+            <div className="exam-actions">
+            <button
+                  className="view-button"
+                  onClick={() => handleViewExam(exam.id)}
+                >
+                  Ver Preguntas
+                </button>
+                <button
+                  className="define-Type-button"
+                  onClick={() => handleDefineType(exam.id)}
+                >
+                  Definir Tipo Examen 
+                </button>
+            </div>
+            </li>
+          ))}
+          </ul>
+      )}
+      
+      {ShowDefineModal && (
+       <div className="define-exam-type-modal">
+       <h3>Selecciona el tipo de examen</h3>
+       {options.map((option) => (
+         <div key={option}>
+           <input
+             type="radio"
+             id={option}
+             name="examType"
+             value={option}
+             onChange={(e) => setType(e.target.value)}
+           />
+           <label htmlFor={option}>{option}</label>
+         </div>
+       ))}
+       <button onClick={() => setShowDefineModal(false)}>Cancelar</button>
+       <button onClick={handleDefineExamen}>Aceptar</button>
+     </div>
       )}
     </div>
   );
 };
+
 
 export default DefineExamType;

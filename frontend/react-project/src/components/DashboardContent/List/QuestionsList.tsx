@@ -45,7 +45,6 @@ const QuestionList: React.FC = () => {
   const [teachers, setTeachers] = useState<{
     [key: number]: { firstName: string; lastName: string };
   }>({});
-  const [fetchedTeachers, setFetchedTeachers] = useState<boolean>(false);
   const [sortKey, setSortKey] = useState<string>("content");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -92,53 +91,52 @@ const QuestionList: React.FC = () => {
   }, [questions, fetchedTopics]);
 
   const fetchTeachers = useCallback(async () => {
-    if (questions && Object.keys(questions).length > 0 && !fetchedTeachers) {
-      const teacherIds = Array.from(
-        new Set(
-          Object.values(questions)
-            .flat()
-            .map((q: Question) => q.teacher)
-        )
-      ).map(Number);
+    const teacherIds = Array.from(
+      new Set(
+        Object.values(questions)
+          .flat()
+          .map((q: Question) => q.teacher)
+      )
+    ).map(Number);
 
-      const teachersDict: {
-        [key: number]: { firstName: string; lastName: string };
-      } = {};
+    const teachersDict: {
+      [key: number]: { firstName: string; lastName: string };
+    } = {};
 
-      await Promise.all(
-        teacherIds.map(async (id) => {
-          try {
-            const response = await axios.get(
-              `http://localhost:8000/api/account/teacher/${id}`
+    await Promise.all(
+      teacherIds.map(async (id) => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/api/account/teacher/${id}`
+          );
+          teachersDict[id] = {
+            firstName: response.data.first_name,
+            lastName: response.data.last_name,
+          };
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            console.error(
+              "Error al obtener el profesor:",
+              err.response?.data || err.message
             );
-            teachersDict[id] = {
-              firstName: response.data.first_name,
-              lastName: response.data.last_name,
-            };
-          } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-              console.error(
-                "Error al obtener el profesor:",
-                err.response?.data || err.message
-              );
-            } else if (err instanceof Error) {
-              console.error("Error al obtener el profesor:", err.message);
-            } else {
-              console.error("Error desconocido al obtener el profesor.");
-            }
+          } else if (err instanceof Error) {
+            console.error("Error al obtener el profesor:", err.message);
+          } else {
+            console.error("Error desconocido al obtener el profesor.");
           }
-        })
-      );
+        }
+      })
+    );
 
-      setTeachers(teachersDict);
-      setFetchedTeachers(true);
-    }
-  }, [questions, fetchedTeachers]);
+    setTeachers(teachersDict);
+  }, [questions]);
 
   useEffect(() => {
-    fetchTeachers();
-  }, [fetchTeachers]);
-
+    if (questions && Object.keys(questions).length > 0) {
+      fetchTeachers();
+    }
+  }, [fetchTeachers, questions]);
+  useEffect(() => {console.log(questions)}, [questions] );
   const sortedQuestions = useMemo(() => {
     const allQuestions = Object.values(questions).flat();
 
