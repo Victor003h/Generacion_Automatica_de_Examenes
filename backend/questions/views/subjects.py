@@ -147,6 +147,8 @@ def teacher_subjects(request,teacher_id):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 
+
+
 @extend_schema(
     methods=['GET'],
     responses={

@@ -129,8 +129,8 @@ def teacher_examgraded_detail(request,months):
 @extend_schema(
     methods=['GET'],
     responses={
-        200:OpenApiResponse(description='OK'),
-        404:OpenApiResponse(description="Primary key n")
+        200: OpenApiResponse(description="OK"),
+        404:OpenApiResponse(description="Primary key not found")
     }
 )
 @api_view(['GET'])

@@ -1,8 +1,11 @@
-from abc import ABC , abstractmethod
+from abc import ABC, abstractmethod
 
 class Exporter(ABC):
     @abstractmethod
-    def export(self,data,file_name):
+    def exportar(self, data, nombre_archivo: str):
         pass
-    
-    
+
+
+
+
+

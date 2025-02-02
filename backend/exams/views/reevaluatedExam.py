@@ -86,12 +86,13 @@ def reevaluated_exam_detail(request, pk):
         404:OpenApiResponse(description="Primary key not found")
     }
 )
+@api_view(['GET'])
 def teacher_reevaluatedexam(request,pk):
     """
     Obtain all the re-evaluated exam of a teacher 
 
     """
     teacher=get_object_or_404(Teacher,pk=pk)
-    reevaluatedexam=ReevaluatedExam.objects.filter(teacher=pk)
+    reevaluatedexam=ReevaluatedExam.objects.filter(teacher=teacher)
     serializer=ReevaluatedExamSerializer(reevaluatedexam,many=True)
     return Response(serializer.data)

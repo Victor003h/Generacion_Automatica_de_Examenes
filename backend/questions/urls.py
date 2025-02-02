@@ -20,6 +20,7 @@ urlpatterns = [
     path('subject/topics/<int:subject_id>/', subject_topics, name='subject-topics'),
     path('subject/teachers/<int:subject_id>/', subject_teachers, name='subject-teachers'),
     
+
     path('topic/', topic_list, name='topic-list'),
     path('topic/<int:pk>/', topic_detail, name='topic-detail'),
     path('topic/subject/<int:topic_id>/', topic_subject, name='topic-subject'),
@@ -33,5 +34,7 @@ urlpatterns = [
     path('teacher/subjects/<int:teacher_id>/',teacher_subjects),
     path('teacher/head_of_subject/<int:teacher_id>',headofsubject),
     path('student/subjects/<int:pk>/',student_subjects),
+    
+    path('export/csv/', export_csv, name='export_csv'),
      
 ]+router.urls
