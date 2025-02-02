@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
@@ -143,7 +144,17 @@ def subject_exams(request,pk):
     subject=get_object_or_404(Subject,pk=pk)
     exams=Exam.objects.filter(subject=subject)
     serializer=ExamSerializer(exams,many=True)
-    return Response(serializer.data,status=status.HTTP_200_OK)
+    result=[]
+    for  exam in exams:
+        result.append({
+            'exam_id' : f'{exam.pk}',
+            'teacher' : f'{exam.teacher.first_name}',
+            'created_date' : f'{exam.date}',
+            })
+     
+    jsonresult=json.dumps(result,indent=4)
+    return Response(jsonresult)
+   # return Response(serializer.data,status=status.HTTP_200_OK)
    
 @extend_schema(
     methods=['GET'],

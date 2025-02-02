@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
 from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
+
+from exams.views.examgrade import teacher_examgraded_detail
 from .exporterfactory import ExporterFactory
 
 
