@@ -119,31 +119,3 @@ def topic_question(request,topic_id):
     questions=Question.objects.filter(topic=topic)
     serializer=QuestionSerializer(questions,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
-
-
-# views.py
-import csv
-from django.http import HttpResponse
-@api_view(['POST'])
-def export_csv(request):
-    # Crear la respuesta HTTP con el tipo de contenido de CSV
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="data.csv"'
-
-    # Crear un escritor de CSV
-    writer = csv.writer(response)
-    
-    # Escribir el encabezado del CSV
-    writer.writerow(['ID', 'Nombre', 'Edad'])
-
-    # Escribir algunas filas de ejemplo (puedes reemplazar esto con tus datos reales)
-    data = [
-        [1, 'Alice', 30],
-        [2, 'Bob', 25],
-        [3, 'Charlie', 35]
-    ]
-    
-    for row in data:
-        writer.writerow(row)
-
-    return response

@@ -5,23 +5,7 @@ from django.http import HttpResponse
 
 
 class CSVExporter(Exporter):
-    def exportar(self, data, nombre_archivo: str):
     
-    
-        buffer = StringIO()
-        writer = csv.writer(buffer)
-        
-        
-        with open(nombre_archivo, mode='w', newline='') as file:
-            if datos:
-                fieldnames = list(datos[0].keys())
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writeheader()
-                for row in datos:
-                    writer.writerow(row)
-        
-        
-
     def export(self,data,file_name:str):
         # Crear la respuesta HTTP con el tipo de contenido de CSV
         response = HttpResponse(content_type='text/csv')
@@ -31,17 +15,11 @@ class CSVExporter(Exporter):
         writer = csv.writer(response)
         
         # Escribir el encabezado del CSV
-        writer.writerow(['ID', 'Nombre', 'Edad'])
-
-        # Escribir algunas filas de ejemplo (puedes reemplazar esto con tus datos reales)
-        data = [
-            [1, 'Alice', 30],
-            [2, 'Bob', 25],
-            [3, 'Charlie', 35]
-        ]
-        
-        for row in data:
-            writer.writerow(row)
+        headers=data[0].keys()
+        writer.writerow(headers)
+    
+        for item in data:
+            writer.writerow(item.values())
 
         return response
     # def export(self, data):

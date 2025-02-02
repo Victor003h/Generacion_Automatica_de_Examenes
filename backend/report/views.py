@@ -1,8 +1,14 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-from .exporterfactory import ExporterFactory
+from rest_framework import viewsets ,permissions,status
 from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
+from .exporterfactory import ExporterFactory
+
+
+@api_view(['GET'])
+def test(request):
+    return Response("erdiablo")
+
 
 
 
@@ -16,23 +22,29 @@ from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiRespo
                     'type' : 'string'
                 },
                 'content':{
-                    'type' : 'list'
+                    'type' : 'str'
                 }
             },
         }
     },
 )
 @api_view(['POST'])
-def export_document(request, format):
+def export_document(request, format_id):
+    if format_id==1:
+        format='csv'
+    elif format_id==2:
+        format='pdf'
+    else:
+        return Response("errror : Invalid format",status=status.HTTP_400_BAD_REQUEST)
     data = request.data.get('content')
     title = request.data.get('title')
-    
-    document = Document(title, data)
-    
     file_name = f'{title}.{format}'
+    
     try:
         exporter = ExporterFactory.get_exporter(format)
-        exporter.exportar(document, file_name)
-        return Response({'message': f'Documento exportado a {file_name}'}, status=200)
+        response=exporter.export(data, file_name)
+        return response
     except ValueError as e:
         return Response({'error': str(e)}, status=400)
+
+
