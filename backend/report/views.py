@@ -5,13 +5,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiRespo
 from .exporterfactory import ExporterFactory
 
 
-@api_view(['GET'])
-def test(request):
-    return Response("erdiablo")
-
-
-
-
 @extend_schema(
     methods=['POST'],
     request={
@@ -30,6 +23,10 @@ def test(request):
 )
 @api_view(['POST'])
 def export_document(request, format_id):
+    """
+    Export of documents to various formats.    
+
+    """
     if format_id==1:
         format='csv'
     elif format_id==2:
