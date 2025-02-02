@@ -11,8 +11,6 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-
-
 @extend_schema(
     methods=['GET'],
     responses={

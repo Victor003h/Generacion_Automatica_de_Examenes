@@ -1,4 +1,8 @@
+from  datetime import timedelta
+import json
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -96,4 +100,51 @@ def student_examgrade(request,pk):
     examgrade=ExamGrade.objects.filter(examdone__student=student)
     serializer=ExamGradeSerializer(examgrade,many=True)
     return Response(serializer.data)
+    
+    
+    
+
+@api_view(['GET'])
+def teacher_examgraded_detail(request,months):
+    today=timezone.now().date()
+    range=today - timedelta(days=months*31)
+    examgrades=ExamGrade.objects.filter(date__gte=range)
+    
+    details=examgrades.values('teacher','examdone__exam__subject').annotate(num_exam_grade=Count('id'))
+    
+    result=[]
+    for  detail in details:
+        result.append({
+            'teacher' : detail['teacher'],
+            'subject' : detail['examdone__exam__subject'],
+            'num_exam_grade': detail['num_exam_grade']
+            })
+     
+    jsonresult=json.dumps(result, ensure_ascii=False,indent=4)
+    return Response(jsonresult)
+
+
+
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:OpenApiResponse(description='OK'),
+        404:OpenApiResponse(description="Primary key n")
+    }
+)
+@api_view(['GET'])
+def is_reevaluated(request,pk):
+    """
+    Check if an exam grade is a revaluated exam.
+
+    """
+    examgrade=get_object_or_404(ExamGrade,pk=pk)
+    try:
+        reevaluated_exam = ReevaluatedExam.objects.get(examgrade=examgrade)
+        return Response({'reevaluated : True'},status=status.HTTP_200_OK)
+    except ReevaluatedExam.DoesNotExist:
+        return Response({'reevaluated : False'},status=status.HTTP_200_OK)
+
+    
     
