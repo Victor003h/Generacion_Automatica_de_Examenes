@@ -3,7 +3,7 @@ from account.models import Teacher,Course
 
     
 
-    
+
 class Subject(models.Model):
     name=models.CharField(max_length=150)
     study_program=models.TextField()
@@ -36,6 +36,6 @@ class Question(models.Model):
     teacher=models.ForeignKey(Teacher,null=True,on_delete=models.SET_NULL)
     date=models.DateField(auto_now_add=True)
     topic=models.ForeignKey(Topic,null=True,on_delete=models.SET_NULL)
-    subject=models.ForeignKey(Subject,null=True,on_delete=models.SET_NULL)
+    subject=models.ForeignKey(Subject,null=True,on_delete=models.SET_NULL)  # sobra
     
     

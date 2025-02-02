@@ -33,6 +33,30 @@ def subject_list(request):
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:SubjectSerializer,
+        404: OpenApiResponse(description='Primary key not found.'),
+    }
+)
+@extend_schema(
+    methods=['PUT'],
+    request=SubjectSerializer,
+    responses={
+        201:SubjectSerializer,
+        400: OpenApiResponse(description='Bad resquest.'),
+        404: OpenApiResponse(description='Primary key not found.'),
+    }
+)
+@extend_schema(
+    methods=['DELETE'],
+    responses={
+        204: OpenApiResponse(description='It was successfully removed.'),
+        404: OpenApiResponse(description='Primary key not found.'),
+    }
+)
 @api_view(['GET', 'PUT', 'DELETE'])
 def subject_detail(request, pk):
 
@@ -49,13 +73,20 @@ def subject_detail(request, pk):
         serializer = SubjectSerializer(subject, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         subject.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:QuestionSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def subject_questions(request,subject_id):
     """
@@ -72,7 +103,12 @@ def subject_questions(request,subject_id):
     return Response(serializer.data,status=status.HTTP_200_OK)
 
 
-
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:TopicSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def subject_topics(request,subject_id):
     """
@@ -88,7 +124,12 @@ def subject_topics(request,subject_id):
     serializer=TopicSerializer(topic,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
-
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:SubjectSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def teacher_subjects(request,teacher_id):
     """
@@ -105,6 +146,13 @@ def teacher_subjects(request,teacher_id):
     serializer=SubjectSerializer(subjects,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:TeacherSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def subject_teachers(request,subject_id):
     """
@@ -120,6 +168,13 @@ def subject_teachers(request,subject_id):
     serializer=TeacherSerializer(teachers,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:TeacherSerializer,
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def headofsubject(request,teacher_id):
     """
@@ -138,6 +193,12 @@ def headofsubject(request,teacher_id):
     serializer= SubjectSerializer(subject,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
 
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:SubjectSerializer(many=True),
+        404:OpenApiResponse(description="Primary key not found")}
+)
 @api_view(['GET'])
 def student_subjects(request,pk):
     """
@@ -154,3 +215,5 @@ def student_subjects(request,pk):
     subjects= Subject.objects.filter(course=course)
     serializer=SubjectSerializer(subjects,many=True)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+
