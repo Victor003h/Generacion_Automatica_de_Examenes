@@ -78,6 +78,17 @@ const AdminDashboard: React.FC = () => {
             </Link>
           </li>
           <li>
+            <Link to="grade-exams">
+              <FaQuestionCircle className="icon" />
+              <span>Calificar Exámenes</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="regrade-request">
+              <span>Recalificar Exámenes</span>
+            </Link>
+          </li>
+          <li>
             <Link to="statistics">
               <FaChartBar className="icon" />
               <span>Estadísticas</span>

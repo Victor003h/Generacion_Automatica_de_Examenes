@@ -1,0 +1,17 @@
+.view-exams-container {
+  padding: 20px;
+}
+
+.exam-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.exam-container h3 {
+  margin: 0;
+}
+
+.exam-container button {
+  margin-top: 10px;
+}

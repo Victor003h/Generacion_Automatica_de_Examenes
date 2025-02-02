@@ -1,0 +1,17 @@
+.grade-exams-container {
+  padding: 20px;
+}
+
+.subject-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.subject-container h3 {
+  margin: 0;
+}
+
+.subject-container button {
+  margin-top: 10px;
+}

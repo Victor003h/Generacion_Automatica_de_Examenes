@@ -42,6 +42,12 @@ import StudentExam from "./components/DashboardContent/Student/StudentExam";
 import TakeExam from "./components/DashboardContent/Student/TakeExam";
 import PrivateRoute from "./components/PrivateRoute";
 import DefineExamType from "./components/DashboardContent/Validation/DefineExamType";
+import GradeExams from "./components/DashboardContent/GradeExams";
+import ViewExamsDone from "./components/DashboardContent/ViewExamsDone";
+import SetGradeExam from "./components/DashboardContent/SetGradeExam";
+import ExamResults from "./components/DashboardContent/Student/ExamResults";
+import RegradeRequest from "./components/DashboardContent/RegradeRequest";
+import SetExamRegrade from "./components/DashboardContent/SetExamRegrade";
 
 const App: React.FC = () => {
   return (
@@ -77,6 +83,11 @@ const App: React.FC = () => {
             element={<ViewExamForValidation />}
           />
           <Route path="define-exam-type" element={<DefineExamType />} />
+          <Route path="grade-exams" element={<GradeExams />} />
+          <Route path="view-exams-done" element={<ViewExamsDone />} />
+          <Route path="set-grade-exam" element={<SetGradeExam />} />
+          <Route path="regrade-request" element={<RegradeRequest />} />
+          <Route path="set-exam-regrade" element={<SetExamRegrade />} />
         </Route>
         <Route
           path="/student-dashboard"
@@ -92,6 +103,7 @@ const App: React.FC = () => {
           <Route path="student-subjects" element={<StudentSubjects />} />
           <Route path="take-exam" element={<TakeExam />} />
           <Route path="statistics" element={<Statistics />} />
+          <Route path="exam-results" element={<ExamResults />} />
         </Route>
         <Route
           path="/admin-dashboard"
@@ -127,6 +139,11 @@ const App: React.FC = () => {
           <Route path="edit-exam-questions" element={<EditExamQuestions />} />
           <Route path="view-exam" element={<ViewExam />} />
           <Route path="validations" element={<Validations />} />
+          <Route path="grade-exams" element={<GradeExams />} />
+          <Route path="view-exams-done" element={<ViewExamsDone />} />
+          <Route path="set-grade-exam" element={<SetGradeExam />} />
+          <Route path="regrade-request" element={<RegradeRequest />} />
+          <Route path="set-exam-regrade" element={<SetExamRegrade />} />
           <Route
             path="validate-exam-view"
             element={<ViewExamForValidation />}

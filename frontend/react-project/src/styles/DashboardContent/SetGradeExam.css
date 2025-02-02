@@ -1,0 +1,26 @@
+.set-grade-exam-container {
+  padding: 20px;
+}
+
+.question-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.question-container h3 {
+  margin: 0;
+}
+
+.question-container label {
+  display: block;
+  margin-top: 10px;
+}
+
+.question-container input {
+  margin-left: 10px;
+}
+
+button {
+  margin-top: 20px;
+}

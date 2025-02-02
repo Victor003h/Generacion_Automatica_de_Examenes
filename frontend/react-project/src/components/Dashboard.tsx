@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
 
-  const { subjectIds, loading, error } = useFetchHeadOfSubjects(userId);
+  const { subjectIds } = useFetchHeadOfSubjects(userId);
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -84,6 +84,16 @@ const Dashboard: React.FC = () => {
               </li>
             </>
           )}
+          <li>
+            <Link to="grade-exams">
+              <span>Calificar Exámenes</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="regrade-request">
+              <span>Recalificar Exámenes</span>
+            </Link>
+          </li>
           <li>
             <Link to="statistics">
               <FaChartBar className="icon" />

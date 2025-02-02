@@ -38,6 +38,11 @@ const StudentDashboard: React.FC = () => {
             </Link>
           </li>
           <li>
+            <Link to="exam-results">
+              <span>Resultados de Exámenes</span>
+            </Link>
+          </li>
+          <li>
             <Link to="statistics">
               <FaChartBar className="icon" />
               <span>Estadísticas</span>

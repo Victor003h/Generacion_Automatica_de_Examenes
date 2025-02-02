@@ -36,6 +36,21 @@ export interface Exam {
   subject: number;
   questions: number[];
 }
+
+export interface ExamDone {
+  id: number;
+  date: string;
+  exam: number;
+  student: number;
+}
+
+export interface ExamGrade {
+  id: number;
+  date: string;
+  finalnote: number;
+  examdone: number;
+  teacher: number;
+}
 // Interface para los temas
 export interface Topic {
   id: number;
