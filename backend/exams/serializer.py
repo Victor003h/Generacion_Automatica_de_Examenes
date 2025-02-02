@@ -11,20 +11,16 @@ class ExamSerializer(serializers.ModelSerializer):
         subject= self.instance.subject if self.instance else self.initial_data.get('subject')
         
         for question in value:
-            if question.topic.Subject != subject:
-                raise ValidationError(f' Question "{question.id}" does not belong to the subject "{subject}."')
+            if question.topic.Subject.id != subject.id:
+                
+                raise ValidationError(f' Question "{question.id}"  does not belong to the subject "{subject.id}. not "')
             
         return value
     
     def validate(self, attrs):
         return super().validate(attrs)
         
-        
-# class ValidatedExamSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ValidatedExam
-#         fields = '__all__'
-        
+    
 
 class ExamDoneSerializer(serializers.ModelSerializer):
     class Meta:
