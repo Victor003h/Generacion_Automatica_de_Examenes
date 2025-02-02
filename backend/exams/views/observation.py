@@ -85,6 +85,7 @@ def observation_detail(request, pk):
         404: OpenApiResponse(description='Primary key not found')
     }
 )
+@api_view(['GET'])
 def exam_observations(request,pk):
     """
     Obtain all observations of an exam.
@@ -94,3 +95,5 @@ def exam_observations(request,pk):
     observations=Observation.objects.filter(exam=exam)
     serializer=ObservationSerializer(observations,many=True)
     return Response(serializer.data)
+
+
