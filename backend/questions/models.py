@@ -1,9 +1,6 @@
 from django.db import models
 from account.models import Teacher,Course
 
-    
-
-
 class Subject(models.Model):
     name=models.CharField(max_length=150)
     study_program=models.TextField()
