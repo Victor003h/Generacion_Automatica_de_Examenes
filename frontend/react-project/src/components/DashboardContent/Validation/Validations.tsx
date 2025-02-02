@@ -12,7 +12,6 @@ const ValidarExamenes: React.FC = () => {
   const {
     subjectIds,
     loading: subjectsLoading,
-    
     error: subjectsError,
   } = useFetchHeadOfSubjects(userId);
 
@@ -28,10 +27,11 @@ const ValidarExamenes: React.FC = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/exam/bystate/P");
+        const response = await axios.get(
+          "http://localhost:8000/api/exam/bystate/P"
+        );
         const examList: Exam[] = response.data;
         setExams(examList);
-
       } catch (err) {
         console.error("Error al obtener los exámenes:", err);
       }
@@ -71,7 +71,7 @@ const ValidarExamenes: React.FC = () => {
   }, [exams]);
 
   const filteredExams = useMemo(() => {
-    if (subjectIds.length === 0) {
+    if (!subjectIds || subjectIds.length === 0) {
       return [];
     }
     return exams.filter((exam) => subjectIds.includes(exam.subject));
@@ -91,12 +91,10 @@ const ValidarExamenes: React.FC = () => {
         teacher: exam.teacher,
         validation_teacher: exam.validation,
         subject: exam.subject,
-        questions: exam.questions
+        questions: exam.questions,
       });
       alert("Examen validado exitosamente");
-      setExams((prevExams) =>
-        prevExams.filter((ex) => ex.id !== exam.id)
-      );
+      setExams((prevExams) => prevExams.filter((ex) => ex.id !== exam.id));
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
@@ -126,12 +124,12 @@ const ValidarExamenes: React.FC = () => {
         teacher: selectedExam.teacher,
         validation_teacher: selectedExam.validation,
         subject: selectedExam.subject,
-        questions: selectedExam.questions
+        questions: selectedExam.questions,
       });
       await axios.post(`http://localhost:8000/api/observation/`, {
         observation: observations,
         checked: false,
-        exam: selectedExam.id
+        exam: selectedExam.id,
       });
       alert("Examen descartado exitosamente");
       setShowDiscardModal(false);
@@ -216,9 +214,7 @@ const ValidarExamenes: React.FC = () => {
               placeholder="Observaciones"
             ></textarea>
             <button onClick={handleDiscardSubmit}>Aceptar</button>
-            <button onClick={() => setShowDiscardModal(false)}>
-              Cancelar//
-            </button>
+            <button onClick={() => setShowDiscardModal(false)}>Cancelar</button>
           </div>
         </div>
       )}

@@ -14,6 +14,12 @@ const StatisticsView: React.FC = () => {
     setShowExportOptions(false);
   };
 
+  const handleExportToCSV = () => {
+    // Lógica para exportar a PDF
+    console.log("Exportando a CSV...");
+    setShowExportOptions(false);
+  };
+
   return (
     <div className="statistics-container">
       <h2>Estadísticas</h2>
@@ -26,6 +32,9 @@ const StatisticsView: React.FC = () => {
       {showExportOptions && (
         <div className="export-options-container">
           <button onClick={handleExportToPDF} className="export-option-button">
+            Exportar a PDF
+          </button>
+          <button onClick={handleExportToCSV} className="export-option-button">
             Exportar a PDF
           </button>
         </div>
