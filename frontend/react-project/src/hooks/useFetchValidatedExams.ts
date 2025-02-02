@@ -3,7 +3,7 @@ import axios from "axios";
 
 const useFetchValidatedExams = () => {
   const [validatedExams, setValidatedExams] = useState<
-    { exam: number; id: number }[]
+    { id:number, type:string, date:string , exam:number}[]
   >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,9 +12,10 @@ const useFetchValidatedExams = () => {
     const fetchValidatedExams = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/validated_exam/`
+          `http://localhost:8000/api/assigned_exam/`
         );
-        const validatedExamList: { exam: number; id: number }[] = response.data;
+        const validatedExamList: {id:number, type:string, date:string , exam:number}[] = response.data;
+        
         setValidatedExams(validatedExamList);
         setLoading(false);
       } catch (err: unknown) {
@@ -23,7 +24,7 @@ const useFetchValidatedExams = () => {
         } else if (err instanceof Error) {
           setError(err.message);
         } else {
-          setError("Error desconocido al obtener los exámenes validados.");
+          setError("Error desconocido al obtener los exámenes Oficiales.");
         }
         setLoading(false);
       }
@@ -31,7 +32,7 @@ const useFetchValidatedExams = () => {
 
     fetchValidatedExams();
   }, []);
-
+   
   return { validatedExams, loading, error };
 };
 

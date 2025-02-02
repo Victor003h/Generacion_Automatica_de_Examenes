@@ -31,10 +31,21 @@ export interface Exam {
   id: number;
   type: string;
   date: string;
+  state: string;
+  validation_date:string;
   teacher: number;
   validation: number;
   subject: number;
   questions: number[];
+}
+// interface para Observaciones
+
+export interface Observation{
+  id : number,
+  date: string,
+  obsrvation: string,
+  checked: boolean,
+  exam: number,
 }
 // Interface para los temas
 export interface Topic {

@@ -136,7 +136,7 @@ const QuestionList: React.FC = () => {
       fetchTeachers();
     }
   }, [fetchTeachers, questions]);
-
+  useEffect(() => {console.log(questions)}, [questions] );
   const sortedQuestions = useMemo(() => {
     const allQuestions = Object.values(questions).flat();
 
