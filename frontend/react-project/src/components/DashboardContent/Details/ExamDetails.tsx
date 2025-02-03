@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/ExamDetails.css";
 import { Exam } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 // Component for displaying exam details
 const ExamDetails: React.FC = () => {
@@ -33,6 +34,7 @@ const ExamDetails: React.FC = () => {
 
   return (
     <div className="exam-details-container">
+      <BackButton/>
       <h2>Exam Details</h2>
       <div className="exam-details">
         <p>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/SetGradeExam.css";
 import { Exam, Question, ExamDone, Teacher } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 interface QuestionResponse {
   id: number;
@@ -140,6 +141,7 @@ const SetGradeExam: React.FC = () => {
 
   return (
     <div className="set-grade-exam-container">
+      <BackButton/>
       <h2>Calificar Examen</h2>
       {questions.map((question, index) => (
         <div key={question.id} className="question-container">

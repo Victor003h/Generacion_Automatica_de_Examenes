@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/GradeExams.css";
 import { Subject } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 // Componente para listar las asignaturas y ver los exámenes realizados
 const GradeExams: React.FC = () => {
@@ -36,6 +37,7 @@ const GradeExams: React.FC = () => {
 
   return (
     <div className="grade-exams-container">
+      <BackButton/>
       <h2>Calificar Exámenes</h2>
       {subjects.length === 0 ? (
         <p>No hay asignaturas disponibles.</p>

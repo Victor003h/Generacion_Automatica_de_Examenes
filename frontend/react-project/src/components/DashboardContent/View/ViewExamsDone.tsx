@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/ViewExams.css";
 import { ExamDone, Exam, Student } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 const ViewExamsDone: React.FC = () => {
   const location = useLocation();
@@ -100,6 +101,7 @@ const ViewExamsDone: React.FC = () => {
 
   return (
     <div className="view-exams-container">
+      <BackButton/>
       <h2>Exámenes a calificar</h2>
       {examsDone.length === 0 ? (
         <p>No hay exámenes a calificar para esta asignatura.</p>

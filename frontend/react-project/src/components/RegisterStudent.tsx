@@ -1,12 +1,12 @@
-// Importa las librerías necesarias de React y otros módulos
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
+//import { Link } from "react-router-dom";
 import "../styles/Register.css";
 import "../styles/Errors.css";
+import { useNavigate } from "react-router-dom";
+import useFetchCourses from "../hooks/useFetchCourses";
 
-// Define el componente funcional para el registro de estudiantes
 const RegisterStudent: React.FC = () => {
-  // Define los estados locales para los datos del formulario y la repetición de la contraseña
   const [formData, setFormData] = useState({
     first_name: "",
     email: "",
@@ -14,17 +14,24 @@ const RegisterStudent: React.FC = () => {
     last_name: "",
     last_name2: "",
     age: 0,
-    course: 2024,
+    course: "",
   });
 
   const [passwordRepeat, setPasswordRepeat] = useState("");
+  const navigate = useNavigate();
+  const [courseId, setCourseId] = useState<number | "">("");
+  const [error, setError] = useState<string | null>(null);
+  //const [loading, setLoading] = useState(false);
+  const {
+    courses,
+    loading: coursesLoading,
+    error: coursesError,
+  } = useFetchCourses();
 
-  // Maneja el cambio en el campo de repetición de la contraseña
   const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordRepeat(e.target.value);
   };
 
-  // Maneja los cambios en los campos del formulario
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -32,20 +39,15 @@ const RegisterStudent: React.FC = () => {
     });
   };
 
-  const [error, setError] = useState("");
-
-  // Maneja el envío del formulario
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
-    // Verifica si las contraseñas coinciden
     if (formData.password !== passwordRepeat) {
       setError("Las contraseñas no coinciden");
       return;
     }
     const data = { ...formData };
-    // Envía los datos del formulario al servidor
     axios
       .post("http://localhost:8000/api/account/register/student/", data, {
         headers: {
@@ -54,6 +56,7 @@ const RegisterStudent: React.FC = () => {
       })
       .then((response) => {
         console.log("Registro exitoso:", response.data);
+        navigate("../login");
         // Maneja la respuesta, redirige o muestra un mensaje de éxito
       })
       .catch((error) => {
@@ -62,7 +65,6 @@ const RegisterStudent: React.FC = () => {
       });
   };
 
-  // Renderiza el formulario de registro de estudiantes
   return (
     <div className="register-container">
       <div className="register-box">
@@ -115,15 +117,22 @@ const RegisterStudent: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Curso</label>
-            <input
-              type="number"
-              name="course"
-              className="form-input"
-              value={formData.course}
-              onChange={handleChange}
+            <label htmlFor="course">Curso</label>
+            <select
+              id="course"
+              value={courseId}
+              onChange={(e) => setCourseId(Number(e.target.value))}
               required
-            />
+            >
+              <option value="">Seleccionar Curso</option>
+              {coursesLoading && <option>Cargando cursos...</option>}
+              {coursesError && <option>Error al cargar cursos</option>}
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label className="form-label">Email</label>

@@ -3,6 +3,7 @@ import axios from "axios";
 // Importación de estilos y componentes necesarios
 import "../../../styles/DashboardContent/ExamResults.css";
 import { ExamDone, Exam, Teacher } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 interface ExamGrade {
   id: number;
@@ -177,6 +178,7 @@ const ExamResults: React.FC = () => {
 
   return (
     <div className="exam-results-container">
+      <BackButton/>
       <h2>Resultados de Exámenes</h2>
       {examGrades.length === 0 ? (
         <p>No hay resultados de exámenes disponibles.</p>

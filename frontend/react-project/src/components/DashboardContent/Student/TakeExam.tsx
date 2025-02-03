@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/TakeExam.css";
 import { Question } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 const TakeExam: React.FC = () => {
   const location = useLocation();
@@ -75,6 +76,7 @@ const TakeExam: React.FC = () => {
 
   return (
     <div className="take-exam-container">
+      <BackButton/>
       <h1>Responder Examen</h1>
       {questions.length === 0 ? (
         <p>No hay preguntas disponibles para este examen.</p>

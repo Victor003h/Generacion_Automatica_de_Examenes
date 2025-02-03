@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/RegradeRequest.css";
 import { ExamGrade, ExamDone } from "../../Interfaces";
+import BackButton from "../../BackButton";
 
 interface ReevaluatedExam {
   id: number;
@@ -79,6 +80,7 @@ const RegradeRequest: React.FC = () => {
 
   return (
     <div className="recalificar-examenes-container">
+      <BackButton/>
       <h2>Recalificar Exámenes</h2>
       {reevaluatedExams.length === 0 ? (
         <p>No hay solicitudes de recalificación disponibles.</p>

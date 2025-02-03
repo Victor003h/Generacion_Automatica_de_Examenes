@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../../styles/DashboardContent/Statistics.css";
+import BackButton from "../../BackButton";
 
 // Componente funcional que muestra enlaces a diferentes estadísticas
 const Statistics: React.FC = () => {
   return (
     <div className="statistics-container">
+      <BackButton/>
       <h1>Estadísticas</h1>
       <ul className="statistics-links">
         <li>

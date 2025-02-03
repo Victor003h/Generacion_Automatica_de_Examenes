@@ -13,7 +13,6 @@ import TeacherList from "./components/DashboardContent/List/TeacherList";
 import StudentList from "./components/DashboardContent/List/StudentList";
 import TopicsList from "./components/DashboardContent/List/TopicsList";
 import CourseList from "./components/DashboardContent/List/CourseList";
-import CreateExam from "./components/DashboardContent/Create/CreateExam";
 import QuestionsList from "./components/DashboardContent/List/QuestionsList";
 import AddQuestion from "./components/DashboardContent/Add/AddQuestion";
 import ExamDetails from "./components/DashboardContent/Details/ExamDetails";
@@ -161,14 +160,6 @@ const App: React.FC = () => {
             element={<ViewExamForValidation />}
           />
         </Route>
-        <Route
-          path="create-exam"
-          element={
-            <PrivateRoute>
-              <CreateExam />
-            </PrivateRoute>
-          }
-        />
         <Route
           path="exam-details"
           element={

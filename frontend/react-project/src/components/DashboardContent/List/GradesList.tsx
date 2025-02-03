@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/GradesList.css";
-
+import BackButton from "../../BackButton";
 // Interfaz para representar una calificación
 interface Grade {
   id: number;
@@ -30,6 +30,7 @@ const GradesList: React.FC = () => {
 
   return (
     <div className="content-container">
+      <BackButton/>
       <div className="header">
         <h2>Listado de Calificaciones</h2>
       </div>
