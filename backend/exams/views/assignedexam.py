@@ -6,8 +6,7 @@ from rest_framework import status
 from questions.serializer import QuestionSerializer
 from ..serializer import *
 from ..models import *
-from django.utils import timezone
-from datetime import timedelta
+
 
 
 @extend_schema(
