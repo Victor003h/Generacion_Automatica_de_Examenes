@@ -91,7 +91,7 @@ def exam_observations(request,pk):
     Obtain all observations of an exam.
 
     """
-    exam=get_object_or_404(Exam,pk)
+    exam=get_object_or_404(Exam,pk=pk)
     observations=Observation.objects.filter(exam=exam)
     serializer=ObservationSerializer(observations,many=True)
     return Response(serializer.data)
