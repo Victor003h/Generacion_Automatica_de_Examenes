@@ -7,7 +7,7 @@ import { Question } from "../../Interfaces";
 const TakeExam: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { examId, validatedExamId } = location.state;
+  const { examId } = location.state;
 
   const userId = localStorage.getItem("userId") || "";
 
@@ -49,7 +49,7 @@ const TakeExam: React.FC = () => {
         `http://localhost:8000/api/exam_done/`,
         {
           //date: new Date().toISOString().split("T")[0],
-          validated_exam: validatedExamId,
+          exam: examId,
           student: parseInt(userId),
         }
       );
@@ -60,7 +60,7 @@ const TakeExam: React.FC = () => {
       const promises = questions.map((question) =>
         axios.post(`http://localhost:8000/api/exam_question_response/`, {
           response: answers[question.id] || "",
-          observation: "",
+          note: "",
           exam_Done: examDoneId,
           question: question.id,
         })

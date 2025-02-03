@@ -9,11 +9,19 @@ import BackButton from "../../BackButton";
 const ValidarExamenes: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
+
+  // Obtener los subjects en lugar de subjectIds
   const {
-    subjectIds,
+    subjects,
     loading: subjectsLoading,
     error: subjectsError,
-  } = useFetchHeadOfSubjects(userId);
+  } = useFetchHeadOfSubjects(Number(userId));
+
+  // Extraer subjectIds de subjects
+  const subjectIds = useMemo(
+    () => subjects.map((subject) => subject.id),
+    [subjects]
+  );
 
   const [exams, setExams] = useState<Exam[]>([]);
   const [examDetails, setExamDetails] = useState<{
@@ -71,7 +79,7 @@ const ValidarExamenes: React.FC = () => {
   }, [exams]);
 
   const filteredExams = useMemo(() => {
-    if (!subjectIds || subjectIds.length === 0) {
+    if (subjectIds.length === 0) {
       return [];
     }
     return exams.filter((exam) => subjectIds.includes(exam.subject));

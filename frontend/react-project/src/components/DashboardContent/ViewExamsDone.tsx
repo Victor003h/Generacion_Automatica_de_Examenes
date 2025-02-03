@@ -2,28 +2,34 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/DashboardContent/ViewExams.css";
-import { ExamDone, Exam, Student, ExamGrade } from "../Interfaces";
+import { ExamDone, Exam, Student } from "../Interfaces";
 
 const ViewExamsDone: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { subjectId } = location.state;
+
+  // Verificar si location.state es null
+  const state = location.state as { subjectId: number } | null;
+  const subjectId = state?.subjectId;
+
   const [examsDone, setExamsDone] = useState<ExamDone[]>([]);
   const [exams, setExams] = useState<Exam[]>([]);
   const [students, setStudents] = useState<{ [key: number]: Student }>({});
-  const [examGrades, setExamGrades] = useState<{ [key: number]: ExamGrade }>(
-    {}
-  );
 
   useEffect(() => {
+    if (!subjectId) {
+      console.error("No subjectId provided.");
+      return;
+    }
+
     const fetchExamsDone = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/subject/exams_done/${subjectId}/`
+          `http://localhost:8000/api/exam_done/ungraded/${subjectId}`
         );
         setExamsDone(response.data);
       } catch (error) {
-        console.error("Error fetching completed exams:", error);
+        console.error("Error fetching ungraded exams:", error);
       }
     };
 
@@ -76,59 +82,38 @@ const ViewExamsDone: React.FC = () => {
     }
   }, [examsDone]);
 
-  useEffect(() => {
-    const fetchExamGrades = async () => {
-      const examGradeDetails: { [key: number]: ExamGrade } = {};
-      await Promise.all(
-        examsDone.map(async (examDone) => {
-          try {
-            const response = await axios.get(
-              `http://localhost:8000/api/exam_done/exam_grade/${examDone.id}/`
-            );
-            examGradeDetails[examDone.id] = response.data;
-          } catch (error) {
-            console.error("Error fetching exam grade details:", error);
-          }
-        })
-      );
-      setExamGrades(examGradeDetails);
-    };
-
-    if (examsDone.length > 0) {
-      fetchExamGrades();
-    }
-  }, [examsDone]);
-
   const handleGradeExam = (examDoneId: number) => {
     navigate("../set-grade-exam", { state: { examDoneId } });
   };
 
+  if (!subjectId) {
+    return (
+      <div>
+        No se ha proporcionado una asignatura válida para mostrar los exámenes.
+      </div>
+    );
+  }
+
   return (
     <div className="view-exams-container">
       <h2>Exámenes a calificar</h2>
-      {exams.length === 0 ? (
+      {examsDone.length === 0 ? (
         <p>No hay exámenes a calificar para esta asignatura.</p>
       ) : (
-        examsDone.map((examDone, index) => {
-          const examGrade = examGrades[examDone.id];
-          if (examGrade?.finalnote !== null) {
-            return null; // Skip exams with non-null notes
-          }
-          return (
-            <div key={examDone.id} className="exam-container">
-              <h3>{exams[index]?.type}</h3>
-              <p>Fecha: {exams[index]?.date}</p>
-              <p>
-                Estudiante: {students[examDone.student]?.first_name}{" "}
-                {students[examDone.student]?.last_name}{" "}
-                {students[examDone.student]?.last_name2}{" "}
-              </p>
-              <button onClick={() => handleGradeExam(examDone.id)}>
-                Calificar
-              </button>
-            </div>
-          );
-        })
+        examsDone.map((examDone, index) => (
+          <div key={examDone.id} className="exam-container">
+            <h3>{exams[index]?.type}</h3>
+            <p>Fecha: {exams[index]?.date}</p>
+            <p>
+              Estudiante: {students[examDone.student]?.first_name}{" "}
+              {students[examDone.student]?.last_name}{" "}
+              {students[examDone.student]?.last_name2}{" "}
+            </p>
+            <button onClick={() => handleGradeExam(examDone.id)}>
+              Calificar
+            </button>
+          </div>
+        ))
       )}
     </div>
   );

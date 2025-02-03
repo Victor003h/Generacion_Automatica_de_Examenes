@@ -5,7 +5,7 @@ export interface Subject {
   study_program: string;
   course: number;
   head_of_subject: number;
-  subject_teachers: number[];
+  teachers_subject: number[];
 }
 // Interface para los estudiantes
 export interface Student {

@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
 
-  const { subjectIds } = useFetchHeadOfSubjects(userId);
+  const { subjects, loading, error } = useFetchHeadOfSubjects(Number(userId));
 
   useEffect(() => {
     const storedName = localStorage.getItem("username");
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
               <span>Asignaturas</span>
             </Link>
           </li>
-          {subjectIds.length > 0 && (
+          {subjects.length > 0 && (
             <>
               <li>
                 <Link to="validations">
@@ -108,6 +108,8 @@ const Dashboard: React.FC = () => {
       </nav>
       <main className="main-content">
         <section className="content-section">
+          {loading && <div>Cargando asignaturas...</div>}
+          {error && <div>{error}</div>}
           <Outlet />
         </section>
       </main>
