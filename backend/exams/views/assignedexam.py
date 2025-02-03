@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
 from drf_spectacular.utils import extend_schema,OpenApiResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -86,52 +85,3 @@ def assigned_exam_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
    
    
-@extend_schema(
-    methods=['GET'],
-    responses={
-        200:QuestionSerializer(many=True),
-        404:OpenApiResponse(description="Primary key not found.")
-    }
-)
-@api_view(['GET'])   
-def common_questions(request,pk):
-    """
-    Obtain the most commond used question in final exams
-
-    """
-    subject=get_object_or_404(Subject,pk=pk)
-    
-    questions=Question.objects.filter(
-        exams__assignedexam__type='final',
-        exams__subject=subject
-    ).annotate(usage_count=Count('exams__assignedexam')).order_by('-usage_count')
-    
-    result=[]
-    for question in questions:
-        id=question.pk
-        difficulty=question.difficulty
-        topic=question.topic
-        used=question.usage_count
-        result.append({"question" : id, "difficulty" : difficulty, "topic" : topic.name , "used":used})
-    return Response(result)
-
-@extend_schema(
-    methods=['GET'],
-    responses={
-         200:QuestionSerializer(many=True),
-        404:OpenApiResponse(description="Primary key not found.")
-    }
-)
-@api_view(['GET'])  
-def unused_questions(request,pk):
-    """
-    Questions not used in the last 2 years.
-
-    """
-    subject=get_object_or_404(Subject,pk=pk)
-    today=timezone.now().date()
-    range= today-timedelta(days=730)
-    ques=Question.objects.filter(topic__Subject=subject)
-    questions=ques.exclude(exams__date__gte=range).distinct()
-    serializer=QuestionSerializer(questions,many=True)
-    return Response(serializer.data)

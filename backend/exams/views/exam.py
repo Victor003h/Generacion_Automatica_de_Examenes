@@ -130,26 +130,6 @@ def exams_by_state(request,state):
 @extend_schema(
     methods=['GET'],
     responses={
-        200:ExamSerializer(many=True),
-        400: OpenApiResponse(description='Bad resquest, incorrect state')
-    }
-)
-@api_view(['GET'])
-def subject_exams(request,pk):
-    """
-    Obtains all the exams of a subject.
-
-    """
-    
-    subject=get_object_or_404(Subject,pk=pk)
-    exams=Exam.objects.filter(subject=subject)
-    serializer=ExamSerializer(exams,many=True)
-    result=[{"exam":exam.id,"date":exam.date,"creator":exam.teacher.first_name} for exam in exams]
-    return Response(result,status=status.HTTP_200_OK)
-   
-@extend_schema(
-    methods=['GET'],
-    responses={
         204:OpenApiResponse(description='Its validated'),
         404: OpenApiResponse(description='Its not validated')
     }
@@ -171,59 +151,5 @@ def isvalidated(request,pk):
     
  
  
-@extend_schema(
-    methods=['GET'],
-    responses={
-        200:OpenApiResponse(description='OK'),
-        404: OpenApiResponse(description='Primary key not found')
-    }
-)
-@api_view(['GET'])
-def validatedby(request,pk):
-    """
-    Obtain all exam that was validated by a specific teacher.
 
-    """
-    teacher=get_object_or_404(Teacher,pk)
-    exams=Exam.objects.filter(teacher=teacher)
-    serializers=ExamSerializer(exams,many=True)
-    return Response(serializers.data,status=status.HTTP_200_OK)
-    
  
- 
- 
- 
-@api_view(['GET'])
-def exam_compare(request):
-    subjects = set(Exam.objects.values_list('subject__name', flat=True))
-    report = []
-
-    for subject in subjects:
-        exams = Exam.objects.filter(subject__name=subject)
-        questions_distribution = {}
-        questionsTotal = 0
-
-        for exam in exams:
-            for question in exam.questions.all():
-                topic = question.topic.name
-                diff = question.get_difficulty_display()
-
-                if topic not in questions_distribution:
-                    questions_distribution[topic] = {'Easy': 0, 'Medium': 0, 'Difficult': 0}
-
-                questions_distribution[topic][diff] += 1
-                questionsTotal += 1
-
-        criterios_equilibrio = all(
-            all(dificultad_count > 0 for dificultad_count in dificultades.values())
-            for dificultades in questions_distribution.values()
-        )
-
-        report.append({
-            'asignatura': subject,
-            'distribucion_preguntas': questions_distribution,
-            'total_preguntas': questionsTotal,
-            'criterios_equilibrio_cumplidos': criterios_equilibrio,
-        })
-
-    return Response(report)

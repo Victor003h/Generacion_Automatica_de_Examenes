@@ -106,36 +106,6 @@ def student_examgrade(request,pk):
 @extend_schema(
     methods=['GET'],
     responses={
-        200:OpenApiResponse(description="Ok"),
-    }
-)
-@api_view(['GET'])
-def teacher_examgraded_detail(request,months):
-    """
-    Detailed record of the teachers who have reviewed exams in the last months.
-
-    """
-    today=timezone.now().date()
-    range=today - timedelta(days=months*31)
-    examgrades=ExamGrade.objects.filter(date__gte=range)
-    
-    details=examgrades.values('teacher','examdone__exam__subject').annotate(num_exam_grade=Count('id'))
-    
-    result=[]
-    for detail in details:
-        teacher=Teacher.objects.get(pk=detail['teacher']).first_name
-        try:
-            subject=Subject.objects.get(pk=detail['examdone__exam__subject']).name
-        except Subject.DoesNotExist:
-            subject="null"
-        num=detail['num_exam_grade']
-        result.append({"teacher" : teacher, "subject" : subject, "num_exam_grade" : num })
-    return Response(result)
-
-
-@extend_schema(
-    methods=['GET'],
-    responses={
         200: OpenApiResponse(description="OK"),
         404:OpenApiResponse(description="Primary key not found")
     }
