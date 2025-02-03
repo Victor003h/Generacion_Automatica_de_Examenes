@@ -31,18 +31,18 @@ def export_document(request,extension):
 
     """
     data = request.data.get('content')
-    try:
-        json.loads(data)
-    except TypeError as e:
-        return Response({f'error' : {e}},status=status.HTTP_400_BAD_REQUEST)
+    
     title = request.data.get('title')
     file_name = f'{title}.{extension}'
     
     try:
         exporter = ExporterFactory.get_exporter(extension)
         response=exporter.export(data, file_name)
+        
         return response
     except ValueError as e:
         return Response({'error': str(e)}, status=400)
+
+
 
 
