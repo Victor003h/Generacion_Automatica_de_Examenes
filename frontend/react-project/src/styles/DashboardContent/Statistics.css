@@ -1,48 +1,28 @@
 .statistics-container {
+  text-align: center;
   padding: 20px;
-  font-family: "Arial", sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.statistics-container h2 {
-  font-size: 24px;
+.statistics-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.statistic-button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.generate-report-button {
-  background-color: #007bff;
   color: white;
+  background-color: #0078d4;
   border: none;
-  padding: 10px 15px;
-  font-size: 14px;
   border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-.generate-report-button:hover {
-  background-color: #0056b3;
-}
-
-.export-options-container {
-  margin-top: 10px;
-}
-
-.export-option-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.export-option-button:hover {
-  background-color: #218838;
+.statistic-button-link:hover {
+  background-color: #005fa3;
 }

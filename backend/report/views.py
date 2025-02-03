@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
 from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
 
-from backend.questions.serializer import QuestionSerializer
+from questions.serializer import QuestionSerializer
 from exams.models import *
 from exams.serializer import *
 from .exporterfactory import ExporterFactory

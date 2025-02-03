@@ -164,9 +164,9 @@ const ExamList: React.FC = () => {
             : "No hay exámenes disponibles."}
         </div>
       ) : (
-        <ul className="exam-list" >
+        <ul className="exam-list">
           {paginatedExams.map((exam) => (
-            <li key={exam.id} className={exam.state} >
+            <li key={exam.id} className={exam.state}>
               <h2>{exam.type}</h2>
               <p>
                 <strong>Fecha:</strong>
@@ -180,7 +180,7 @@ const ExamList: React.FC = () => {
                 <strong>Asignatura:</strong>
                 {examDetails[exam.id]?.subjectName || "Cargando..."}
               </p>
-              <div className="exam-actions" >
+              <div className="exam-actions">
                 <button
                   className="view-button"
                   onClick={() => handleViewExam(exam.id)}
