@@ -68,7 +68,15 @@ const QuestionsUnused: React.FC = () => {
           content: questions,
         }
       );
-      console.log("Export successful:", response.data);
+      const blob = new Blob([response.data], { type: `application/${format}` });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `data.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error exporting data:", error);
     }

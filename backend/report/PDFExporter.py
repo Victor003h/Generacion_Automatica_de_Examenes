@@ -5,7 +5,8 @@ import json
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle ,Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 class PDFExporter(Exporter):
     def export(self, data, file_name):
@@ -17,6 +18,12 @@ class PDFExporter(Exporter):
         doc = SimpleDocTemplate(response, pagesize=letter)
         elements = []
 
+        if not data:
+        # Escribir un mensaje en el PDF indicando que no hay datos disponibles (opcional)
+            styles = getSampleStyleSheet()
+            elements.append(Paragraph("No hay datos disponibles", styles['Normal']))
+            doc.build(elements)
+            return response
     
         # Create table
         headers = list(data[0].keys())
