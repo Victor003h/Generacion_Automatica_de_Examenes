@@ -29,7 +29,7 @@ urlpatterns = [
     path('assigned_exam/',assigned_exam_list),
     path('assigned_exam/<int:pk>/',assigned_exam_detail),
     path('questions/most_used/<int:pk>',common_questions),
-    path('questions/unused/<int:pk>',unused_questions),
+    path('questions/unused/<int:pk>/',unused_questions),
     
     path('observation/',observation_list),
     path('observation/<int:pk>/',observation_detail),
