@@ -18,7 +18,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data): 
         if 'username' not in validated_data: 
-            validated_data['username'] = validated_data['first_name'] 
+            validated_data['username'] = validated_data['first_name']
             user = Teacher(**validated_data) 
             user.set_password(validated_data['password']) 
             user.save() 

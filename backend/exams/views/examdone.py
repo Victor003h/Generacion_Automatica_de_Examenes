@@ -154,7 +154,7 @@ def examsdone_ungraded(request,pk):
     subject= get_object_or_404(Subject,pk=pk)
     examdone=ExamDone.objects.filter(exam__subject=subject)
     examsgrade=ExamGrade.objects.filter(examdone__exam__subject=subject)
-    exams_ungraded=examdone.objects.exclude(id__in=examsgrade.values('examdone_id'))
+    exams_ungraded=examdone.exclude(id__in=examsgrade.values('examdone_id'))
     serializer=ExamDoneSerializer(exams_ungraded,many=True)
     return Response(serializer.data)
 

@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objectivo del Proyecto}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Requerimientos}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Requerimientos Técnicos}{3}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Hardware}{3}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Sistema Operativo}{3}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Requerimientos de Software.}{3}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Instalación}{3}{section.3}%
+\contentsline {section}{\numberline {4}Descripción General del Producto}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Descripción de los Actores}{5}{subsection.4.1}%
