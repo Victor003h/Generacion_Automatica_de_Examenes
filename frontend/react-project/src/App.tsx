@@ -46,8 +46,12 @@ import GradeExams from "./components/DashboardContent/Grade/GradeExams";
 import ViewExamsDone from "./components/DashboardContent/View/ViewExamsDone";
 import SetGradeExam from "./components/DashboardContent/Grade/SetGradeExam";
 import ExamResults from "./components/DashboardContent/Student/ExamResults";
-import RegradeRequest from "./components/DashboardContent/ReGrade/RegradeRequest";
-import SetExamRegrade from "./components/DashboardContent/ReGrade/SetExamRegrade";
+import RegradeRequest from "./components/DashboardContent/RegradeRequest";
+import SetExamRegrade from "./components/DashboardContent/SetExamRegrade";
+import ExamListBySubject from "./components/DashboardContent/Stadistics/ExamListBySubject";
+import TeacherAnalysis from "./components/DashboardContent/Stadistics/TeacherAnalysis";
+import QuestionMostUsed from "./components/DashboardContent/Stadistics/QuestionMostUsed";
+import QuestionUnused from "./components/DashboardContent/Stadistics/QuestionUnused";
 
 const App: React.FC = () => {
   return (
@@ -88,6 +92,10 @@ const App: React.FC = () => {
           <Route path="set-grade-exam" element={<SetGradeExam />} />
           <Route path="regrade-request" element={<RegradeRequest />} />
           <Route path="set-exam-regrade" element={<SetExamRegrade />} />
+          <Route path="exam-list-by-subject" element={<ExamListBySubject />} />
+          <Route path="teacher-analysis" element={<TeacherAnalysis />} />
+          <Route path="question-most-used" element={<QuestionMostUsed />} />
+          <Route path="question-unused" element={<QuestionUnused />} />
         </Route>
         <Route
           path="/student-dashboard"

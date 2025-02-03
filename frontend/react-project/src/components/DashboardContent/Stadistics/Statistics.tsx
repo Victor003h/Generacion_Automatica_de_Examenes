@@ -1,46 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import "../../../styles/DashboardContent/Statistics.css";
 
-const StatisticsView: React.FC = () => {
-  const [showExportOptions, setShowExportOptions] = useState(false);
-
-  const handleGenerateReport = () => {
-    setShowExportOptions(true);
-  };
-
-  const handleExportToPDF = () => {
-    // Lógica para exportar a PDF
-    console.log("Exportando a PDF...");
-    setShowExportOptions(false);
-  };
-
-  const handleExportToCSV = () => {
-    // Lógica para exportar a PDF
-    console.log("Exportando a CSV...");
-    setShowExportOptions(false);
-  };
-
+const Statistics: React.FC = () => {
   return (
     <div className="statistics-container">
-      <h2>Estadísticas</h2>
-      {/* Contenido de estadísticas aquí */}
-
-      <button onClick={handleGenerateReport} className="generate-report-button">
-        Generar Reporte
-      </button>
-
-      {showExportOptions && (
-        <div className="export-options-container">
-          <button onClick={handleExportToPDF} className="export-option-button">
-            Exportar a PDF
-          </button>
-          <button onClick={handleExportToCSV} className="export-option-button">
-            Exportar a PDF
-          </button>
-        </div>
-      )}
+      <h1>Estadísticas</h1>
+      <ul className="statistics-links">
+        <li>
+          <Link to="../exam-list-by-subject" className="statistic-button-link">
+            Lista de Exámenes por Asignatura
+          </Link>
+        </li>
+        <li>
+          <Link to="../teacher-analysis" className="statistic-button-link">
+            Análisis de Profesores
+          </Link>
+        </li>
+        <li>
+          <Link to="../question-most-used" className="statistic-button-link">
+            Preguntas Más Usadas
+          </Link>
+        </li>
+        <li>
+          <Link to="../question-unused" className="statistic-button-link">
+            Preguntas no usadas aún
+          </Link>
+        </li>
+        {/* Añade más enlaces aquí según sea necesario */}
+      </ul>
     </div>
   );
 };
 
-export default StatisticsView;
+export default Statistics;
