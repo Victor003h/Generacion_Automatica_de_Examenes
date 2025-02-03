@@ -14,23 +14,25 @@ router=routers.DefaultRouter()
 
 
 urlpatterns = [
+    #Subject
     path('subjects/', subject_list, name='subject-list'),
     path('subject/<int:pk>/', subject_detail, name='subject-detail'),
     path('subject/question/<int:subject_id>/', subject_questions, name='subject-questions'),
     path('subject/topics/<int:subject_id>/', subject_topics, name='subject-topics'),
     path('subject/teachers/<int:subject_id>/', subject_teachers, name='subject-teachers'),
     
-
+    #Topic
     path('topic/', topic_list, name='topic-list'),
     path('topic/<int:pk>/', topic_detail, name='topic-detail'),
     path('topic/subject/<int:topic_id>/', topic_subject, name='topic-subject'),
     path('topic/questions/<int:topic_id>/', topic_question, name='topic-questions'),
     
-    
+    #Question
     path('question/', question_list),
     path('question/<int:pk>/', question_detail),
     path('question/topic/<int:pk>/', question_topic),
   
+    #Others
     path('teacher/subjects/<int:teacher_id>/',teacher_subjects),
     path('teacher/head_of_subject/<int:teacher_id>',headofsubject),
     path('student/subjects/<int:pk>/',student_subjects),

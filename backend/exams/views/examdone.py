@@ -174,6 +174,6 @@ def examdone_exist(request,student_pk,exam_pk):
     student=get_object_or_404(Student,pk=student_pk)
     exam=get_object_or_404(Exam,pk=exam_pk)
     if ExamDone.objects.filter(student=student,exam=exam).exists():
-        return Response({'exist : true'})
+        return Response({'exist : True'})
     
-    return Response({'exist : false'})
+    return Response({'exist : False'})

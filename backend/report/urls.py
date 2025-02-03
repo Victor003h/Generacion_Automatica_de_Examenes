@@ -3,5 +3,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('export/<int:format_id>/', export_document),
+    path('export/<str:extension>/', export_document),
 ]

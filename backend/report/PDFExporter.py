@@ -9,23 +9,22 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 class PDFExporter(Exporter):
     def export(self, data, file_name):
-    # Crear la respuesta HTTP con el tipo de contenido de PDF
+    # Create the HTTP response with the content type of PDF.
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="data.pdf"'
 
-        # Crear el documento PDF
+        # Create the PDF document.
         doc = SimpleDocTemplate(response, pagesize=letter)
         elements = []
 
-        # Leer los datos JSON de la solicitud
-
-        # Crear la tabla con los datos
+    
+        # Create table
         headers = list(data[0].keys())
         table_data = [headers]
         for item in data:
             table_data.append(list(item.values()))
 
-        # Definir el estilo de la tabla
+        # Define the style of the table.
         table_style = TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -38,11 +37,7 @@ class PDFExporter(Exporter):
 
         table = Table(table_data)
         table.setStyle(table_style)
-
-        # Añadir la tabla al documento
         elements.append(table)
-
-        # Construir el documento PDF
         doc.build(elements)
 
         return response

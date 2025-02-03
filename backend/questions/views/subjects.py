@@ -5,7 +5,7 @@ from account.models import *
 from account.serializer import TeacherSerializer
 from ..models import *
 from ..serializer import *
-from drf_spectacular.utils import extend_schema, extend_schema_view,OpenApiResponse
+from drf_spectacular.utils import extend_schema,OpenApiResponse
 
 
 @extend_schema(
@@ -79,6 +79,7 @@ def subject_detail(request, pk):
     elif request.method == 'DELETE':
         subject.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 @extend_schema(
