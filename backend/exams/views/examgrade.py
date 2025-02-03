@@ -122,17 +122,15 @@ def teacher_examgraded_detail(request,months):
     details=examgrades.values('teacher','examdone__exam__subject').annotate(num_exam_grade=Count('id'))
     
     result=[]
-    for  detail in details:
-        result.append({
-            'teacher' : detail['teacher'],
-            'subject' : detail['examdone__exam__subject'],
-            'num_exam_grade': detail['num_exam_grade']
-            })
-     
-    jsonresult=json.dumps(result, ensure_ascii=False,indent=4)
-    return Response(jsonresult)
-
-
+    for detail in details:
+        teacher=Teacher.objects.get(pk=detail['teacher']).first_name
+        try:
+            subject=Subject.objects.get(pk=detail['examdone__exam__subject']).name
+        except Subject.DoesNotExist:
+            subject="null"
+        num=detail['num_exam_grade']
+        result.append({"teacher" : teacher, "subject" : subject, "num_exam_grade" : num })
+    return Response(result)
 
 
 @extend_schema(
