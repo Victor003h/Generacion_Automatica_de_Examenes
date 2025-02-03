@@ -1,3 +1,4 @@
+import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets ,permissions,status
@@ -24,26 +25,26 @@ from .exporterfactory import ExporterFactory
     },
 )
 @api_view(['POST'])
-def export_document(request, format_id):
+def export_document(request,extension):
     """
     Export of documents to various formats.    
 
     """
-    if format_id==1:
-        format='csv'
-    elif format_id==2:
-        format='pdf'
-    else:
-        return Response("errror : Invalid format",status=status.HTTP_400_BAD_REQUEST)
     data = request.data.get('content')
+    try:
+        json.loads(data)
+    except TypeError as e:
+        return Response({f'error' : {e}},status=status.HTTP_400_BAD_REQUEST)
     title = request.data.get('title')
-    file_name = f'{title}.{format}'
+    file_name = f'{title}.{extension}'
     
     try:
-        exporter = ExporterFactory.get_exporter(format)
+        exporter = ExporterFactory.get_exporter(extension)
         response=exporter.export(data, file_name)
         return response
     except ValueError as e:
         return Response({'error': str(e)}, status=400)
+
+
 
 

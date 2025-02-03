@@ -29,7 +29,7 @@ urlpatterns = [
     path('assigned_exam/',assigned_exam_list),
     path('assigned_exam/<int:pk>/',assigned_exam_detail),
     path('questions/most_used/<int:pk>',common_questions),
-    path('questions/unused/<int:pk>',unused_questions),
+    path('questions/unused/<int:pk>/',unused_questions),
     
     path('observation/',observation_list),
     path('observation/<int:pk>/',observation_detail),
@@ -39,8 +39,8 @@ urlpatterns = [
     path('exam_done/<int:pk>/',exam_done_detail),
     path('exam_done/questions/<int:pk>/',questions_response),
     path('exam_done/ungraded/<int:pk>',examsdone_ungraded),
+    path('exam_done/exist/<int:student_pk>/<int:exam_pk>',examdone_exist),
     path('subject/exams_done/<int:pk>/',subject_examsdone),
-    
     
     
     path('exam_question_response/',exam_question_response_list),
