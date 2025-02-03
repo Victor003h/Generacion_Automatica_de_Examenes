@@ -111,7 +111,8 @@ def common_questions(request,pk):
         id=question.pk
         difficulty=question.difficulty
         topic=question.topic
-        result.append({"question" : id, "difficulty" : difficulty, "topic" : topic.name })
+        used=question.usage_count
+        result.append({"question" : id, "difficulty" : difficulty, "topic" : topic.name , "used":used})
     return Response(result)
 
 @extend_schema(
