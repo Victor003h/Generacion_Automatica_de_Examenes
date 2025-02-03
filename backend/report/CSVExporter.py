@@ -18,7 +18,7 @@ class CSVExporter(Exporter):
         headers=data[0].keys()
         writer.writerow(headers)
     
-        # Write the rows of the CSV.
+        
         for item in data:
             writer.writerow(item.values())
 

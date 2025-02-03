@@ -106,9 +106,13 @@ def common_questions(request,pk):
         exams__subject=subject
     ).annotate(usage_count=Count('exams__assignedexam')).order_by('-usage_count')
     
-    serializer=QuestionSerializer(questions,many=True)
-    return Response(serializer.data)
-    
+    result=[]
+    for question in questions:
+        id=question.pk
+        difficulty=question.difficulty
+        topic=question.topic
+        result.append({"question" : id, "difficulty" : difficulty, "topic" : topic.name })
+    return Response(result)
 
 @extend_schema(
     methods=['GET'],
