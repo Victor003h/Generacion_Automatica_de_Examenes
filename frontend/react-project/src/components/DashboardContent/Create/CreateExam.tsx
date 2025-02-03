@@ -83,7 +83,7 @@ const CreateExam: React.FC = () => {
       console.error("Error al crear el examen:", error);
     }
   };
-
+  
   return (
     <div className="content-container">
       <form onSubmit={handleSubmit}>

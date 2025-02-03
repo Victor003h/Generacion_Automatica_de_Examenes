@@ -81,13 +81,15 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
         >
           Editar
         </button>
-        <button
+        {Number(question.teacher) === Number(userId) && (
+          <button
           className="delete-button"
           onClick={() => onDelete(question.id)}
           disabled={!isActionAllowed}
         >
           Eliminar
         </button>
+      )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/ExamList.css";
-import { Exam } from "../../Interfaces";
+import { Exam , Exam_isdone } from "../../Interfaces";
 import { useNavigate } from "react-router-dom";
 import useFetchStudentSubjects from "../../../hooks/useFetchStudentSubjects";
 import useFetchValidatedExams from "../../../hooks/useFetchValidatedExams";
@@ -13,7 +13,8 @@ import "../../../styles/DashboardContent/Pagination.css";
 const StudentExam: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
   const navigate = useNavigate();
-
+ 
+  
   const {
     subjects: studentSubjects,
     loading: studentSubjectsLoading,
@@ -32,10 +33,11 @@ const StudentExam: React.FC = () => {
   const [examDetails, setExamDetails] = useState<{
     [key: number]: { subjectName: string; teacherName: string };
   }>({});
+  const [examsDone, setExamsDone] = useState<{ [key: number]: boolean }>({});
 
+    
   useEffect(() => {
-    console.log (validatedExams)
-    console.log(validatedExams.map(exam => exam.exam));
+  
     
     if (validatedExams.length > 0) {
       const fetchExams = async () => {
@@ -50,7 +52,9 @@ const StudentExam: React.FC = () => {
               })),              
           );
           const examsData = await Promise.all(examPromises);
-          setExams(examsData);
+          setExams(examsData)
+
+          
         } catch (error) {
           console.error("Error fetching exams:", error);
         }
@@ -99,6 +103,40 @@ const StudentExam: React.FC = () => {
       fetchExamDetails(exam.id, exam.subject, exam.teacher);
     });
   }, [exams, studentSubjects]);
+
+  useEffect(() => {
+    const checkExamsDone = async () => {
+      try {
+        const examsDonePromises = exams.map(async (exam) => {
+          try {
+            const response = await axios.get(
+              `http://127.0.0.1:8000/api/exam_done/exist/${userId}/${exam.id}`
+            );
+            const exist = response.data[0]?.includes("True");
+            return { examId: exam.id, done: exist };
+          } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 404) {
+              return { examId: exam.id, done: false };
+            } else {
+              throw error;
+            }
+          }
+        });
+        const examsDoneData = await Promise.all(examsDonePromises);
+        const examsDoneMap = examsDoneData.reduce((acc, { examId, done }) => {
+          acc[examId] = done;
+          return acc;
+        }, {} as { [key: number]: boolean });
+        setExamsDone(examsDoneMap);
+      } catch (error) {
+        console.error("Error checking if exams are done:", error);
+      }
+    };
+  
+    if (exams.length > 0) {
+      checkExamsDone();
+    }
+  }, [exams, userId]);
 
   const filteredExams = useMemo(() => {
     if (!Array.isArray(studentSubjects) || !Array.isArray(exams)) return [];
@@ -152,6 +190,12 @@ const StudentExam: React.FC = () => {
     });
   };
 
+  const handleViewAnswers = (examId: number, validatedExamId: number) => {
+    navigate("../view-answers", {
+      state: { examId, validatedExamId },
+    });
+  };
+
   if (studentSubjectsLoading || validatedExamsLoading)
     return <div>Cargando...</div>;
   if (studentSubjectsError) return <div>{studentSubjectsError}</div>;
@@ -180,7 +224,7 @@ const StudentExam: React.FC = () => {
       ) : (
         <ul className="exam-list">
           {paginatedExams.map((exam) => (
-            <li key={exam.id} className="exam-item">
+            <li key={`${exam.id}-${exam.validatedExamId}`} className="exam-item">
               <div className="exam-details">
                 <h2>{exam.typeExam}</h2>
                 <p>
@@ -203,12 +247,14 @@ const StudentExam: React.FC = () => {
                 >
                   Ver Preguntas
                 </button>
-                <button
-                  className="take-exam-button"
-                  onClick={() => handleTakeExam(exam.id, exam.validatedExamId)}
-                >
-                  Responder Examen
-                </button>
+                {!examsDone[exam.id] && (
+                  <button
+                    className="take-exam-button"
+                    onClick={() => handleTakeExam(exam.id, exam.validatedExamId)}
+                  >
+                    Responder Examen
+                  </button>
+                )}
               </div>
             </li>
           ))}

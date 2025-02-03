@@ -7,8 +7,7 @@ import { Question } from "../../Interfaces";
 const TakeExam: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { examId } = location.state;
-
+  const { examId  } = location.state; 
   const userId = localStorage.getItem("userId") || "";
 
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -55,7 +54,6 @@ const TakeExam: React.FC = () => {
       );
 
       const examDoneId = examDoneResponse.data.id;
-
       // Guardar las respuestas de las preguntas
       const promises = questions.map((question) =>
         axios.post(`http://localhost:8000/api/exam_question_response/`, {

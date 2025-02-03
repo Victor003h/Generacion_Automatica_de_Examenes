@@ -2,38 +2,36 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/AddExam.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import useFetchSubjects from "../../../hooks/useFetchSubjects";
 import useFetchTeachersBySubject from "../../../hooks/useFetchSubjectTeachers";
 import BackButton from "../../BackButton";
-import { Exam } from "../../Interfaces";
+import { Exam, Question, Subject } from "../../Interfaces";
 
 const EditExam: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const examId = location.state?.examId;
+  const role = localStorage.getItem("role") || "";
+  const storedUserId = localStorage.getItem("userId");
+  const userId = storedUserId ? parseInt(storedUserId) : null;
 
   const [type, setType] = useState("");
   const [date, setDate] = useState("");
   const [teacher, setTeacher] = useState<number | null>(null);
   const [subject, setSubject] = useState<number | null>(null);
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
-  const [states,setStates] = useState("");
-  const [validation_date, setvalidation_date]= useState("");
+  const [states, setStates] = useState("");
+  const [validation_date, setValidationDate] = useState("");
+  const [subjects, setSubjects] = useState<Subject[]>();
+  const [subjectsLoading, setSubjectsLoading] = useState(true);
+  const [subjectsError, setSubjectsError] = useState<unknown> (null);
 
-  const {
-    subjects,
-    loading: subjectsLoading,
-    error: subjectsError,
-  } = useFetchSubjects();
   const {
     teachers,
     loading: teachersLoading,
     error: teachersError,
   } = useFetchTeachersBySubject(subject);
 
-  const role = localStorage.getItem("role") || "";
-  const storedUserId = localStorage.getItem("userId");
-  const userId = storedUserId ? parseInt(storedUserId) : null;
+
 
   useEffect(() => {
     const fetchExamDetails = async () => {
@@ -47,8 +45,8 @@ const EditExam: React.FC = () => {
         setTeacher(exam.teacher);
         setSubject(exam.subject);
         setSelectedQuestions(exam.questions);
-        setStates(exam.state)
-        setvalidation_date(exam.validation_date)
+        setStates(exam.state);
+        setValidationDate(exam.validation_date);
       } catch (err: unknown) {
         console.error("Error al obtener los detalles del examen:", err);
       }
@@ -57,38 +55,80 @@ const EditExam: React.FC = () => {
     fetchExamDetails();
   }, [examId]);
 
+  useEffect(() => {
+    const fetchSubjectsByTeacher = async () => {
+      
+      
+      if (userId) {
+        try {
+          const response = await axios.get(
+            `http://127.0.0.1:8000/api/teacher/subjects/${userId}/`
+          );
+        
+          setSubjects(response.data);
+        } catch (err: unknown) {
+          setSubjectsError(err);
+        } finally {
+          setSubjectsLoading(false);
+        }
+      }
+    };
+
+    fetchSubjectsByTeacher();
+  }, []);
+
+  useEffect(() => { 
+    const questionsubject = async () => {
+      const questionid:number = selectedQuestions[0];
+      console.log(subject);
+      
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/question/${questionid}/`
+        );
+        const questionsubjectid = response.data.subject; 
+        return questionsubjectid;
+      } catch (err: unknown) {
+        console.error("Error al obtener la asignatura de la pregunta:", err);
+      }
+    };
+
+    const fetchSubjectId = async () => {
+      const subject_id = await questionsubject();
+      if (subject !== subject_id) {
+        console.log(subject_id);
+        setSelectedQuestions([]);
+      }
+    };
+
+    if(selectedQuestions.length > 0) fetchSubjectId();
+  }, [subject]);
+
   const handleSaveExam = async () => {
     if (selectedQuestions.length === 0) {
       alert("Debe añadir al menos una pregunta al examen.");
       return;
     }
-   
 
     const validationTeacherId =
       role === "admin"
         ? teacher
-        : subjects.find((s) => s.id === subject)?.head_of_subject;
+        : subjects?.find((s) => s.id === subject)?.head_of_subject;
 
     const updatedExam = {
       type: type,
       validation_date: validation_date,
-      state: states=="R"? "P":states,
+      state: states === "R" ? "P" : states,
       teacher: role === "admin" ? teacher : userId,
       validation_teacher: validationTeacherId,
       subject: subject,
-      questions: selectedQuestions
-
+      questions: selectedQuestions,
     };
-     
-     
+
     try {
-       console.log(updatedExam);
-       
       await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
-      
       alert("Examen actualizado exitosamente");
 
-      
       if (role === "admin") {
         navigate("/admin-dashboard/exams");
       } else {
@@ -112,17 +152,17 @@ const EditExam: React.FC = () => {
     try {
       const updatedExam = {
         type: type,
-        states:states,
+        states: states,
         teacher: role === "admin" ? teacher : userId,
         validation_date: validation_date,
         validation_teacher:
           role === "admin"
             ? teacher
-            : subjects.find((s) => s.id === subject)?.head_of_subject,
+            : subjects?.find((s) => s.id === subject)?.head_of_subject,
         subject: subject,
         questions: selectedQuestions,
       };
-      
+      console.log(updatedExam);
       
 
       await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
@@ -166,7 +206,7 @@ const EditExam: React.FC = () => {
             value={subject || ""}
           >
             <option value="">Seleccione una asignatura</option>
-            {subjects.map((subject) => (
+            {subjects?.map((subject) => (
               <option key={subject.id} value={subject.id}>
                 {subject.name}
               </option>

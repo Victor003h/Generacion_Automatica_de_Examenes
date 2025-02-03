@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/AddExam.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetchSubjects from "../../../hooks/useFetchSubjects";
 import useFetchTeachersBySubject from "../../../hooks/useFetchSubjectTeachers";
 import BackButton from "../../BackButton";
+import { Subject } from "../../Interfaces";
 
 const AddExam: React.FC = () => {
   const location = useLocation();
@@ -40,6 +41,24 @@ const AddExam: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
 
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]> ();
+  
+  useEffect(() => {
+    const fetchFilteredSubjects = async () => {
+      if (userId && role !== "admin") {
+        try {
+          const response = await axios.get(`http://127.0.0.1:8000/api/teacher/subjects/${userId}/`);
+          setFilteredSubjects(response.data);
+        } catch (error) {
+          console.error("Error fetching filtered subjects:", error);
+        }
+      } else {
+        setFilteredSubjects(subjects);
+      }
+    };
+    fetchFilteredSubjects();
+  }, []);
+
   const handleSaveExam = async () => {
     if (selectedQuestions.length === 0) {
       alert("Debe añadir al menos una pregunta al examen.");
@@ -54,6 +73,7 @@ const AddExam: React.FC = () => {
     const newExam = {
       type: type,
       date: currentDate,
+      state: "P",
       teacher: role === "admin" ? teacher : userId, // Usar el ID del usuario si es profesor
       validation_teacher: validationTeacherId,
       subject: subject,
@@ -112,7 +132,7 @@ const AddExam: React.FC = () => {
             value={subject || ""}
           >
             <option value="">Seleccione una asignatura</option>
-            {subjects.map((subject) => (
+            {filteredSubjects?.map((subject) => (
               <option key={subject.id} value={subject.id}>
                 {subject.name}
               </option>

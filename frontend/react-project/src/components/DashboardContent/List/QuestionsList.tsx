@@ -33,7 +33,7 @@ const QuestionList: React.FC = () => {
   const subjectsError =
     role === "admin" ? adminSubjectsError : teacherSubjectsError;
 
-  const subjectIds = subjects.map((subject: Subject) => subject.id);
+  const subjectIds = useMemo(() => subjects.map((subject: Subject) => subject.id), [subjects]);
   const {
     questions,
     loading: questionsLoading,
@@ -220,7 +220,7 @@ const QuestionList: React.FC = () => {
                       question={question}
                       topics={topics}
                       teachers={teachers}
-                      onDelete={handleDeleteQuestion}
+                      onDelete={handleDeleteQuestion} 
                       onEdit={handleEditQuestion}
                     />
                   ))}

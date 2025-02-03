@@ -42,12 +42,12 @@ import StudentExam from "./components/DashboardContent/Student/StudentExam";
 import TakeExam from "./components/DashboardContent/Student/TakeExam";
 import PrivateRoute from "./components/PrivateRoute";
 import DefineExamType from "./components/DashboardContent/Validation/DefineExamType";
-import GradeExams from "./components/DashboardContent/GradeExams";
-import ViewExamsDone from "./components/DashboardContent/ViewExamsDone";
-import SetGradeExam from "./components/DashboardContent/SetGradeExam";
+import GradeExams from "./components/DashboardContent/Grade/GradeExams";
+import ViewExamsDone from "./components/DashboardContent/View/ViewExamsDone";
+import SetGradeExam from "./components/DashboardContent/Grade/SetGradeExam";
 import ExamResults from "./components/DashboardContent/Student/ExamResults";
-import RegradeRequest from "./components/DashboardContent/RegradeRequest";
-import SetExamRegrade from "./components/DashboardContent/SetExamRegrade";
+import RegradeRequest from "./components/DashboardContent/ReGrade/RegradeRequest";
+import SetExamRegrade from "./components/DashboardContent/ReGrade/SetExamRegrade";
 
 const App: React.FC = () => {
   return (

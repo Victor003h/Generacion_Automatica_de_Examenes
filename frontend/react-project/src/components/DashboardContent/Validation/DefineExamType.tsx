@@ -37,11 +37,6 @@ const DefineExamType: React.FC = () => {
           "http://localhost:8000/api/exam/bystate/V"
         );
         const examList: Exam[] = response.data;
-        const filterexam= examList.map(
-          exam =>{
-            
-          }
-          )
         setExams(examList);
       } catch (err) {
         console.error("Error al obtener los exámenes:", err);

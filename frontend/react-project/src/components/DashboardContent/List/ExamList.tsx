@@ -144,7 +144,7 @@ const ExamList: React.FC = () => {
         const response = await axios.get(`http://localhost:8000/api/exam/observations/${examId}/`);
         const Observationslist :Observation[] = response.data;
         const lastobservation = Observationslist[Observationslist.length-1];
-        console.log(lastobservation);
+    
         
         alert(`${lastobservation.observations}`);
         

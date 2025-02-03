@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../styles/DashboardContent/SetGradeExam.css";
-import { Exam, Question, ExamDone, Teacher } from "../Interfaces";
+import "../../../styles/DashboardContent/SetGradeExam.css";
+import { Exam, Question, ExamDone, Teacher } from "../../Interfaces";
 
 interface QuestionResponse {
   id: number;

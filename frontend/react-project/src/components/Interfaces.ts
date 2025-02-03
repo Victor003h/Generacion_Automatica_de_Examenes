@@ -26,7 +26,10 @@ export interface Teacher {
   last_name2: string;
   speciality: string;
 }
-
+export interface Exam_isdone{
+  id: number;
+  isDone: boolean;  
+}
 export interface Exam {
   id: number;
   type: string;

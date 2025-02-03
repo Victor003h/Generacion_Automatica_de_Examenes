@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../styles/DashboardContent/RegradeRequest.css";
-import { ExamGrade, ExamDone } from "../Interfaces";
+import "../../../styles/DashboardContent/RegradeRequest.css";
+import { ExamGrade, ExamDone } from "../../Interfaces";
 
 interface ReevaluatedExam {
   id: number;

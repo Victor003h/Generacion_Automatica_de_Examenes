@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../../styles/DashboardContent/GradeExams.css";
-import { Subject } from "../Interfaces";
+import "../../../styles/DashboardContent/GradeExams.css";
+import { Subject } from "../../Interfaces";
 
 const GradeExams: React.FC = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);

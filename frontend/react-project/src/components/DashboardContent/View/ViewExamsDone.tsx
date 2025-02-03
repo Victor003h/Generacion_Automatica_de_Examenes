@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../styles/DashboardContent/ViewExams.css";
-import { ExamDone, Exam, Student } from "../Interfaces";
+import "../../../styles/DashboardContent/ViewExams.css";
+import { ExamDone, Exam, Student } from "../../Interfaces";
 
 const ViewExamsDone: React.FC = () => {
   const location = useLocation();
