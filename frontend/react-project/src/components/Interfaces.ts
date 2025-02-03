@@ -57,7 +57,7 @@ export interface ExamGrade {
 export interface Observation {
   id: number;
   date: string;
-  obsrvation: string;
+  observations: string;
   checked: boolean;
   exam: number;
 }

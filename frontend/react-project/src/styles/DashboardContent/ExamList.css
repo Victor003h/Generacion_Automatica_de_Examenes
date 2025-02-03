@@ -117,3 +117,17 @@ ul {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+.toast-container .Toastify__toast {
+  background-color: #323232; /* Color de fondo del cuadro */
+  color: #fff; /* Color del texto */
+  border-radius: 0; /* Sin bordes redondeados */
+  box-shadow: none; /* Sin sombra */
+}
+
+.toast-container .Toastify__toast-body {
+  padding: 10px; /* Añade un poco de relleno interno */
+}
+
+.toast-container .Toastify__close-button {
+  color: #fff; /* Color del botón de cierre */
+}

@@ -100,6 +100,7 @@ const ValidarExamenes: React.FC = () => {
         validation_teacher: exam.validation,
         subject: exam.subject,
         questions: exam.questions,
+        Date: Date.now()
       });
       alert("Examen validado exitosamente");
       setExams((prevExams) => prevExams.filter((ex) => ex.id !== exam.id));
@@ -133,9 +134,10 @@ const ValidarExamenes: React.FC = () => {
         validation_teacher: selectedExam.validation,
         subject: selectedExam.subject,
         questions: selectedExam.questions,
+        validation_time: Date.now()
       });
       await axios.post(`http://localhost:8000/api/observation/`, {
-        observation: observations,
+        observations: observations,
         checked: false,
         exam: selectedExam.id,
       });

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/ExamList.css";
-import { Exam } from "../../Interfaces";
+import { Exam, Observation} from "../../Interfaces";
 import { Link, useNavigate } from "react-router-dom";
 import useFetchAllExams from "../../../hooks/useFetchAllExams";
 import useFetchTeacherSubjects from "../../../hooks/useFetchTeacherSubjects";
@@ -14,7 +14,6 @@ const ExamList: React.FC = () => {
   const role = localStorage.getItem("role") || "";
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
-
   const {
     exams,
     loading: examsLoading,
@@ -140,6 +139,30 @@ const ExamList: React.FC = () => {
     { value: "type", label: "Tipo" },
     { value: "date", label: "Fecha" },
   ];
+  const handleobservation = async (examId:number) => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/exam/observations/${examId}/`);
+        const Observationslist :Observation[] = response.data;
+        const lastobservation = Observationslist[Observationslist.length-1];
+        console.log(lastobservation);
+        
+        alert(`${lastobservation.observations}`);
+        
+        
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.error(
+            "Error al obtener  las observaciones del examen:",
+            err.response?.data || err.message
+          );
+        } else if (err instanceof Error) {
+          console.error("Error al obtener las observiones del examen:", err.message);
+        } else {
+          console.error("Error desconocido al obtener las observaciones del examen.");
+        }
+      }
+  
+  } ;
 
   return (
     <div className="exam-list-container">
@@ -201,13 +224,25 @@ const ExamList: React.FC = () => {
                     >
                       Eliminar
                     </button>
+                    
+                    {(exam.state === "R") && (
+                       <button 
+                       className="Observation-botton"
+                       onClick= { () => handleobservation(exam.id)}
+                     >
+                       Observarciones
+                     </button>
+                    )}
+                  
                   </>
+
                 )}
               </div>
             </li>
           ))}
         </ul>
       )}
+   
       <div className="pagination">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
