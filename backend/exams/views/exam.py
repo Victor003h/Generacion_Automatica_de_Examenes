@@ -144,7 +144,8 @@ def subject_exams(request,pk):
     subject=get_object_or_404(Subject,pk=pk)
     exams=Exam.objects.filter(subject=subject)
     serializer=ExamSerializer(exams,many=True)
-    return Response(serializer.data,status=status.HTTP_200_OK)
+    result=[{"exam":exam.id,"date":exam.date,"creator":exam.teacher.first_name} for exam in exams]
+    return Response(result,status=status.HTTP_200_OK)
    
 @extend_schema(
     methods=['GET'],
