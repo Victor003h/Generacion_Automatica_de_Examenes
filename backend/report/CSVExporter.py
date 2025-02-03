@@ -11,10 +11,17 @@ class CSVExporter(Exporter):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename="{file_name}.csv"'
 
+        
+        
         writer = csv.writer(response)
         
+        if not data:
+        # Escribir un mensaje en el CSV indicando que no hay datos (opcional)
+            writer.writerow(["No hay datos disponibles"])
+        return response
         
         # Write the header of the CSV
+        
         headers=data[0].keys()
         writer.writerow(headers)
     

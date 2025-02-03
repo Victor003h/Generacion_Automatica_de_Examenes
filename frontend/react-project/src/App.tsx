@@ -160,6 +160,7 @@ const App: React.FC = () => {
             element={<ViewExamForValidation />}
           />
         </Route>
+        
         <Route
           path="exam-details"
           element={

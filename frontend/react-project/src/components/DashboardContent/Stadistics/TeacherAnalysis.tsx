@@ -53,7 +53,15 @@ const TeacherAnalysis: React.FC = () => {
           content: data,
         }
       );
-      console.log("Export successful:", response.data);
+      const blob = new Blob([response.data], { type: `application/${format}` });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `data.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
       // Aquí podrías manejar la descarga del archivo o cualquier otra acción de éxito
     } catch (error) {
       console.error("Error exporting data:", error);
