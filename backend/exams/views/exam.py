@@ -193,7 +193,7 @@ def validatedby(request,pk):
  
  
  
-
+@api_view(['GET'])
 def exam_compare(request):
     subjects = set(Exam.objects.values_list('subject__name', flat=True))
     report = []
