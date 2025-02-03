@@ -50,8 +50,6 @@ def export_document(request,extension):
         return Response({'error': str(e)}, status=400)
 
 
-
-
 @extend_schema(
     methods=['GET'],
     responses={
@@ -71,9 +69,7 @@ def subject_exams(request,pk):
     serializer=ExamSerializer(exams,many=True)
     result=[{"exam":exam.id,"date":exam.date,"creator":exam.teacher.first_name} for exam in exams]
     return Response(result,status=status.HTTP_200_OK)
-   
-   
-   
+      
 @extend_schema(
     methods=['GET'],
     responses={
@@ -91,9 +87,14 @@ def validatedby(request,pk):
     exams=Exam.objects.filter(teacher=teacher)
     serializers=ExamSerializer(exams,many=True)
     return Response(serializers.data,status=status.HTTP_200_OK)
+ 
     
 @api_view(['GET'])
 def exam_compare(request):
+    """
+    _Get a comparison of exams from different subjects.
+
+    """
     subjects = set(Exam.objects.values_list('subject__name', flat=True))
     report = []
 

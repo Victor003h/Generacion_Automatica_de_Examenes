@@ -1,0 +1,38 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Diccionario de datos.}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}User}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Teacher}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Student}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Course}{2}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Subject}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Topic}{3}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Question}{3}{subsection.1.7}%
+\contentsline {subsection}{\numberline {1.8}Exam}{3}{subsection.1.8}%
+\contentsline {subsection}{\numberline {1.9}Observation}{4}{subsection.1.9}%
+\contentsline {subsection}{\numberline {1.10}AssignedExam}{4}{subsection.1.10}%
+\contentsline {subsection}{\numberline {1.11}ExamDone}{4}{subsection.1.11}%
+\contentsline {subsection}{\numberline {1.12}ExamQuestionResponse}{4}{subsection.1.12}%
+\contentsline {subsection}{\numberline {1.13}ExamGrade}{4}{subsection.1.13}%
+\contentsline {subsection}{\numberline {1.14}ReevaluatedExam}{5}{subsection.1.14}%
+\contentsline {section}{\numberline {2}Esquema con el diseño de la aplicación}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Backend}{5}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Diagrama de Clases}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Usuario}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Curso}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Asigantura}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Tema}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Exámen}{6}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Observación}{6}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Asignación de Exámen}{6}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}ExamDone}{6}{subsection.3.8}%
+\contentsline {subsection}{\numberline {3.9}ExamQuestionResponse}{6}{subsection.3.9}%
+\contentsline {subsection}{\numberline {3.10}ExamGrade(Calificación)}{6}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.11}ReevaluatedExam(Recalificación)}{7}{subsection.3.11}%
+\contentsline {section}{\numberline {4}Esquema de las clases definidas}{7}{section.4}%
+\contentsline {section}{\numberline {5}Solución Propuesta}{7}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Descripción de los Módulos}{8}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Módulo de Autenticación}{8}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Módulo de Gestión de Preguntas}{8}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Módulo de Gestión de Exámenes}{8}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Módulo de Reportes y Exportación de Datos}{8}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Información Adicional para el Mantenimiento del Sistema}{8}{section.6}%
