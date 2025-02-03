@@ -2,7 +2,7 @@
 from django.urls import path
 from .views import *
 
-#Add a name parameter to each path in urlpatterns
+
 
 urlpatterns = [
     path('register/teacher/', teacher_register, name='teacher_register'),

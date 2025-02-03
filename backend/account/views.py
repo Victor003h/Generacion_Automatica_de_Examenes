@@ -32,6 +32,9 @@ from drf_spectacular.utils import extend_schema,OpenApiResponse
 )
 @api_view(['POST'])
 def login(request):
+    """
+    User login management
+    """
     print(request)
     user= get_object_or_404(User,username=request.data['username'])
     

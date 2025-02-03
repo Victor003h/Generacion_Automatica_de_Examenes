@@ -15,7 +15,6 @@ class Topic(models.Model):
     
     
 class Question(models.Model):
-    #Content, Type, Difficulty
     content=models.TextField()
     TYPE_OF_QUESTION=[
         ("MO","Multiple Option"),
