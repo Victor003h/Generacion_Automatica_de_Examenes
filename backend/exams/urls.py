@@ -13,11 +13,8 @@ urlpatterns = [
     path('exam/<int:pk>/',exam_detail),
     path('exam/questions/<int:pk>/',exam_questions),
     path('exam/bystate/<str:state>/',exams_by_state),
-    path('subject/exams/<int:pk>/',subject_exams),
     path('exam/isvalidated/<int:pk>/',isvalidated),
-    path('exam/validatedby/<int:pk>/',validatedby),
     path('exam/observations/<int:pk>/',exam_observations),
-    path('exam/compare/',exam_compare),
     
    
    
@@ -26,12 +23,10 @@ urlpatterns = [
     path('exam_grade/is_reevaluated/<int:pk>/',is_reevaluated),
     
     path('student/exams_grade/<int:pk>/',student_examgrade),
-    path('teacher/exam_graded/detail/<int:months>',teacher_examgraded_detail),
     
     path('assigned_exam/',assigned_exam_list),
     path('assigned_exam/<int:pk>/',assigned_exam_detail),
-    path('questions/most_used/<int:pk>',common_questions),
-    path('questions/unused/<int:pk>/',unused_questions),
+    
     
     path('observation/',observation_list),
     path('observation/<int:pk>/',observation_detail),
