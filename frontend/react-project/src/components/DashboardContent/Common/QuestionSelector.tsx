@@ -9,16 +9,19 @@ interface QuestionSelectorProps {
   setSelectedQuestions: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
+// Component for selecting questions
 const QuestionSelector: React.FC<QuestionSelectorProps> = ({
   subjectIds,
   selectedQuestions,
   setSelectedQuestions,
 }) => {
+  // Fetch questions based on subject IDs
   const { questions, loading, error } = useFetchQuestions(subjectIds);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<keyof Question>("content");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // Handle question selection
   const handleSelectQuestion = (questionId: number) => {
     setSelectedQuestions((prev) =>
       prev.includes(questionId)
@@ -27,12 +30,14 @@ const QuestionSelector: React.FC<QuestionSelectorProps> = ({
     );
   };
 
+  // Filter questions based on search term
   const filteredQuestions = useMemo(() => {
     return questions.filter((question: Question) =>
       question.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [questions, searchTerm]);
 
+  // Sort questions based on selected sort key and order
   const sortedQuestions = useMemo(() => {
     return filteredQuestions.slice().sort((a, b) => {
       const aValue = a[sortKey];
@@ -67,6 +72,7 @@ const QuestionSelector: React.FC<QuestionSelectorProps> = ({
             onChange={(e) => setSortKey(e.target.value as keyof Question)}
           >
             <option value="content">Contenido</option>
+            {/* Add more sort options if needed */}
           </select>
           <button
             onClick={() =>

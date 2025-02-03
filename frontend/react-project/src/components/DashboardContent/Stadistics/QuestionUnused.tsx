@@ -5,6 +5,7 @@ import { Subject, Question } from "../../Interfaces";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/ExportButtons.css"; // Importar los estilos de exportación
 
+// Componente funcional que muestra preguntas no usadas y permite exportarlas
 const QuestionsUnused: React.FC = () => {
   const [subjectId, setSubjectId] = useState<number | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -13,6 +14,7 @@ const QuestionsUnused: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [exportVisible, setExportVisible] = useState<boolean>(false);
 
+  // Efecto para obtener las asignaturas al montar el componente
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
@@ -27,6 +29,7 @@ const QuestionsUnused: React.FC = () => {
     fetchSubjects();
   }, []);
 
+  // Efecto para obtener las preguntas no usadas cuando se selecciona una asignatura
   useEffect(() => {
     const fetchQuestions = async () => {
       if (subjectId === null) return;
@@ -50,10 +53,12 @@ const QuestionsUnused: React.FC = () => {
     fetchQuestions();
   }, [subjectId]);
 
+  // Manejar el cambio de asignatura seleccionada
   const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSubjectId(Number(e.target.value));
   };
 
+  // Manejar la exportación de preguntas en el formato seleccionado
   const handleExport = async (format: string) => {
     try {
       const response = await axios.post(
@@ -69,6 +74,7 @@ const QuestionsUnused: React.FC = () => {
     }
   };
 
+  // Formatear la dificultad de las preguntas
   const formatDifficulty = (difficulty: string) => {
     switch (difficulty) {
       case "E":

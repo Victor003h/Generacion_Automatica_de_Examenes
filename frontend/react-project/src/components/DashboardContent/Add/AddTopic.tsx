@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import { useState } from "react";
 import axios from "axios";
 import useFetchSubjects from "../../../hooks/useFetchSubjects";
@@ -6,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddTopic.css";
 
+// Define el componente funcional para añadir un tema
 const AddTopic: React.FC = () => {
   const navigate = useNavigate();
   const { subjects, loading, error } = useFetchSubjects();
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
   const [topicName, setTopicName] = useState<string>("");
 
+  // Maneja el envío del formulario para añadir un tema
   const handleAddTopic = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -36,6 +39,7 @@ const AddTopic: React.FC = () => {
     }
   };
 
+  // Renderiza el formulario para añadir un tema
   return (
     <div className="add-topic-container">
       <BackButton />

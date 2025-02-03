@@ -1,11 +1,14 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "./RegisterModal";
-import useRegisterModal from "../hooks/RegisterModalTrigger";
+import useRegisterModal from "./RegisterModalTrigger";
 
+// Define el componente funcional para el inicio de sesión
 const Login: React.FC = () => {
+  // Define los estados locales para los datos del formulario y el error
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -16,6 +19,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // Actualiza el tipo de error
   const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
 
+  // Maneja los cambios en los campos del formulario
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -25,6 +29,7 @@ const Login: React.FC = () => {
     });
   };
 
+  // Maneja el envío del formulario
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log(formData);
@@ -69,6 +74,7 @@ const Login: React.FC = () => {
     }
   };
 
+  // Renderiza el formulario de inicio de sesión
   return (
     <div className="login-container">
       <div className="login-box">

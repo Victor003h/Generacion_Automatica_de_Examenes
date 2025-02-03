@@ -10,6 +10,7 @@ import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 import "../../../styles/DashboardContent/Pagination.css"; // Importar los estilos de paginación
 
+// Componente para listar exámenes
 const ExamList: React.FC = () => {
   const role = localStorage.getItem("role") || "";
   const storedUserId = localStorage.getItem("userId");
@@ -35,6 +36,7 @@ const ExamList: React.FC = () => {
     [key: number]: { subjectName: string; teacherName: string };
   }>({});
 
+  // Obtener detalles de los exámenes
   useEffect(() => {
     const fetchExamDetails = async () => {
       for (const exam of exams) {
@@ -59,6 +61,7 @@ const ExamList: React.FC = () => {
     }
   }, [exams]);
 
+  // Filtrar exámenes según el rol del usuario
   const filteredExams = useMemo(() => {
     if (role === "admin") {
       return exams;
@@ -70,6 +73,7 @@ const ExamList: React.FC = () => {
     return exams.filter((exam) => subjectIds.includes(exam.subject));
   }, [exams, role, subjects]);
 
+  // Ordenar exámenes
   const sortedExams = useMemo(() => {
     return filteredExams.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Exam];
@@ -89,6 +93,7 @@ const ExamList: React.FC = () => {
     });
   }, [filteredExams, sortKey, sortOrder]);
 
+  // Paginación de exámenes
   const paginatedExams = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -97,10 +102,12 @@ const ExamList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedExams.length / itemsPerPage);
 
+  // Manejar clic en editar examen
   const handleEditClick = (examId: number) => {
     navigate("../edit-exam", { state: { examId } });
   };
 
+  // Manejar eliminación de examen
   const handleDeleteExam = async (examId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este examen?"
@@ -125,6 +132,7 @@ const ExamList: React.FC = () => {
     }
   };
 
+  // Manejar visualización de examen
   const handleViewExam = (examId: number) => {
     navigate("../view-exam", {
       state: { examId },
@@ -139,30 +147,27 @@ const ExamList: React.FC = () => {
     { value: "type", label: "Tipo" },
     { value: "date", label: "Fecha" },
   ];
-  const handleobservation = async (examId:number) => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/exam/observations/${examId}/`);
-        const Observationslist :Observation[] = response.data;
-        const lastobservation = Observationslist[Observationslist.length-1];
-    
-        
-        alert(`${lastobservation.observations}`);
-        
-        
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          console.error(
-            "Error al obtener  las observaciones del examen:",
-            err.response?.data || err.message
-          );
-        } else if (err instanceof Error) {
-          console.error("Error al obtener las observiones del examen:", err.message);
-        } else {
-          console.error("Error desconocido al obtener las observaciones del examen.");
-        }
+  // Manejar observaciones del examen
+  const handleObservation = async (examId: number) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/exam/observations/${examId}/`);
+      const observationsList: Observation[] = response.data;
+      const lastObservation = observationsList[observationsList.length - 1];
+
+      alert(`${lastObservation.observations}`);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "Error al obtener las observaciones del examen:",
+          err.response?.data || err.message
+        );
+      } else if (err instanceof Error) {
+        console.error("Error al obtener las observaciones del examen:", err.message);
+      } else {
+        console.error("Error desconocido al obtener las observaciones del examen.");
       }
-  
-  } ;
+    }
+  };
 
   return (
     <div className="exam-list-container">
@@ -228,7 +233,7 @@ const ExamList: React.FC = () => {
                     {(exam.state === "R") && (
                        <button 
                        className="Observation-botton"
-                       onClick= { () => handleobservation(exam.id)}
+                       onClick= { () => handleObservation(exam.id)}
                      >
                        Observarciones
                      </button>

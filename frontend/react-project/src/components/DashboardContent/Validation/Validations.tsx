@@ -35,6 +35,7 @@ const ValidarExamenes: React.FC = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
+        // Obtener exámenes en estado pendiente
         const response = await axios.get(
           "http://localhost:8000/api/exam/bystate/P"
         );
@@ -55,9 +56,11 @@ const ValidarExamenes: React.FC = () => {
       teacherId: number
     ) => {
       try {
+        // Obtener detalles del subject
         const subjectResponse = await axios.get(
           `http://localhost:8000/api/subject/${subjectId}/`
         );
+        // Obtener detalles del teacher
         const teacherResponse = await axios.get(
           `http://localhost:8000/api/account/teacher/${teacherId}`
         );
@@ -93,6 +96,7 @@ const ValidarExamenes: React.FC = () => {
 
   const handleValidateExam = async (exam: Exam) => {
     try {
+      // Validar el examen
       await axios.put(`http://localhost:8000/api/exam/${exam.id}/`, {
         type: exam.type,
         state: "V",
@@ -127,6 +131,7 @@ const ValidarExamenes: React.FC = () => {
     if (!selectedExam) return;
 
     try {
+      // Descartar el examen
       await axios.put(`http://localhost:8000/api/exam/${selectedExam.id}/`, {
         type: selectedExam.type,
         state: "R",
@@ -136,6 +141,7 @@ const ValidarExamenes: React.FC = () => {
         questions: selectedExam.questions,
         validation_time: Date.now()
       });
+      // Registrar observaciones
       await axios.post(`http://localhost:8000/api/observation/`, {
         observations: observations,
         checked: false,
@@ -146,7 +152,7 @@ const ValidarExamenes: React.FC = () => {
       setExams((prevExams) =>
         prevExams.filter((exam) => exam.id !== selectedExam.id)
       );
-      setObservations(""); // Clear observations after submission
+      setObservations(""); // Limpiar observaciones después de enviar
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(

@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/AddExam.css";
@@ -7,10 +8,12 @@ import useFetchTeachersBySubject from "../../../hooks/useFetchSubjectTeachers";
 import BackButton from "../../BackButton";
 import { Subject } from "../../Interfaces";
 
+// Define el componente funcional para añadir un examen
 const AddExam: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [type, setType] = useState(location.state?.type || "");
   const [teacher, setTeacher] = useState<number | null>(
     location.state?.teacher || null
@@ -19,10 +22,10 @@ const AddExam: React.FC = () => {
     location.state?.subject || null
   );
   const initialSelectedQuestions = location.state?.selectedQuestions || [];
-  const [selectedQuestions, setSelectedQuestions] = useState<number[]>(
+  const [selectedQuestions] = useState<number[]>(
     initialSelectedQuestions
   );
-  const [currentDate, setCurrentDate] = useState<string>(
+  const [currentDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
 
@@ -41,13 +44,16 @@ const AddExam: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
 
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]> ();
-  
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>();
+
+  // Filtra las asignaturas según el rol del usuario
   useEffect(() => {
     const fetchFilteredSubjects = async () => {
       if (userId && role !== "admin") {
         try {
-          const response = await axios.get(`http://127.0.0.1:8000/api/teacher/subjects/${userId}/`);
+          const response = await axios.get(
+            `http://127.0.0.1:8000/api/teacher/subjects/${userId}/`
+          );
           setFilteredSubjects(response.data);
         } catch (error) {
           console.error("Error fetching filtered subjects:", error);
@@ -59,6 +65,7 @@ const AddExam: React.FC = () => {
     fetchFilteredSubjects();
   }, []);
 
+  // Maneja el guardado del examen
   const handleSaveExam = async () => {
     if (selectedQuestions.length === 0) {
       alert("Debe añadir al menos una pregunta al examen.");
@@ -102,12 +109,14 @@ const AddExam: React.FC = () => {
     }
   };
 
+  // Maneja la adición de preguntas al examen
   const handleAddQuestions = () => {
     navigate("../add-exam-questions", {
       state: { type, currentDate, teacher, subject, selectedQuestions },
     });
   };
 
+  // Renderiza el formulario para añadir un examen
   return (
     <div className="add-exam-container">
       <BackButton />

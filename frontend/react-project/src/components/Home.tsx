@@ -1,13 +1,16 @@
+// Importa las librerías necesarias de React y otros módulos
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
 import RegisterModal from "./RegisterModal";
-import useRegisterModal from "../hooks/RegisterModalTrigger";
+import useRegisterModal from "./RegisterModalTrigger";
 
+// Define el componente funcional para la página de inicio
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { open, handleRegisterClick, handleCloseModal } = useRegisterModal();
 
+  // Renderiza la página de inicio
   return (
     <div className="home-container">
       <header className="home-header">

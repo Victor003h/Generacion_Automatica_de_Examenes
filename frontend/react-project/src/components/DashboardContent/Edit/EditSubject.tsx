@@ -6,6 +6,7 @@ import { Teacher } from "../../Interfaces";
 import useFetchCourses from "../../../hooks/useFetchCourses";
 import BackButton from "../../BackButton";
 
+// Componente para editar una asignatura
 const EditSubject: React.FC = () => {
   const [name, setName] = useState("");
   const [studyProgram, setStudyProgram] = useState("");
@@ -24,6 +25,7 @@ const EditSubject: React.FC = () => {
   } = useFetchCourses();
   const subjectId = localStorage.getItem("editSubjectId");
 
+  // Efecto para obtener la lista de profesores y los detalles de la asignatura
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -57,6 +59,7 @@ const EditSubject: React.FC = () => {
     fetchSubject();
   }, [subjectId]);
 
+  // Manejar la edición de la asignatura
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -84,6 +87,7 @@ const EditSubject: React.FC = () => {
     }
   };
 
+  // Manejar el cambio de selección de profesores
   const handleTeacherChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTeachers = Array.from(
       e.target.selectedOptions,

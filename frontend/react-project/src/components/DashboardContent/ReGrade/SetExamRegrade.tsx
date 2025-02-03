@@ -12,6 +12,7 @@ interface QuestionResponse {
   exam_Done: number;
 }
 
+// Componente funcional para recalificar un examen
 const SetExamRegrade: React.FC = () => {
   const location = useLocation();
   const { reevaluatedExam, examGrade, examDone } = location.state;
@@ -22,9 +23,9 @@ const SetExamRegrade: React.FC = () => {
   const [selectedTeacher, setSelectedTeacher] = useState<number | null>(null);
   const [totalGrade, setTotalGrade] = useState<number>(0);
   const role = localStorage.getItem("role");
-  //const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
+  // Efecto para obtener los detalles del examen al montar el componente
   useEffect(() => {
     const fetchExamDetails = async () => {
       try {
@@ -40,6 +41,7 @@ const SetExamRegrade: React.FC = () => {
     fetchExamDetails();
   }, [examDone]);
 
+  // Efecto para obtener las preguntas y respuestas del examen
   useEffect(() => {
     if (exam) {
       const fetchQuestions = async () => {
@@ -66,6 +68,7 @@ const SetExamRegrade: React.FC = () => {
     }
   }, [exam, examDone]);
 
+  // Efecto para obtener los profesores si el usuario es admin
   useEffect(() => {
     if (role === "admin") {
       const fetchTeachers = async () => {
@@ -83,11 +86,13 @@ const SetExamRegrade: React.FC = () => {
     }
   }, [role]);
 
+  // Efecto para calcular la nota total del examen
   useEffect(() => {
     const total = responses.reduce((sum, response) => sum + response.note, 0);
     setTotalGrade(total);
   }, [responses]);
 
+  // Manejar el cambio de nota de una respuesta
   const handleNoteChange = (responseId: number, note: number) => {
     setResponses((prevResponses) =>
       prevResponses.map((response) =>
@@ -96,6 +101,7 @@ const SetExamRegrade: React.FC = () => {
     );
   };
 
+  // Manejar la recalificación del examen
   const handleRegradeExam = async () => {
     try {
       await Promise.all(

@@ -24,6 +24,7 @@ const Dashboard: React.FC = () => {
 
   const { subjects, loading, error } = useFetchHeadOfSubjects(Number(userId));
 
+  // Cargar el nombre y rol del usuario desde el almacenamiento local
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     const storedRole = localStorage.getItem("role");
@@ -31,6 +32,7 @@ const Dashboard: React.FC = () => {
     if (storedRole) setRole(storedRole);
   }, []);
 
+  // Alternar la visibilidad de la barra lateral
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };

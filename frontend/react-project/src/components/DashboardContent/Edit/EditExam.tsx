@@ -4,8 +4,9 @@ import "../../../styles/DashboardContent/AddExam.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import useFetchTeachersBySubject from "../../../hooks/useFetchSubjectTeachers";
 import BackButton from "../../BackButton";
-import { Exam, Question, Subject } from "../../Interfaces";
+import { Exam, Subject } from "../../Interfaces";
 
+// Component for editing exam details
 const EditExam: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -14,6 +15,7 @@ const EditExam: React.FC = () => {
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? parseInt(storedUserId) : null;
 
+  // State variables for exam details
   const [type, setType] = useState("");
   const [date, setDate] = useState("");
   const [teacher, setTeacher] = useState<number | null>(null);
@@ -23,16 +25,16 @@ const EditExam: React.FC = () => {
   const [validation_date, setValidationDate] = useState("");
   const [subjects, setSubjects] = useState<Subject[]>();
   const [subjectsLoading, setSubjectsLoading] = useState(true);
-  const [subjectsError, setSubjectsError] = useState<unknown> (null);
+  const [subjectsError, setSubjectsError] = useState<unknown>(null);
 
+  // Fetch teachers based on selected subject
   const {
     teachers,
     loading: teachersLoading,
     error: teachersError,
   } = useFetchTeachersBySubject(subject);
 
-
-
+  // Fetch exam details on component mount
   useEffect(() => {
     const fetchExamDetails = async () => {
       try {
@@ -48,23 +50,21 @@ const EditExam: React.FC = () => {
         setStates(exam.state);
         setValidationDate(exam.validation_date);
       } catch (err: unknown) {
-        console.error("Error al obtener los detalles del examen:", err);
+        console.error("Error fetching exam details:", err);
       }
     };
 
     fetchExamDetails();
   }, [examId]);
 
+  // Fetch subjects based on teacher
   useEffect(() => {
     const fetchSubjectsByTeacher = async () => {
-      
-      
       if (userId) {
         try {
           const response = await axios.get(
             `http://127.0.0.1:8000/api/teacher/subjects/${userId}/`
           );
-        
           setSubjects(response.data);
         } catch (err: unknown) {
           setSubjectsError(err);
@@ -75,35 +75,34 @@ const EditExam: React.FC = () => {
     };
 
     fetchSubjectsByTeacher();
-  }, []);
+  }, [userId]);
 
-  useEffect(() => { 
+  // Ensure selected questions belong to the selected subject
+  useEffect(() => {
     const questionsubject = async () => {
-      const questionid:number = selectedQuestions[0];
-      console.log(subject);
-      
+      const questionid: number = selectedQuestions[0];
       try {
         const response = await axios.get(
           `http://localhost:8000/api/question/${questionid}/`
         );
-        const questionsubjectid = response.data.subject; 
+        const questionsubjectid = response.data.subject;
         return questionsubjectid;
       } catch (err: unknown) {
-        console.error("Error al obtener la asignatura de la pregunta:", err);
+        console.error("Error fetching question subject:", err);
       }
     };
 
     const fetchSubjectId = async () => {
       const subject_id = await questionsubject();
       if (subject !== subject_id) {
-        console.log(subject_id);
         setSelectedQuestions([]);
       }
     };
 
-    if(selectedQuestions.length > 0) fetchSubjectId();
+    if (selectedQuestions.length > 0) fetchSubjectId();
   }, [subject]);
 
+  // Handle saving exam details
   const handleSaveExam = async () => {
     if (selectedQuestions.length === 0) {
       alert("Debe añadir al menos una pregunta al examen.");
@@ -137,17 +136,18 @@ const EditExam: React.FC = () => {
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
-          "Error al actualizar el examen:",
+          "Error updating exam:",
           err.response?.data || err.message
         );
       } else if (err instanceof Error) {
-        console.error("Error al actualizar el examen:", err.message);
+        console.error("Error updating exam:", err.message);
       } else {
-        console.error("Error desconocido al actualizar el examen.");
+        console.error("Unknown error updating exam.");
       }
     }
   };
 
+  // Handle adding questions to the exam
   const handleAddQuestions = async () => {
     try {
       const updatedExam = {
@@ -162,8 +162,6 @@ const EditExam: React.FC = () => {
         subject: subject,
         questions: selectedQuestions,
       };
-      console.log(updatedExam);
-      
 
       await axios.put(`http://localhost:8000/api/exam/${examId}/`, updatedExam);
 
@@ -171,10 +169,7 @@ const EditExam: React.FC = () => {
         state: { examId, type, date, teacher, subject, selectedQuestions },
       });
     } catch (err: unknown) {
-      console.error(
-        "Error al guardar el examen antes de añadir preguntas:",
-        err
-      );
+      console.error("Error saving exam before adding questions:", err);
     }
   };
 

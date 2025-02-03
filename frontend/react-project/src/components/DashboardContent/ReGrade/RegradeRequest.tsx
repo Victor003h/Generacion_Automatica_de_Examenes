@@ -11,6 +11,7 @@ interface ReevaluatedExam {
   teacher: number;
 }
 
+// Componente funcional para mostrar solicitudes de recalificación de exámenes
 const RegradeRequest: React.FC = () => {
   const [reevaluatedExams, setReevaluatedExams] = useState<ReevaluatedExam[]>(
     []
@@ -21,6 +22,7 @@ const RegradeRequest: React.FC = () => {
   const role = localStorage.getItem("role");
   const navigate = useNavigate();
 
+  // Efecto para obtener las solicitudes de recalificación al montar el componente
   useEffect(() => {
     const fetchReevaluatedExams = async () => {
       try {
@@ -64,6 +66,7 @@ const RegradeRequest: React.FC = () => {
     fetchReevaluatedExams();
   }, [userId, role]);
 
+  // Manejar la acción de recalificar un examen
   const handleRegrade = (
     reevaluatedExam: ReevaluatedExam,
     examGrade: ExamGrade,

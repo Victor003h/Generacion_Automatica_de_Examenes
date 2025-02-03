@@ -9,6 +9,7 @@ import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 import "../../../styles/DashboardContent/Pagination.css"; // Importar los estilos de paginación
 
+// Componente para listar cursos
 const CourseList: React.FC = () => {
   const { courses, loading, error } = useFetchCourses();
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const CourseList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+  // Ordenar cursos
   const sortedCourses = useMemo(() => {
     return courses.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Course];
@@ -38,6 +40,7 @@ const CourseList: React.FC = () => {
     });
   }, [courses, sortKey, sortOrder]);
 
+  // Paginación de cursos
   const paginatedCourses = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -46,10 +49,12 @@ const CourseList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedCourses.length / itemsPerPage);
 
+  // Manejar clic en editar curso
   const handleEditClick = (courseId: number) => {
     navigate("/admin-dashboard/edit-course", { state: { courseId } });
   };
 
+  // Manejar eliminación de curso
   const handleDeleteCourse = async (courseId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este curso?"

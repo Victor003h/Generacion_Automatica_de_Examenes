@@ -3,7 +3,9 @@ import axios from "axios";
 import "../styles/Register.css";
 import "../styles/Errors.css";
 
+// Componente funcional para el registro de profesores
 const RegisterProfessor: React.FC = () => {
+  // Estado para almacenar los datos del formulario
   const [formData, setFormData] = useState({
     first_name: "",
     email: "",
@@ -13,12 +15,15 @@ const RegisterProfessor: React.FC = () => {
     speciality: "",
   });
 
+  // Estado para almacenar la repetición de la contraseña
   const [passwordRepeat, setPasswordRepeat] = useState("");
 
+  // Maneja el cambio en el campo de repetición de contraseña
   const handlePasswordRepeatChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordRepeat(e.target.value);
   };
 
+  // Maneja el cambio en los campos del formulario
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -26,17 +31,21 @@ const RegisterProfessor: React.FC = () => {
     });
   };
 
+  // Estado para almacenar mensajes de error
   const [error, setError] = useState("");
 
+  // Maneja el envío del formulario
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
+    // Verifica que las contraseñas coincidan
     if (formData.password !== passwordRepeat) {
       setError("Las contraseñas no coinciden");
       return;
     }
 
+    // Envía los datos del formulario al servidor
     const data = { ...formData };
     axios
       .post("http://localhost:8000/api/account/register/teacher/", data, {

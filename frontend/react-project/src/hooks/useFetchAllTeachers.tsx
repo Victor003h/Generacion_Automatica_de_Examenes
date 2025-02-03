@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Teacher } from "../components/Interfaces";
 
+// Hook personalizado para obtener todos los profesores
 const useFetchAllTeachers = () => {
+  // Estado para almacenar los profesores
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  // Estado para indicar si se están cargando los profesores
   const [loading, setLoading] = useState<boolean>(true);
+  // Estado para almacenar errores
   const [error, setError] = useState<string | null>(null);
 
+  // Efecto para obtener los profesores cuando se monta el componente
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -35,6 +40,7 @@ const useFetchAllTeachers = () => {
     fetchTeachers();
   }, []);
 
+  // Retornar los profesores, el estado de carga y los errores
   return { teachers, loading, error };
 };
 

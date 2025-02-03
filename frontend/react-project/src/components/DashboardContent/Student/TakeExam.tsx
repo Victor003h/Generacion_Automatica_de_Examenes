@@ -34,6 +34,7 @@ const TakeExam: React.FC = () => {
     fetchQuestions();
   }, [examId, navigate]);
 
+  // Maneja el cambio de respuesta para una pregunta específica
   const handleAnswerChange = (questionId: number, answer: string) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
@@ -41,13 +42,13 @@ const TakeExam: React.FC = () => {
     }));
   };
 
+  // Maneja la finalización del examen y el envío de respuestas
   const handleFinishExam = async () => {
     try {
       // Crear el examen respondido
       const examDoneResponse = await axios.post(
         `http://localhost:8000/api/exam_done/`,
         {
-          //date: new Date().toISOString().split("T")[0],
           exam: examId,
           student: parseInt(userId),
         }

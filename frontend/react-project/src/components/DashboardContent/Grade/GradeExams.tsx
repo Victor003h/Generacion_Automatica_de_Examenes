@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/GradeExams.css";
 import { Subject } from "../../Interfaces";
 
+// Componente para listar las asignaturas y ver los exámenes realizados
 const GradeExams: React.FC = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role");
 
+  // Obtener las asignaturas según el rol del usuario
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
@@ -27,6 +29,7 @@ const GradeExams: React.FC = () => {
     fetchSubjects();
   }, [userId, role]);
 
+  // Manejar la visualización de los exámenes de una asignatura
   const handleViewExams = (subjectId: number) => {
     navigate("../view-exams-done", { state: { subjectId } });
   };

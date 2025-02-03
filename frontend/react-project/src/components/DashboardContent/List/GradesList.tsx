@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/GradesList.css";
 
+// Interfaz para representar una calificación
 interface Grade {
   id: number;
   studentName: string;
@@ -9,9 +10,11 @@ interface Grade {
   score: number;
 }
 
+// Componente para listar calificaciones
 const GradesList: React.FC = () => {
   const [grades, setGrades] = useState<Grade[]>([]);
 
+  // Obtener calificaciones desde el servidor
   useEffect(() => {
     const fetchGrades = async () => {
       try {

@@ -5,7 +5,9 @@ import "../../../styles/DashboardContent/AddStudent.css";
 import BackButton from "../../BackButton";
 import useFetchCourses from "../../../hooks/useFetchCourses";
 
+// Componente para editar los detalles de un estudiante
 const EditStudent: React.FC = () => {
+  // Variables de estado para los detalles del estudiante
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +19,7 @@ const EditStudent: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Obtener cursos usando un hook personalizado
   const {
     courses,
     loading: coursesLoading,
@@ -24,6 +27,7 @@ const EditStudent: React.FC = () => {
   } = useFetchCourses();
   const studentId = localStorage.getItem("editStudentId");
 
+  // Obtener los detalles del estudiante al montar el componente
   useEffect(() => {
     const fetchStudent = async () => {
       if (!studentId) return;
@@ -34,25 +38,26 @@ const EditStudent: React.FC = () => {
         const student = response.data;
         setFirstName(student.first_name);
         setEmail(student.email);
-        setPassword(""); // No se debería obtener la contraseña del backend por seguridad
+        setPassword(""); // No obtener la contraseña por razones de seguridad
         setLastName(student.last_name);
         setLastName2(student.last_name2);
         setAge(student.age);
         setCourseId(student.course);
       } catch (err) {
-        console.error("Error al obtener el estudiante:", err);
+        console.error("Error al obtener los detalles del estudiante:", err);
       }
     };
 
     fetchStudent();
   }, [studentId]);
 
+  // Manejar el envío del formulario para actualizar los detalles del estudiante
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (!studentId) throw new Error("No student ID found in local storage");
+      if (!studentId) throw new Error("No se encontró el ID del estudiante en el almacenamiento local");
       await axios.put(
         `http://localhost:8000/api/account/student/${studentId}`,
         {
@@ -67,11 +72,9 @@ const EditStudent: React.FC = () => {
       );
 
       alert("Estudiante actualizado con éxito");
-      navigate("../students"); // Redirige a la lista de estudiantes
+      navigate("../students"); // Redirigir a la lista de estudiantes
     } catch (err) {
-      setError(
-        "Error al actualizar el estudiante. Por favor, intenta de nuevo."
-      );
+      setError("Error al actualizar el estudiante. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -82,6 +85,7 @@ const EditStudent: React.FC = () => {
       <BackButton />
       <h1>Editar Estudiante</h1>
       <form className="edit-student-form" onSubmit={handleSubmit}>
+        {/* Campos del formulario para los detalles del estudiante */}
         <div className="form-group">
           <label htmlFor="firstName">Nombre</label>
           <input

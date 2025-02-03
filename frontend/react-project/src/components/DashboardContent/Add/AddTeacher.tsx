@@ -1,10 +1,13 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/AddTeacher.css";
 import BackButton from "../../BackButton";
 
+// Define el componente funcional para añadir un profesor
 const AddTeacher: React.FC = () => {
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,6 +18,7 @@ const AddTeacher: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Maneja el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -38,6 +42,7 @@ const AddTeacher: React.FC = () => {
     }
   };
 
+  // Renderiza el formulario para añadir un profesor
   return (
     <div className="add-teacher-container">
       <BackButton />

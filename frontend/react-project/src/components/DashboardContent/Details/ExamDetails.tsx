@@ -3,8 +3,11 @@ import axios from "axios";
 import "../../../styles/DashboardContent/ExamDetails.css";
 import { Exam } from "../../Interfaces";
 
+// Component for displaying exam details
 const ExamDetails: React.FC = () => {
   const [exam, setExam] = useState<Exam | null>(null);
+
+  // Fetch exam details on component mount
   useEffect(() => {
     const fetchExams = async () => {
       const examId = localStorage.getItem("examId");
@@ -17,32 +20,34 @@ const ExamDetails: React.FC = () => {
           );
           setExam(foundExam || null);
         } catch (error) {
-          console.error("Error al obtener los detalles del examen:", error);
+          console.error("Error fetching exam details:", error);
         }
       }
     };
     fetchExams();
   }, []);
+
   if (!exam) {
-    return <div>Cargando detalles del examen...</div>;
+    return <div>Loading exam details...</div>;
   }
+
   return (
     <div className="exam-details-container">
-      <h2>Detalles del Examen</h2>
+      <h2>Exam Details</h2>
       <div className="exam-details">
         <p>
-          <strong>Asignatura:</strong> {exam.subject}
+          <strong>Subject:</strong> {exam.subject}
         </p>
         <p>
-          <strong>Tipo:</strong> {exam.type}
+          <strong>Type:</strong> {exam.type}
         </p>
         <p>
-          <strong>Fecha:</strong> {exam.date}
+          <strong>Date:</strong> {exam.date}
         </p>
         <p>
-          <strong>Profesor:</strong> {exam.teacher}
+          <strong>Teacher:</strong> {exam.teacher}
         </p>
-        {/* Añadir más detalles según sea necesario */}
+        {/* Add more details as needed */}
       </div>
     </div>
   );

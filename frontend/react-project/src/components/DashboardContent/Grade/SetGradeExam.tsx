@@ -12,6 +12,7 @@ interface QuestionResponse {
   exam_Done: number;
 }
 
+// Componente para calificar un examen
 const SetGradeExam: React.FC = () => {
   const location = useLocation();
   const { examDoneId } = location.state;
@@ -25,6 +26,7 @@ const SetGradeExam: React.FC = () => {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
+  // Obtener los detalles del examen realizado
   useEffect(() => {
     const fetchExamDoneDetails = async () => {
       try {
@@ -37,13 +39,14 @@ const SetGradeExam: React.FC = () => {
         );
         setExam(examResponse.data);
       } catch (error) {
-        console.error("Error fetching exam done details:", error);
+        console.error("Error al obtener los detalles del examen realizado:", error);
       }
     };
 
     fetchExamDoneDetails();
   }, [examDoneId]);
 
+  // Obtener las preguntas y respuestas del examen
   useEffect(() => {
     if (exam) {
       const fetchQuestions = async () => {
@@ -62,7 +65,7 @@ const SetGradeExam: React.FC = () => {
           );
           setQuestions(questionDetails);
         } catch (error) {
-          console.error("Error fetching questions and responses:", error);
+          console.error("Error al obtener las preguntas y respuestas:", error);
         }
       };
 
@@ -70,6 +73,7 @@ const SetGradeExam: React.FC = () => {
     }
   }, [exam, examDoneId]);
 
+  // Obtener la lista de profesores si el usuario es administrador
   useEffect(() => {
     if (role === "admin") {
       const fetchTeachers = async () => {
@@ -79,7 +83,7 @@ const SetGradeExam: React.FC = () => {
           );
           setTeachers(response.data);
         } catch (error) {
-          console.error("Error fetching teachers:", error);
+          console.error("Error al obtener la lista de profesores:", error);
         }
       };
 
@@ -87,11 +91,13 @@ const SetGradeExam: React.FC = () => {
     }
   }, [role]);
 
+  // Calcular la nota total del examen
   useEffect(() => {
     const total = responses.reduce((sum, response) => sum + response.note, 0);
     setTotalGrade(total);
   }, [responses]);
 
+  // Manejar el cambio de nota de una respuesta
   const handleNoteChange = (responseId: number, note: number) => {
     setResponses((prevResponses) =>
       prevResponses.map((response) =>
@@ -100,6 +106,7 @@ const SetGradeExam: React.FC = () => {
     );
   };
 
+  // Manejar la calificación del examen
   const handleGradeExam = async () => {
     try {
       await Promise.all(
@@ -124,22 +131,22 @@ const SetGradeExam: React.FC = () => {
         teacher: teacherId,
       });
 
-      alert("Exam graded successfully");
+      alert("Examen calificado con éxito");
       navigate("../view-exams-done");
     } catch (error) {
-      console.error("Error grading exam:", error);
+      console.error("Error al calificar el examen:", error);
     }
   };
 
   return (
     <div className="set-grade-exam-container">
-      <h2>Grade Exam</h2>
+      <h2>Calificar Examen</h2>
       {questions.map((question, index) => (
         <div key={question.id} className="question-container">
           <h3>{question.content}</h3>
-          <p>Response: {responses[index]?.response}</p>
+          <p>Respuesta: {responses[index]?.response}</p>
           <label>
-            Note:
+            Nota:
             <input
               type="number"
               value={responses[index]?.note || 0}
@@ -152,19 +159,19 @@ const SetGradeExam: React.FC = () => {
       ))}
       <div className="total-grade-container">
         <label>
-          Total Grade:
+          Nota Total:
           <input type="number" value={totalGrade} readOnly />
         </label>
       </div>
       {role === "admin" && (
         <div className="teacher-select-container">
           <label>
-            Select Teacher:
+            Seleccionar Profesor:
             <select
               value={selectedTeacher || ""}
               onChange={(e) => setSelectedTeacher(Number(e.target.value))}
             >
-              <option value="">Select a teacher</option>
+              <option value="">Seleccionar un profesor</option>
               {teachers.map((teacher) => (
                 <option key={teacher.id} value={teacher.id}>
                   {teacher.first_name} {teacher.last_name}
@@ -174,7 +181,7 @@ const SetGradeExam: React.FC = () => {
           </label>
         </div>
       )}
-      <button onClick={handleGradeExam}>Grade</button>
+      <button onClick={handleGradeExam}>Calificar</button>
     </div>
   );
 };

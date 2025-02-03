@@ -5,6 +5,7 @@ import { Course } from "../../Interfaces";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddCourse.css";
 
+// Component for editing course details
 const EditCourse: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,6 +17,7 @@ const EditCourse: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch course details on component mount
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
@@ -31,12 +33,12 @@ const EditCourse: React.FC = () => {
         if (axios.isAxiosError(err)) {
           setError(
             err.response?.data?.message ||
-              "Error al obtener los detalles del curso."
+              "Error fetching course details."
           );
         } else if (err instanceof Error) {
           setError(err.message);
         } else {
-          setError("Error desconocido al obtener los detalles del curso.");
+          setError("Unknown error fetching course details.");
         }
       } finally {
         setLoading(false);
@@ -46,11 +48,12 @@ const EditCourse: React.FC = () => {
     if (courseId) {
       fetchCourseDetails();
     } else {
-      setError("No se proporcionó el ID del curso.");
+      setError("No course ID provided.");
       setLoading(false);
     }
   }, [courseId]);
 
+  // Handle form submission for updating course details
   const handleEditCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -60,33 +63,33 @@ const EditCourse: React.FC = () => {
         startDate,
         endDate,
       });
-      alert("Curso actualizado con éxito");
+      alert("Course updated successfully");
       navigate("../courses");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error(
-          "Error al actualizar el curso:",
+          "Error updating course:",
           err.response?.data || err.message
         );
       } else if (err instanceof Error) {
-        console.error("Error al actualizar el curso:", err.message);
+        console.error("Error updating course:", err.message);
       } else {
-        console.error("Error desconocido al actualizar el curso.");
+        console.error("Unknown error updating course.");
       }
     }
   };
 
-  if (loading) return <div>Cargando detalles del curso...</div>;
+  if (loading) return <div>Loading course details...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="edit-course-container">
       <BackButton />
-      <h1>Editar Curso</h1>
+      <h1>Edit Course</h1>
       {course ? (
         <form onSubmit={handleEditCourse}>
           <div className="form-group">
-            <label htmlFor="name">Nombre del Curso:</label>
+            <label htmlFor="name">Course Name:</label>
             <input
               id="name"
               type="text"
@@ -96,7 +99,7 @@ const EditCourse: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="startDate">Fecha de Inicio:</label>
+            <label htmlFor="startDate">Start Date:</label>
             <input
               id="startDate"
               type="datetime-local"
@@ -106,7 +109,7 @@ const EditCourse: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="endDate">Fecha de Fin:</label>
+            <label htmlFor="endDate">End Date:</label>
             <input
               id="endDate"
               type="datetime-local"
@@ -116,11 +119,11 @@ const EditCourse: React.FC = () => {
             />
           </div>
           <button type="submit" className="submit-button">
-            Actualizar Curso
+            Update Course
           </button>
         </form>
       ) : (
-        <div>No se encontraron detalles del curso.</div>
+        <div>No course details found.</div>
       )}
     </div>
   );

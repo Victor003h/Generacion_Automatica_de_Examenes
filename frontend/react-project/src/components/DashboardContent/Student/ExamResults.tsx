@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+// Importación de estilos y componentes necesarios
 import "../../../styles/DashboardContent/ExamResults.css";
 import { ExamDone, Exam, Teacher } from "../../Interfaces";
 

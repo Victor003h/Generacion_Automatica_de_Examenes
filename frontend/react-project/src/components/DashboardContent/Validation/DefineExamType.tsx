@@ -30,6 +30,7 @@ const DefineExamType: React.FC = () => {
   const [type, setType] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  // Efecto para obtener los exámenes
   useEffect(() => {
     const fetchExams = async () => {
       try {
@@ -46,6 +47,7 @@ const DefineExamType: React.FC = () => {
     fetchExams();
   }, []);
 
+  // Efecto para obtener los detalles de los exámenes
   useEffect(() => {
     const fetchExamDetails = async (
       examId: number,
@@ -76,6 +78,7 @@ const DefineExamType: React.FC = () => {
     });
   }, [exams]);
 
+  // Filtrar exámenes por asignaturas del usuario
   const filteredExams = useMemo(() => {
     if (subjectIds.length === 0) {
       return [];
@@ -83,17 +86,20 @@ const DefineExamType: React.FC = () => {
     return exams.filter((exam) => subjectIds.includes(exam.subject));
   }, [exams, subjectIds]);
 
+  // Manejar la acción de ver un examen
   const handleViewExam = (examId: number) => {
     navigate("../view-exam", {
       state: { examId },
     });
   };
 
+  // Manejar la acción de definir el tipo de examen
   const handleDefineType = (examId: number) => {
     setSelectedExamid(examId);
     setShowDefineModal(true);
   };
 
+  // Manejar la acción de definir el tipo de examen en el servidor
   const handleDefineExamen = async () => {
     if (!selectedExamid) return;
     try {

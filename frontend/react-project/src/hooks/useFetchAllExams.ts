@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Exam } from "../components/Interfaces";
 
+// Hook personalizado para obtener todos los exámenes
 const useFetchAllExams = () => {
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Función para obtener los exámenes desde el servidor
     const fetchExams = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/exam/");

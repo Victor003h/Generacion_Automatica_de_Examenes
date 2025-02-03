@@ -9,6 +9,7 @@ interface SortOptionsProps {
   options: { value: string; label: string }[];
 }
 
+// Component for sorting options
 const SortOptions: React.FC<SortOptionsProps> = ({
   sortKey,
   setSortKey,

@@ -27,6 +27,7 @@ const ExamListBySubject: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+  // Efecto para obtener las asignaturas al montar el componente
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
@@ -41,6 +42,7 @@ const ExamListBySubject: React.FC = () => {
     fetchSubjects();
   }, []);
 
+  // Efecto para obtener los exámenes cuando cambia el subjectId
   useEffect(() => {
     const fetchExams = async () => {
       if (subjectId === null) return;
@@ -64,10 +66,12 @@ const ExamListBySubject: React.FC = () => {
     fetchExams();
   }, [subjectId]);
 
+  // Manejar el cambio de asignatura seleccionada
   const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSubjectId(Number(e.target.value));
   };
 
+  // Manejar la exportación de datos en diferentes formatos
   const handleExport = async (format: string) => {
     try {
       const response = await axios.post(
@@ -84,6 +88,7 @@ const ExamListBySubject: React.FC = () => {
     }
   };
 
+  // Ordenar los exámenes según la clave y el orden seleccionados
   const sortedExams = useMemo(() => {
     return exams.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof ExamData];
@@ -103,6 +108,7 @@ const ExamListBySubject: React.FC = () => {
     });
   }, [exams, sortKey, sortOrder]);
 
+  // Paginación de los exámenes ordenados
   const paginatedExams = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;

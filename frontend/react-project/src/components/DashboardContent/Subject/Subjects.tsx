@@ -14,10 +14,12 @@ import "../../../styles/DashboardContent/CrudButtons.css";
 import "../../../styles/DashboardContent/Pagination.css";
 
 const SubjectList: React.FC = () => {
+  // Obtener el ID del usuario y el rol desde el almacenamiento local
   const userId = localStorage.getItem("userId") || "";
   const role = localStorage.getItem("role") || "";
   const navigate = useNavigate();
 
+  // Obtener las asignaturas según el rol del usuario
   const {
     subjects: adminSubjects,
     loading: adminSubjectsLoading,
@@ -38,16 +40,19 @@ const SubjectList: React.FC = () => {
 
   const { courses } = useFetchCourses();
 
+  // Estados para la ordenación y paginación
   const [sortKey, setSortKey] = useState<string>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+  // Obtener el nombre del curso basado en su ID
   const getCourseName = (courseId: number) => {
     const course = courses.find((course) => course.id === courseId);
     return course ? course.name : "Curso no encontrado";
   };
 
+  // Ordenar las asignaturas según la clave y el orden seleccionados
   const sortedSubjects = useMemo(() => {
     return subjects.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Subject];
@@ -67,6 +72,7 @@ const SubjectList: React.FC = () => {
     });
   }, [subjects, sortKey, sortOrder]);
 
+  // Paginación de las asignaturas
   const paginatedSubjects = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -75,11 +81,13 @@ const SubjectList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedSubjects.length / itemsPerPage);
 
+  // Manejar el clic en el botón de editar
   const handleEditClick = (subjectId: number) => {
     localStorage.setItem("editSubjectId", subjectId.toString());
     navigate("../edit-subject");
   };
 
+  // Manejar la eliminación de una asignatura
   const handleDeleteSubject = async (subjectId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar esta asignatura?"
@@ -182,6 +190,7 @@ const SubjectItem: React.FC<SubjectItemProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+  // Obtener los temas y profesores de la asignatura
   const {
     topics,
     loading: topicsLoading,

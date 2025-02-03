@@ -20,6 +20,7 @@ const QuestionMostUsed: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [exportVisible, setExportVisible] = useState<boolean>(false);
 
+  // Efecto para obtener las asignaturas al montar el componente
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
@@ -34,6 +35,7 @@ const QuestionMostUsed: React.FC = () => {
     fetchSubjects();
   }, []);
 
+  // Efecto para obtener las preguntas más usadas cuando cambia el subjectId
   useEffect(() => {
     const fetchQuestions = async () => {
       if (subjectId === null) return;
@@ -57,10 +59,12 @@ const QuestionMostUsed: React.FC = () => {
     fetchQuestions();
   }, [subjectId]);
 
+  // Manejar el cambio de asignatura seleccionada
   const handleSubjectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSubjectId(Number(e.target.value));
   };
 
+  // Manejar la exportación de datos en diferentes formatos
   const handleExport = async (format: string) => {
     try {
       const response = await axios.post(
@@ -76,6 +80,7 @@ const QuestionMostUsed: React.FC = () => {
     }
   };
 
+  // Renderizar la dificultad en español
   const renderDifficulty = (difficulty: string) => {
     switch (difficulty) {
       case "M":

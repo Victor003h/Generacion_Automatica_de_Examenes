@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFetchQuestions from "../../../hooks/useFetchQuestions";
@@ -5,6 +6,7 @@ import { Question } from "../../Interfaces";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddExamQuestions.css";
 
+// Define el componente funcional para añadir preguntas a un examen
 const AddExamQuestions: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ const AddExamQuestions: React.FC = () => {
     teacher,
   } = location.state || { selectedQuestions: [], subject: null };
 
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>(
     initialSelectedQuestions
   );
@@ -27,6 +30,7 @@ const AddExamQuestions: React.FC = () => {
     subject ? [subject] : []
   );
 
+  // Maneja la selección de preguntas
   const handleSelectQuestion = (questionId: number) => {
     setSelectedQuestions((prev) =>
       prev.includes(questionId)
@@ -35,12 +39,14 @@ const AddExamQuestions: React.FC = () => {
     );
   };
 
+  // Filtra las preguntas según el término de búsqueda
   const filteredQuestions = useMemo(() => {
     return questions.filter((question: Question) =>
       question.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [questions, searchTerm]);
 
+  // Ordena las preguntas según la clave de ordenación y el orden
   const sortedQuestions = useMemo(() => {
     return filteredQuestions.slice().sort((a, b) => {
       const aValue = a[sortKey];
@@ -56,12 +62,14 @@ const AddExamQuestions: React.FC = () => {
     });
   }, [filteredQuestions, sortKey, sortOrder]);
 
+  // Maneja la confirmación de la selección de preguntas
   const handleConfirmSelection = () => {
     navigate("../add-exam", {
       state: { selectedQuestions, subject, type, date, teacher },
     });
   };
 
+  // Renderiza el formulario para añadir preguntas a un examen
   if (loading) return <div>Cargando preguntas...</div>;
   if (error) return <div>{error}</div>;
 

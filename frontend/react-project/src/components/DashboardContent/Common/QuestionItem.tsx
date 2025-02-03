@@ -8,9 +8,10 @@ interface QuestionItemProps {
   topics: { [key: number]: string };
   teachers: { [key: number]: { firstName: string; lastName: string } };
   onDelete: (id: number) => void;
-  onEdit: (id: number) => void; // Agregamos la función de editar
+  onEdit: (id: number) => void; // Function for editing question
 }
 
+// Component for displaying a question item
 const QuestionItem: React.FC<QuestionItemProps> = ({
   question,
   topics,
@@ -21,6 +22,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role");
 
+  // Translate question type to readable format
   const translateType = (type: string) => {
     switch (type) {
       case "E":
@@ -34,6 +36,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
     }
   };
 
+  // Translate difficulty level to readable format
   const translateDifficulty = (difficulty: string) => {
     switch (difficulty) {
       case "E":
@@ -47,6 +50,7 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
     }
   };
 
+  // Check if the user is allowed to perform actions on the question
   const isActionAllowed =
     userId === String(question.teacher) || role === "admin";
 
@@ -83,13 +87,13 @@ const QuestionItem: React.FC<QuestionItemProps> = ({
         </button>
         {Number(question.teacher) === Number(userId) && (
           <button
-          className="delete-button"
-          onClick={() => onDelete(question.id)}
-          disabled={!isActionAllowed}
-        >
-          Eliminar
-        </button>
-      )}
+            className="delete-button"
+            onClick={() => onDelete(question.id)}
+            disabled={!isActionAllowed}
+          >
+            Eliminar
+          </button>
+        )}
       </div>
     </div>
   );

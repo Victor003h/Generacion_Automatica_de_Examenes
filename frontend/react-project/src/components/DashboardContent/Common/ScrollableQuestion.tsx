@@ -5,9 +5,11 @@ interface ScrollableQuestionProps {
   content: string;
 }
 
+// Component for displaying a scrollable question
 const ScrollableQuestion: React.FC<ScrollableQuestionProps> = ({ content }) => {
   const [expanded, setExpanded] = useState(false);
 
+  // Toggle the expanded state
   const toggleExpand = () => {
     setExpanded(!expanded);
   };

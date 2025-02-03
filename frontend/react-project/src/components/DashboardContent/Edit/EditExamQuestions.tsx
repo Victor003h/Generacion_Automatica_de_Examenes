@@ -6,6 +6,7 @@ import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddExamQuestions.css";
 import axios from "axios";
 
+// Component for editing exam questions
 const EditExamQuestions: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const EditExamQuestions: React.FC = () => {
     teacher,
   } = location.state || { selectedQuestions: [], subject: null };
 
+  // State variables for selected questions and search/sort options
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>(
     initialSelectedQuestions
   );
@@ -25,10 +27,12 @@ const EditExamQuestions: React.FC = () => {
   const [sortKey, setSortKey] = useState<keyof Question>("content");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // Fetch questions based on subject
   const { questions, loading, error } = useFetchQuestions(
     subject ? [subject] : []
   );
 
+  // Handle question selection
   const handleSelectQuestion = (questionId: number) => {
     setSelectedQuestions((prev) =>
       prev.includes(questionId)
@@ -37,12 +41,14 @@ const EditExamQuestions: React.FC = () => {
     );
   };
 
+  // Filter questions based on search term
   const filteredQuestions = useMemo(() => {
     return questions.filter((question: Question) =>
       question.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [questions, searchTerm]);
 
+  // Sort questions based on selected sort key and order
   const sortedQuestions = useMemo(() => {
     return filteredQuestions.slice().sort((a, b) => {
       const aValue = a[sortKey];
@@ -58,6 +64,7 @@ const EditExamQuestions: React.FC = () => {
     });
   }, [filteredQuestions, sortKey, sortOrder]);
 
+  // Handle confirmation of selected questions
   const handleConfirmSelection = async () => {
     try {
       const updatedExam = {

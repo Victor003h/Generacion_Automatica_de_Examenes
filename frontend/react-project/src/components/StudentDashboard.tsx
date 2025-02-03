@@ -1,23 +1,29 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { FaClipboardList, FaBookOpen, FaChartBar } from "react-icons/fa"; // Importamos íconos de react-icons
+import { FaClipboardList, FaBookOpen, FaChartBar } from "react-icons/fa"; // Importa íconos de react-icons
 import "../styles/Dashboard.css";
 import "../styles/DashboardContent/Dropdown.css";
 import LogoutButton from "./DashboardContent/Common/LogoutButton";
 
+// Define el componente funcional del dashboard del estudiante
 const StudentDashboard: React.FC = () => {
+  // Define los estados locales para el sidebar y el nombre del usuario
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [name, setName] = useState("");
 
+  // Usa useEffect para obtener el nombre del usuario almacenado en localStorage
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     if (storedName) setName(storedName);
   }, []);
 
+  // Función para alternar la visibilidad del sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Renderiza el dashboard del estudiante
   return (
     <div className="dashboard">
       <nav className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>

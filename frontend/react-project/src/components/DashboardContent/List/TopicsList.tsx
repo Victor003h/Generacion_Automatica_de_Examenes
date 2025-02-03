@@ -10,6 +10,7 @@ import SortOptions from "../Common/SortOptions"; // Asegúrate de tener este com
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 
+// Componente para listar temas
 const TopicsList: React.FC = () => {
   const userId = localStorage.getItem("userId") || ""; // Obtener el userId desde localstorage
   const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
@@ -36,6 +37,7 @@ const TopicsList: React.FC = () => {
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // Manejar eliminación de tema
   const handleDeleteTopic = async (topicId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este tema?"
@@ -51,6 +53,7 @@ const TopicsList: React.FC = () => {
     }
   };
 
+  // Manejar edición de tema
   const handleEditTopic = (topicId: number) => {
     navigate("../edit-topic", { state: { topicId } });
   };
@@ -100,6 +103,7 @@ const TopicsList: React.FC = () => {
   );
 };
 
+// Props para el componente SubjectTopics
 interface SubjectTopicsProps {
   subjectId: number;
   onDelete: (id: number) => void;
@@ -107,6 +111,7 @@ interface SubjectTopicsProps {
   sortOrder: "asc" | "desc";
 }
 
+// Componente para listar los temas de una asignatura
 const SubjectTopics: React.FC<SubjectTopicsProps> = ({
   subjectId,
   onDelete,
@@ -115,6 +120,7 @@ const SubjectTopics: React.FC<SubjectTopicsProps> = ({
 }) => {
   const { topics, loading, error } = useFetchTopicsBySubject(subjectId);
 
+  // Ordenar temas
   const sortedTopics = useMemo(() => {
     return topics.slice().sort((a, b) => {
       const aValue = a.name;
@@ -147,12 +153,14 @@ const SubjectTopics: React.FC<SubjectTopicsProps> = ({
   );
 };
 
+// Props para el componente TopicItem
 interface TopicItemProps {
   topic: Topic;
   onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }
 
+// Componente para mostrar un tema
 const TopicItem: React.FC<TopicItemProps> = ({ topic, onDelete, onEdit }) => {
   return (
     <div className="topic-item">

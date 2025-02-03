@@ -46,8 +46,8 @@ import GradeExams from "./components/DashboardContent/Grade/GradeExams";
 import ViewExamsDone from "./components/DashboardContent/View/ViewExamsDone";
 import SetGradeExam from "./components/DashboardContent/Grade/SetGradeExam";
 import ExamResults from "./components/DashboardContent/Student/ExamResults";
-import RegradeRequest from "./components/DashboardContent/RegradeRequest";
-import SetExamRegrade from "./components/DashboardContent/SetExamRegrade";
+import RegradeRequest from "./components/DashboardContent/ReGrade/RegradeRequest";
+import SetExamRegrade from "./components/DashboardContent/ReGrade/SetExamRegrade";
 import ExamListBySubject from "./components/DashboardContent/Stadistics/ExamListBySubject";
 import TeacherAnalysis from "./components/DashboardContent/Stadistics/TeacherAnalysis";
 import QuestionMostUsed from "./components/DashboardContent/Stadistics/QuestionMostUsed";
@@ -124,6 +124,10 @@ const App: React.FC = () => {
           <Route path="exams" element={<ExamList />} />
           <Route path="teachers" element={<TeacherList />} />
           <Route path="subjects" element={<SubjectList />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="students" element={<StudentList />} />
+          <Route path="topics" element={<TopicsList />} />
+          <Route path="questions" element={<QuestionsList />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="students" element={<StudentList />} />
           <Route path="topics" element={<TopicsList />} />

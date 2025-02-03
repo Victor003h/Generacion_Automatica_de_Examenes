@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddCourse.css";
 
+// Componente para añadir un nuevo curso
 const AddCourse: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
+  // Maneja el evento de añadir un curso
   const handleAddCourse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

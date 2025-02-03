@@ -16,6 +16,7 @@ const ViewExamsDone: React.FC = () => {
   const [exams, setExams] = useState<Exam[]>([]);
   const [students, setStudents] = useState<{ [key: number]: Student }>({});
 
+  // Efecto para obtener los exámenes no calificados
   useEffect(() => {
     if (!subjectId) {
       console.error("No subjectId provided.");
@@ -36,6 +37,7 @@ const ViewExamsDone: React.FC = () => {
     fetchExamsDone();
   }, [subjectId]);
 
+  // Efecto para obtener los detalles de los exámenes
   useEffect(() => {
     const fetchExamDetails = async () => {
       const examDetails: Exam[] = await Promise.all(
@@ -59,6 +61,7 @@ const ViewExamsDone: React.FC = () => {
     }
   }, [examsDone]);
 
+  // Efecto para obtener los detalles de los estudiantes
   useEffect(() => {
     const fetchStudentDetails = async () => {
       const studentDetails: { [key: number]: Student } = {};
@@ -82,6 +85,7 @@ const ViewExamsDone: React.FC = () => {
     }
   }, [examsDone]);
 
+  // Manejar la acción de calificar un examen
   const handleGradeExam = (examDoneId: number) => {
     navigate("../set-grade-exam", { state: { examDoneId } });
   };

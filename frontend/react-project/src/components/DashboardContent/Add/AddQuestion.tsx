@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState } from "react";
 import axios from "axios";
 import "../../../styles/DashboardContent/AddQuestions.css";
@@ -7,7 +8,9 @@ import useFetchTeachersBySubject from "../../../hooks/useFetchSubjectTeachers"; 
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../BackButton";
 
+// Define el componente funcional para añadir una pregunta
 const AddQuestion: React.FC = () => {
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
   const [questionText, setQuestionText] = useState<string>("");
@@ -38,6 +41,7 @@ const AddQuestion: React.FC = () => {
     error: teachersError,
   } = useFetchTeachersBySubject(selectedSubject); // Usar el nuevo hook
 
+  // Maneja el guardado de la pregunta
   const handleSaveQuestion = async () => {
     const newQuestion = {
       content: questionText,
@@ -71,6 +75,7 @@ const AddQuestion: React.FC = () => {
     }
   };
 
+  // Renderiza el formulario para añadir una pregunta
   return (
     <div className="add-question-container">
       <BackButton />

@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Topic } from "../components/Interfaces";
 
+// Hook personalizado para obtener los temas de una asignatura
 const useFetchTopicsBySubject = (subjectId: number | null) => {
+  // Estado para almacenar los temas
   const [topics, setTopics] = useState<Topic[]>([]);
+  // Estado para manejar la carga
   const [loading, setLoading] = useState<boolean>(true);
+  // Estado para manejar errores
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (subjectId !== null) {
+      // Función para obtener los temas
       const fetchTopics = async () => {
         try {
           const response = await axios.get(
@@ -46,6 +51,7 @@ const useFetchTopicsBySubject = (subjectId: number | null) => {
     }
   }, [subjectId]);
 
+  // Retornar los temas, el estado de carga y el error
   return { topics, loading, error };
 };
 

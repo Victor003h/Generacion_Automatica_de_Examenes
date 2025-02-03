@@ -1,8 +1,11 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
 import "../../styles/ManageAccount.css";
 
+// Define el componente funcional para gestionar la cuenta del profesor
 const ManageAccountTeacher: React.FC = () => {
+  // Define los estados locales para los datos del formulario
   const [formData, setFormData] = useState({
     username: localStorage.getItem("username") || "",
     email: localStorage.getItem("email") || "",
@@ -13,6 +16,7 @@ const ManageAccountTeacher: React.FC = () => {
     speciality: localStorage.getItem("speciality") || "",
   });
 
+  // Maneja los cambios en los campos del formulario
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -20,6 +24,7 @@ const ManageAccountTeacher: React.FC = () => {
     });
   };
 
+  // Maneja la actualización de los datos del formulario
   const handleUpdate = (field: string) => {
     const data = { [field]: formData[field as keyof typeof formData] };
 
@@ -43,6 +48,7 @@ const ManageAccountTeacher: React.FC = () => {
       });
   };
 
+  // Renderiza el formulario para gestionar la cuenta del profesor
   return (
     <div className="manage-account-container">
       <h2>Gestionar Cuenta (Profesor)</h2>

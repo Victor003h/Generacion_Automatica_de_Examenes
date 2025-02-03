@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../../styles/DashboardContent/AddTeacher.css";
 import BackButton from "../../BackButton";
 
+// Componente para editar un profesor
 const EditTeacher: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -15,8 +16,10 @@ const EditTeacher: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Obtener el ID del profesor desde el almacenamiento local
   const teacherId = localStorage.getItem("editTeacherId");
 
+  // Efecto para obtener los detalles del profesor
   useEffect(() => {
     const fetchTeacher = async () => {
       if (!teacherId) return;
@@ -38,6 +41,7 @@ const EditTeacher: React.FC = () => {
     fetchTeacher();
   }, [teacherId]);
 
+  // Manejar la edición del profesor
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

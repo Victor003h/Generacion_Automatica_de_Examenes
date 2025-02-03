@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,9 @@ import "../../../styles/DashboardContent/AddStudent.css";
 import useFetchCourses from "../../../hooks/useFetchCourses";
 import BackButton from "../../BackButton";
 
+// Define el componente funcional para añadir un estudiante
 const AddStudent: React.FC = () => {
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +26,7 @@ const AddStudent: React.FC = () => {
     error: coursesError,
   } = useFetchCourses();
 
+  // Maneja el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -47,6 +51,7 @@ const AddStudent: React.FC = () => {
     }
   };
 
+  // Renderiza el formulario para añadir un estudiante
   return (
     <div className="add-student-container">
       <BackButton />

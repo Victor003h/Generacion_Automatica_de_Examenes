@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Course } from "../components/Interfaces";
 
+// Hook personalizado para obtener todos los cursos
 const useFetchCourses = () => {
+  // Estado para almacenar los cursos
   const [courses, setCourses] = useState<Course[]>([]);
+  // Estado para manejar el estado de carga
   const [loading, setLoading] = useState<boolean>(true);
+  // Estado para manejar errores
   const [error, setError] = useState<string | null>(null);
 
+  // Efecto para obtener los cursos al montar el componente
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -40,6 +45,7 @@ const useFetchCourses = () => {
     fetchCourses();
   }, []);
 
+  // Retornar el estado de los cursos, carga y error
   return { courses, loading, error };
 };
 

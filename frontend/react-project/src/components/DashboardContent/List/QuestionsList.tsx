@@ -11,11 +11,13 @@ import SortOptions from "../Common/SortOptions";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 
+// Componente para listar preguntas
 const QuestionList: React.FC = () => {
   const userId = localStorage.getItem("userId") || "";
   const role = localStorage.getItem("role") || "";
   const navigate = useNavigate();
 
+  // Obtener asignaturas según el rol del usuario
   const {
     subjects: adminSubjects,
     loading: adminSubjectsLoading,
@@ -33,6 +35,7 @@ const QuestionList: React.FC = () => {
   const subjectsError =
     role === "admin" ? adminSubjectsError : teacherSubjectsError;
 
+  // Obtener preguntas de las asignaturas
   const subjectIds = useMemo(() => subjects.map((subject: Subject) => subject.id), [subjects]);
   const {
     questions,
@@ -48,6 +51,7 @@ const QuestionList: React.FC = () => {
   const [sortKey, setSortKey] = useState<string>("content");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  // Obtener temas de las preguntas
   useEffect(() => {
     const fetchTopics = async () => {
       if (questions && Object.keys(questions).length > 0 && !fetchedTopics) {
@@ -90,6 +94,7 @@ const QuestionList: React.FC = () => {
     fetchTopics();
   }, [questions, fetchedTopics]);
 
+  // Obtener profesores de las preguntas
   const fetchTeachers = useCallback(async () => {
     const teacherIds = Array.from(
       new Set(
@@ -137,6 +142,7 @@ const QuestionList: React.FC = () => {
     }
   }, [fetchTeachers, questions]);
   useEffect(() => {console.log(questions)}, [questions] );
+  // Ordenar preguntas
   const sortedQuestions = useMemo(() => {
     const allQuestions = Object.values(questions).flat();
 
@@ -158,6 +164,7 @@ const QuestionList: React.FC = () => {
     });
   }, [questions, sortKey, sortOrder]);
 
+  // Manejar eliminación de pregunta
   const handleDeleteQuestion = async (questionId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar esta pregunta?"
@@ -173,6 +180,7 @@ const QuestionList: React.FC = () => {
     }
   };
 
+  // Manejar edición de pregunta
   const handleEditQuestion = (questionId: number) => {
     navigate("../edit-question", { state: { questionId } });
   };

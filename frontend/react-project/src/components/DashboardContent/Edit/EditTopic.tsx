@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/AddTopic.css";
 
+// Componente para editar un tema
 const EditTopic: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,8 +16,10 @@ const EditTopic: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Obtener el ID del tema desde la ubicación
   const topicId = location.state?.topicId;
 
+  // Efecto para obtener los detalles del tema
   useEffect(() => {
     const fetchTopicDetails = async () => {
       try {
@@ -47,6 +50,7 @@ const EditTopic: React.FC = () => {
     }
   }, [topicId]);
 
+  // Manejar la edición del tema
   const handleEditTopic = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

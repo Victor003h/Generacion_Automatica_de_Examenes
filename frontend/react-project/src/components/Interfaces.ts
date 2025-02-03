@@ -7,6 +7,7 @@ export interface Subject {
   head_of_subject: number;
   teachers_subject: number[];
 }
+
 // Interface para los estudiantes
 export interface Student {
   id: number;
@@ -18,6 +19,7 @@ export interface Student {
   course: number;
 }
 
+// Interface para los profesores
 export interface Teacher {
   id: number;
   first_name: string;
@@ -26,10 +28,14 @@ export interface Teacher {
   last_name2: string;
   speciality: string;
 }
-export interface Exam_isdone{
+
+// Interface para el estado del examen
+export interface Exam_isdone {
   id: number;
-  isDone: boolean;  
+  isDone: boolean;
 }
+
+// Interface para los exámenes
 export interface Exam {
   id: number;
   type: string;
@@ -42,6 +48,7 @@ export interface Exam {
   questions: number[];
 }
 
+// Interface para los exámenes realizados
 export interface ExamDone {
   id: number;
   date: string;
@@ -49,14 +56,16 @@ export interface ExamDone {
   student: number;
 }
 
+// Interface para las calificaciones de los exámenes
 export interface ExamGrade {
   id: number;
   date: string;
   finalnote: number;
   examdone: number;
   teacher: number;
-  // interface para Observaciones
 }
+
+// Interface para las observaciones
 export interface Observation {
   id: number;
   date: string;
@@ -64,6 +73,7 @@ export interface Observation {
   checked: boolean;
   exam: number;
 }
+
 // Interface para los temas
 export interface Topic {
   id: number;
@@ -90,6 +100,7 @@ export interface User {
   role: string;
 }
 
+// Interface para los cursos
 export interface Course {
   id: number;
   name: string;

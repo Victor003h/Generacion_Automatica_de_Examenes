@@ -1,3 +1,4 @@
+// Importa las librerías necesarias de React y otros módulos
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +7,9 @@ import { Teacher } from "../../Interfaces";
 import useFetchCourses from "../../../hooks/useFetchCourses";
 import BackButton from "../../BackButton";
 
+// Define el componente funcional para añadir una asignatura
 const AddSubject: React.FC = () => {
+  // Define los estados locales para los datos del formulario y el estado de carga
   const [name, setName] = useState("");
   const [studyProgram, setStudyProgram] = useState("");
   const [courseId, setCourseId] = useState<number | "">("");
@@ -23,6 +26,7 @@ const AddSubject: React.FC = () => {
     error: coursesError,
   } = useFetchCourses();
 
+  // Obtiene la lista de profesores al montar el componente
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -38,6 +42,7 @@ const AddSubject: React.FC = () => {
     fetchTeachers();
   }, []);
 
+  // Maneja el envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -62,6 +67,7 @@ const AddSubject: React.FC = () => {
     }
   };
 
+  // Maneja el cambio en la selección de profesores
   const handleTeacherChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTeachers = Array.from(
       e.target.selectedOptions,
@@ -70,6 +76,7 @@ const AddSubject: React.FC = () => {
     setTeachersSubject(selectedTeachers);
   };
 
+  // Renderiza el formulario para añadir una asignatura
   return (
     <div className="add-subject-container">
       <BackButton />

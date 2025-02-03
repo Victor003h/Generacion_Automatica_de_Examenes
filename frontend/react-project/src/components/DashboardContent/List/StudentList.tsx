@@ -10,6 +10,7 @@ import SortOptions from "../Common/SortOptions";
 import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 
+// Componente para listar estudiantes
 const StudentList: React.FC = () => {
   const { students, loading, error } = useFetchAllStudents();
   const { courses } = useFetchCourses();
@@ -21,11 +22,13 @@ const StudentList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+  // Obtener el nombre del curso
   const getCourseName = (courseId: number) => {
     const course = courses.find((course) => course.id === courseId);
     return course ? course.name : "Curso no encontrado";
   };
 
+  // Ordenar estudiantes
   const sortedStudents = useMemo(() => {
     return students.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Student];
@@ -45,6 +48,7 @@ const StudentList: React.FC = () => {
     });
   }, [students, sortKey, sortOrder]);
 
+  // Paginación de estudiantes
   const paginatedStudents = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -53,11 +57,13 @@ const StudentList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedStudents.length / itemsPerPage);
 
+  // Manejar clic en editar estudiante
   const handleEditClick = (studentId: number) => {
     localStorage.setItem("editStudentId", studentId.toString());
     navigate("../edit-student");
   };
 
+  // Manejar eliminación de estudiante
   const handleDeleteStudent = async (studentId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este estudiante?"
@@ -156,6 +162,7 @@ interface StudentItemProps {
   onDeleteClick: (id: number) => void;
 }
 
+// Componente para mostrar un estudiante
 const StudentItem: React.FC<StudentItemProps> = ({
   student,
   courseName,

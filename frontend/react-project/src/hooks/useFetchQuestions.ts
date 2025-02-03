@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { Question } from "../components/Interfaces";
 
+// Hook personalizado para obtener las preguntas de las materias
 const useFetchQuestions = (subjectIds: number[]) => {
+  // Estado para almacenar las preguntas
   const [questions, setQuestions] = useState<Question[]>([]);
+  // Estado para indicar si se están cargando las preguntas
   const [loading, setLoading] = useState(true);
+  // Estado para almacenar errores
   const [error, setError] = useState<string | null>(null);
 
+  // Efecto para obtener las preguntas cuando cambian los IDs de las materias
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -42,6 +47,7 @@ const useFetchQuestions = (subjectIds: number[]) => {
     fetchQuestions();
   }, [subjectIds]);
 
+  // Retornar las preguntas, el estado de carga y los errores
   return { questions, loading, error };
 };
 

@@ -8,6 +8,7 @@ interface ExpandableQuestionProps {
 const ExpandableQuestion: React.FC<ExpandableQuestionProps> = ({ content }) => {
   const [expanded, setExpanded] = useState(false);
 
+  // Alterna el estado de expansión de la pregunta
   const toggleExpand = () => {
     setExpanded(!expanded);
   };

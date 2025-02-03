@@ -10,6 +10,7 @@ import BackButton from "../../BackButton";
 import "../../../styles/DashboardContent/CrudButtons.css";
 import "../../../styles/DashboardContent/Pagination.css"; // Importar los estilos de paginación
 
+// Componente para listar profesores
 const TeacherList: React.FC = () => {
   const { teachers, loading, error } = useFetchAllTeachers();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const TeacherList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 6;
 
+  // Ordenar profesores
   const sortedTeachers = useMemo(() => {
     return teachers.slice().sort((a, b) => {
       const aValue = a[sortKey as keyof Teacher];
@@ -39,6 +41,7 @@ const TeacherList: React.FC = () => {
     });
   }, [teachers, sortKey, sortOrder]);
 
+  // Paginación de profesores
   const paginatedTeachers = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -47,10 +50,12 @@ const TeacherList: React.FC = () => {
 
   const totalPages = Math.ceil(sortedTeachers.length / itemsPerPage);
 
+  // Manejar clic en editar profesor
   const handleEditClick = (teacherId: number) => {
     navigate("../edit-teacher", { state: { teacherId } });
   };
 
+  // Manejar eliminación de profesor
   const handleDeleteTeacher = async (teacherId: number) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres borrar este profesor?"
@@ -142,6 +147,7 @@ const TeacherList: React.FC = () => {
   );
 };
 
+// Props para el componente TeacherItem
 interface TeacherItemProps {
   teacher: Teacher;
   role: string;
@@ -149,6 +155,7 @@ interface TeacherItemProps {
   onDeleteClick: (id: number) => void;
 }
 
+// Componente para mostrar un profesor
 const TeacherItem: React.FC<TeacherItemProps> = ({
   teacher,
   role,

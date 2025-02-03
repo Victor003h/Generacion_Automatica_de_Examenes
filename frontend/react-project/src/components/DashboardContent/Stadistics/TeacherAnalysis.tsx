@@ -38,10 +38,12 @@ const TeacherAnalysis: React.FC = () => {
     fetchData();
   }, [months]);
 
+  // Maneja el cambio en el número de meses
   const handleMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMonths(Number(e.target.value));
   };
 
+  // Maneja la exportación de datos en el formato especificado
   const handleExport = async (format: string) => {
     try {
       const response = await axios.post(

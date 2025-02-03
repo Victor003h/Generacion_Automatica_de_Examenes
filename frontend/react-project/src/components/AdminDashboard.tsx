@@ -17,6 +17,7 @@ const AdminDashboard: React.FC = () => {
   const [name, setName] = useState("");
   //const [role, setRole] = useState("");
 
+  // Cargar el nombre del usuario desde el almacenamiento local
   useEffect(() => {
     const storedName = localStorage.getItem("username");
     //const storedRole = localStorage.getItem("role");
@@ -24,6 +25,7 @@ const AdminDashboard: React.FC = () => {
     //if (storedRole) setRole(storedRole);
   }, []);
 
+  // Alternar la visibilidad de la barra lateral
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };

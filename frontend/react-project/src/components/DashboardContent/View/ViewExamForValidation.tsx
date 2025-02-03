@@ -14,6 +14,7 @@ const ViewExamForValidation: React.FC = () => {
   const [teacherName, setTeacherName] = useState<string>("");
   const navigate = useNavigate();
 
+  // Efecto para obtener los detalles del examen
   useEffect(() => {
     const fetchExamDetails = async () => {
       try {
@@ -48,6 +49,7 @@ const ViewExamForValidation: React.FC = () => {
     fetchExamDetails();
   }, [examId]);
 
+  // Manejar la acción de validar un examen
   const handleValidateExam = async () => {
     try {
       await axios.post(`http://localhost:8000/api/validated_exam/${examId}/`);

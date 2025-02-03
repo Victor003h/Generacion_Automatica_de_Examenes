@@ -2,20 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../../styles/DashboardContent/AddQuestions.css";
-import useFetchSubjectsByRole from "../../../hooks/useFetchSubjectsByRole"; // Importa el nuevo hook
-import useFetchTopics from "../../../hooks/useFetchSubjectTopics"; // Importa el hook
+import useFetchSubjectsByRole from "../../../hooks/useFetchSubjectsByRole"; // Import custom hook for fetching subjects by role
+import useFetchTopics from "../../../hooks/useFetchSubjectTopics"; // Import custom hook for fetching topics
 import BackButton from "../../BackButton";
 
+// Component for editing question details
 const EditQuestion: React.FC = () => {
-  const location= useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
   const storedUserId = localStorage.getItem("userId");
   const userId = storedUserId ? storedUserId : null;
-  const role = localStorage.getItem("role") || ""; // Obtener el role desde localstorage
-  const {questionId} = location.state;
+  const role = localStorage.getItem("role") || ""; // Get role from local storage
+  const { questionId } = location.state;
 
-  
-  const [ questionData, setQuestionData] = useState({
+  // State variables for question details
+  const [questionData, setQuestionData] = useState({
     date: "",
     topic: null,
     type: "MO",
@@ -26,24 +27,28 @@ const EditQuestion: React.FC = () => {
   });
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Fetch subjects based on user role
   const {
     subjects,
     loading: subjectsLoading,
     error: subjectsError,
   } = useFetchSubjectsByRole(userId, role);
 
+  // Fetch topics based on selected subject
   const {
     topics,
     loading: topicsLoading,
     error: topicsError,
   } = useFetchTopics(questionData.subject);
 
+  // State variables for teachers
   const [teachers, setTeachers] = useState<
     { id: number; first_name: string; last_name: string }[]
   >([]);
   const [teachersLoading, setTeachersLoading] = useState(true);
   const [teachersError, setTeachersError] = useState<string | null>(null);
 
+  // Fetch teachers if the user is an admin
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
@@ -53,7 +58,7 @@ const EditQuestion: React.FC = () => {
         setTeachers(response.data);
         setTeachersLoading(false);
       } catch (error) {
-        setTeachersError("Error al cargar los profesores");
+        setTeachersError("Error loading teachers");
         setTeachersLoading(false);
       }
     };
@@ -65,6 +70,7 @@ const EditQuestion: React.FC = () => {
     }
   }, [role]);
 
+  // Fetch question details on component mount
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
@@ -72,7 +78,7 @@ const EditQuestion: React.FC = () => {
           `http://localhost:8000/api/question/${questionId}/`
         );
         const question = response.data;
-        
+
         setQuestionData({
           date: question.date,
           topic: question.topic,
@@ -83,7 +89,7 @@ const EditQuestion: React.FC = () => {
           subject: question.subject,
         });
       } catch (error) {
-        console.error("Error al obtener la pregunta:", error);
+        console.error("Error fetching question details:", error);
       }
     };
     if (questionId) {
@@ -91,6 +97,7 @@ const EditQuestion: React.FC = () => {
     }
   }, [questionId]);
 
+  // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<
       HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
@@ -100,51 +107,52 @@ const EditQuestion: React.FC = () => {
     setQuestionData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  // Handle form submission for updating question details
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const updatedQuestionData = {
       ...questionData,
-      date: new Date().toISOString().split("T")[0],
-    }; // Actualizar fecha a la actual
-   
+      date: new Date().toISOString().split("T")[0], // Update date to current date
+    };
+
     try {
-     
       await axios.put(
         `http://localhost:8000/api/question/${questionId}/`,
         updatedQuestionData
       );
-      setSuccessMessage("Pregunta editada con éxito");
+      setSuccessMessage("Question updated successfully");
       setTimeout(() => {
         setSuccessMessage(null);
         navigate(
           role === "admin"
             ? "/admin-dashboard/questions"
             : "/dashboard/questions"
-        ); // Redirige según el rol
-      }, 2000); // Redirigir después de 2 segundos
+        ); // Redirect based on role
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
-      console.error("Error al actualizar la pregunta:", error);
+      console.error("Error updating question:", error);
     }
   };
 
   return (
     <div className="add-question-container">
       <BackButton />
-      <h2>Editar Pregunta</h2>
+      <h2>Edit Question</h2>
       <form onSubmit={handleSubmit}>
+        {/* Form fields for question details */}
         <div className="form-group">
-          <label>Asignatura:</label>
+          <label>Subject:</label>
           {subjectsLoading ? (
-            <p>Cargando asignaturas...</p>
+            <p>Loading subjects...</p>
           ) : subjectsError ? (
-            <p>Error al cargar las asignaturas</p>
+            <p>Error loading subjects</p>
           ) : (
             <select
               name="subject"
               onChange={handleChange}
               value={questionData.subject || ""}
             >
-              <option value="">Seleccione una asignatura</option>
+              <option value="">Select a subject</option>
               {subjects.map((subject) => (
                 <option key={subject.id} value={subject.id}>
                   {subject.name}
@@ -154,18 +162,18 @@ const EditQuestion: React.FC = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Tema:</label>
+          <label>Topic:</label>
           {topicsLoading ? (
-            <p>Cargando temas...</p>
+            <p>Loading topics...</p>
           ) : topicsError ? (
-            <p>Error al cargar los temas</p>
+            <p>Error loading topics</p>
           ) : (
             <select
               name="topic"
               onChange={handleChange}
               value={questionData.topic || ""}
             >
-              <option value="">Seleccione un tema</option>
+              <option value="">Select a topic</option>
               {topics.map((topic) => (
                 <option key={topic.id} value={topic.id}>
                   {topic.name}
@@ -175,7 +183,7 @@ const EditQuestion: React.FC = () => {
           )}
         </div>
         <div className="form-group">
-          <label>Pregunta:</label>
+          <label>Question:</label>
           <textarea
             name="content"
             onChange={handleChange}
@@ -183,30 +191,30 @@ const EditQuestion: React.FC = () => {
           ></textarea>
         </div>
         <div className="form-group">
-          <label>Tipo de Pregunta:</label>
+          <label>Question Type:</label>
           <select name="type" onChange={handleChange} value={questionData.type}>
-            <option value="MO">Opciones Múltiples</option>
-            <option value="E">Redacción</option>
-            <option value="TF">Verdadero o Falso</option>
+            <option value="MO">Multiple Choice</option>
+            <option value="E">Essay</option>
+            <option value="TF">True/False</option>
           </select>
         </div>
         <div className="form-group">
-          <label>Nivel de Dificultad:</label>
+          <label>Difficulty Level:</label>
           <select
             name="difficulty"
             onChange={handleChange}
             value={questionData.difficulty}
           >
-            <option value="E">Fácil</option>
-            <option value="M">Medio</option>
-            <option value="D">Difícil</option>
+            <option value="E">Easy</option>
+            <option value="M">Medium</option>
+            <option value="D">Hard</option>
           </select>
         </div>
-        {role === "admin" && ( // Mostrar el campo de selección de profesor solo si el usuario es admin
+        {role === "admin" && ( // Show teacher selection field only if user is admin
           <div className="form-group">
-            <label>Profesor Autor:</label>
+            <label>Author Teacher:</label>
             {teachersLoading ? (
-              <p>Cargando profesores...</p>
+              <p>Loading teachers...</p>
             ) : teachersError ? (
               <p>{teachersError}</p>
             ) : (
@@ -215,7 +223,7 @@ const EditQuestion: React.FC = () => {
                 onChange={handleChange}
                 value={questionData.teacher || ""}
               >
-                <option value="">Seleccione un profesor</option>
+                <option value="">Select a teacher</option>
                 {teachers.map((teacher) => (
                   <option key={teacher.id} value={teacher.id}>
                     {teacher.first_name} {teacher.last_name}
@@ -226,7 +234,7 @@ const EditQuestion: React.FC = () => {
           </div>
         )}
         <button type="submit" className="save-button">
-          Guardar Cambios
+          Save Changes
         </button>
       </form>
       {successMessage && (

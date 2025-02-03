@@ -14,11 +14,13 @@ const ViewExam: React.FC = () => {
   useEffect(() => {
     const fetchExamDetails = async () => {
       try {
+        // Obtener detalles del examen
         const examResponse = await axios.get(
           `http://localhost:8000/api/exam/${examId}/`
         );
         setExam(examResponse.data);
 
+        // Obtener preguntas del examen
         const questionsResponse = await axios.get(
           `http://localhost:8000/api/exam/questions/${examId}/`
         );
