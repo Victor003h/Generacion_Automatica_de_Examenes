@@ -157,3 +157,23 @@ def examsdone_ungraded(request,pk):
     exams_ungraded=ExamDone.objects.exclude(id__in=examsgrade.values('examdone_id'))
     serializer=ExamDoneSerializer(exams_ungraded,many=True)
     return Response(serializer.data)
+
+@extend_schema(
+    methods=['GET'],
+    responses={
+        200:OpenApiResponse(description="Ok"),
+        404:OpenApiResponse(description="Primary key not found")
+    }
+)
+@api_view(['GET'])
+def examdone_exist(request,student_pk,exam_pk):
+    """
+    Check if exist an examdone given student_pk nad exam_pk
+
+    """
+    student=get_object_or_404(Student,pk=student_pk)
+    exam=get_object_or_404(Exam,pk=exam_pk)
+    if ExamDone.objects.filter(student=student,exam=exam).exists():
+        return Response({'exist : true'})
+    
+    return Response({'exist : false'})
